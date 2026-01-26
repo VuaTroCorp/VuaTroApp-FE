@@ -1,11 +1,29 @@
 import Header from "../../components/Header";
-import React from 'react';
-
+import React from "react";
+import "./Home.scss";
+import FilterBar from "../../components/FilterBar";
+import NewShow from "../../components/NewShow";
+import Footer from "../../components/Footer";
 function Home() {
     return (
         <>
             <Header />
-            <h1>Trang chủ</h1>
+
+            <div className="home-page">
+                <div className="filter-wrapper">
+                    <FilterBar />
+
+                </div>
+                <div className="content-wrapper">
+                    <NewShow />
+                </div>
+
+
+
+            </div>
+            <div className="footer-wrapper">
+                <Footer />
+            </div>
         </>
     );
 }
