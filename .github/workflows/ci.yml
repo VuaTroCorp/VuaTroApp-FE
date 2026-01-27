@@ -1,4 +1,4 @@
-name: ReactJS CI
+name: VuaTroVN FE CI
 
 on:
   pull_request:
