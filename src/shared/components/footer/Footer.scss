@@ -1,0 +1,128 @@
+.footer {
+  background: #faf6f3;
+  border-top: 1px solid #ddd;
+  width: 100%;
+  font-family: Arial, sans-serif;
+
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 80px;
+    gap: 40px;
+  }
+
+  .footer-col {
+    flex: 1;
+
+    h4 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin-bottom: 10px;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .left {
+    .logo {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 800;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 0 #000;
+      margin-bottom: 20px;
+
+      span {
+        font-weight: 900;
+      }
+    }
+
+    .store {
+      display: flex;
+      gap: 12px;
+
+      img {
+        height: 45px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .right {
+    .social {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+
+      img {
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+      }
+    }
+
+    p {
+      margin: 6px 0;
+      font-size: 14px;
+    }
+  }
+
+  .footer-bottom {
+    border-top: 1px solid #ccc;
+    padding: 20px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 12px;
+
+    .copyright {
+      max-width: 70%;
+
+      p {
+        margin: 4px 0;
+      }
+    }
+
+    .bct {
+      width: 140px;
+    }
+  }
+}
+.left {
+  .brand-row {
+    display: flex;
+    align-items: center; // căn giữa theo chiều dọc
+    gap: 16px;
+  }
+
+  .logo {
+    width: 70px;
+    height: auto;
+    flex-shrink: 0; // không bị ép nhỏ
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0 #000;
+    line-height: 1.3;
+  }
+}
