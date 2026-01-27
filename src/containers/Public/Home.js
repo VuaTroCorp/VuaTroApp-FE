@@ -18,9 +18,6 @@ function Home() {
                 <div className="content-wrapper">
                     <NewShow />
                 </div>
-
-
-
             </div>
             <div className="footer-wrapper">
                 <Footer />
