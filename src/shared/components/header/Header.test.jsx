@@ -12,7 +12,7 @@ describe("Header Component", () => {
     render(<Header />);
 
     expect(screen.getByAltText("VuaTro")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Tìm Bất Động Sản..")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Tìm Bất Động Sản...")).toBeInTheDocument();
     expect(screen.getByText("Đăng nhập")).toBeInTheDocument();
     expect(screen.getByText("Đăng tin")).toBeInTheDocument();
   });
