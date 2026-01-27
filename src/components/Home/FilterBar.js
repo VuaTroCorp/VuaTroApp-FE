@@ -1,9 +1,10 @@
 import "./FilterBar.scss";
 import { useRef, useState, useEffect } from "react";
-import homeIcon from "../assets/icons/home.png";
-import buildingIcon from "../assets/icons/building.png";
-import arrowLeft from "../assets/icons/arrow-left.svg";
-import arrowRight from "../assets/icons/arrow-right.svg";
+import homeIcon from "../../assets/icons/home.png";
+import buildingIcon from "../../assets/icons/building.png";
+import arrowLeft from "../../assets/icons/arrow-left.svg";
+import arrowRight from "../../assets/icons/arrow-right.svg";
+
 
 function FilterBar() {
     const listRef = useRef(null);

@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import logo from "../assets/images/logo.png";
-import location1 from "../assets/icons/location1.png";
-import down from "../assets/icons/down.png";
-import heart from "../assets/icons/heart.png";
+import logo from "../../assets/images/logo.png";
+import location1 from "../../assets/icons/location1.png";
+import down from "../../assets/icons/down.png";
+import heart from "../../assets/icons/heart.png";
 import "./Header.scss";
-import account from "../assets/icons/account.png"
+import account from "../../assets/icons/account.png";
 
 function Header() {
     const [showLocation, setShowLocation] = useState(false);

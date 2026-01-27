@@ -1,10 +1,11 @@
 import "./Footer.scss";
-import logo from "../assets/images/logo.png";
-import appstore from "../assets/images/appstore.png";
-import googleplay from "../assets/images/googleplay.png";
-import linkedin from "../assets/images/linkedin.png";
-import facebook from "../assets/images/facebook.png";
-import boCongThuong from "../assets/images/bocongthuong.png";
+import logo from "../../assets/images/logo.png";
+import appstore from "../../assets/images/appstore.png";
+import googleplay from "../../assets/images/googleplay.png";
+import linkedin from "../../assets/images/linkedin.png";
+import facebook from "../../assets/images/facebook.png";
+import boCongThuong from "../../assets/images/bocongthuong.png";
+
 
 const Footer = () => {
     return (

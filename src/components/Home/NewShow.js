@@ -1,11 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import "./NewShow.scss";
-import arrowLeft from "../assets/icons/arrow-left.svg";
-import arrowRight from "../assets/icons/arrow-right.svg";
-import down from "../assets/icons/down.png";
-import cupLeft from "../assets/icons/skagent_left.svg";
-import cupRight from "../assets/icons/skagent_right.svg";
+import arrowLeft from "../../assets/icons/arrow-left.svg";
+import arrowRight from "../../assets/icons/arrow-right.svg";
+import down from "../../assets/icons/down.png";
+import cupLeft from "../../assets/icons/skagent_left.svg";
+import cupRight from "../../assets/icons/skagent_right.svg";
 function NewShow() {
 
 

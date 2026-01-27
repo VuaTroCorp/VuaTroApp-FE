@@ -1,9 +1,10 @@
-import Header from "../../components/Header";
+
 import React from "react";
 import "./Home.scss";
-import FilterBar from "../../components/FilterBar";
-import NewShow from "../../components/NewShow";
-import Footer from "../../components/Footer";
+import Header from "../../components/Home/Header";
+import FilterBar from "../../components/Home/FilterBar";
+import NewShow from "../../components/Home/NewShow";
+import Footer from "../../components/Home/Footer";
 function Home() {
     return (
         <>
