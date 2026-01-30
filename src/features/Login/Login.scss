@@ -1,4 +1,4 @@
-.auth-page {
+.login-page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -6,7 +6,7 @@
   font-family: 'Roboto', sans-serif;
 }
 
-.auth-container {
+.login-container {
   flex: 1;
   display: flex;
   max-width: 1100px;
@@ -17,9 +17,9 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 }
 
-.auth-left {
+.login-left {
   flex: 1;
-  background: url('../../assets/images/background.jpg') center/cover no-repeat; // ảnh phố xá nếu có
+  background: url('../../assets/images/Background.png') no-repeat center center/cover;
   position: relative;
   min-height: 600px;
 
@@ -51,7 +51,7 @@
   }
 }
 
-.auth-right {
+.login-right {
   flex: 1;
   padding: 60px 50px;
   display: flex;
@@ -70,7 +70,7 @@
     margin-bottom: 40px;
   }
 
-  .auth-form {
+  .login-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -123,7 +123,7 @@
       }
     }
 
-    .btn-login {
+    .login-btn {
       background: linear-gradient(to right, #ff9800, #f57c00);
       color: white;
       border: none;
@@ -141,7 +141,7 @@
     }
   }
 
-  .auth-options {
+  .login-options {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
@@ -166,7 +166,7 @@
       margin-bottom: 15px;
     }
 
-    .google-btn {
+    .login-google-btn {
       background: #fda000;
       color: white;
       border: none;
@@ -185,7 +185,7 @@
 }
 
 /* Footer */
-.auth-footer {
+.login-footer {
   background: white;
   padding: 40px 20px;
   border-top: 1px solid #eee;
@@ -241,15 +241,15 @@
 
 /* Responsive */
 @media (max-width: 992px) {
-  .auth-container {
+  .login-container {
     flex-direction: column;
   }
 
-  .auth-left {
+  .login-left {
     min-height: 350px;
   }
 
-  .auth-right {
+  .login-right {
     padding: 40px 30px;
   }
 }

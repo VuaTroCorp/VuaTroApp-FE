@@ -1,15 +1,11 @@
-// src/features/Auth/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoginForm from './components/LoginForm';
-
-// Import ảnh từ src/assets
+import './Login.scss';
 import logo from '../../assets/images/logo.png';
 import appstore from '../../assets/images/appstore.png';
 import googleplay from '../../assets/images/googleplay.png';
 import bocongthuong from '../../assets/images/bocongthuong.png';
 
-import './Login.scss';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,115 +28,85 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
 
-    // Validation cơ bản
-    if (!formData.identifier.trim() || !formData.password) {
-      setError('Vui lòng nhập đầy đủ thông tin!');
-      setLoading(false);
+    if (!formData.identifier || !formData.password) {
+      setError('Vui lòng nhập đầy đủ thông tin');
       return;
     }
 
-    try {
-      // TODO: Thay bằng API đăng nhập thực tế của team
-      // Ví dụ:
-      // const res = await axios.post('/api/auth/login', formData);
-      // localStorage.setItem('token', res.data.token);
+    setLoading(true);
 
-      // Giả lập thành công
-      localStorage.setItem('token', 'demo-jwt-token');
-      alert('Đăng nhập thành công!');
-      navigate('/home'); // Chuyển sang trang home
-    } catch (err) {
-      setError('Đăng nhập thất bại. Kiểm tra lại thông tin.');
-    } finally {
+    setTimeout(() => {
+      localStorage.setItem('token', 'demo-token');
+      navigate('/home');
       setLoading(false);
-    }
+    }, 1000);
   };
 
   return (
-    <div className="auth-page">
+    <div className="auth-page login-page">
       <div className="auth-container">
-        {/* Bên trái - Background + Logo */}
+
         <div className="auth-left">
-          <div className="brand">
-            <img 
-              src={logo} 
-              alt="VUATROVN Logo" 
-              className="logo animated-logo" 
-            />
-            <p className="slogan">Tìm nhà trọ tốt - Uy tín nhất!</p>
-          </div>
+          <img src={logo} alt="logo" className="logo" />
+          <p>Tìm nhà trọ tốt – Uy tín nhất</p>
         </div>
 
-        {/* Bên phải - Form */}
         <div className="auth-right">
-          <h1>CHÀO MỪNG BẠN ĐẾN VỚI VUATROVN</h1>
-          <p className="subtitle">Đăng nhập để bắt đầu tìm nhà trọ ưng ý</p>
+          <h1>Đăng Nhập</h1>
 
-          <LoginForm
-            formData={formData}
-            showPassword={showPassword}
-            error={error}
-            loading={loading}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-            togglePassword={() => setShowPassword(!showPassword)}
-          />
+          {error && <p className="error">{error}</p>}
 
-          <div className="auth-options">
-            <a href="/register" className="register-link">
-              Chưa có tài khoản? <strong>Đăng ký ngay</strong>
-            </a>
-            <a href="#" className="forgot-password">Quên mật khẩu?</a>
-          </div>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="identifier"
+              placeholder="Email hoặc SĐT"
+              value={formData.identifier}
+              onChange={handleChange}
+            />
 
-          <div className="social-login">
-            <p>Hoặc đăng nhập bằng</p>
-            <button className="google-btn">
-              <img 
-                src="https://img.icons8.com/color/48/google-logo.png" 
-                alt="Google" 
+            <div className="password-field">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                placeholder="Mật khẩu"
+                value={formData.password}
+                onChange={handleChange}
               />
-              Tiếp tục với Google
+              <span onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? '🙈' : '👁️'}
+              </span>
+            </div>
+
+            <label className="remember">
+              <input
+                type="checkbox"
+                name="rememberMe"
+                checked={formData.rememberMe}
+                onChange={handleChange}
+              />
+              Ghi nhớ đăng nhập
+            </label>
+
+            <button disabled={loading}>
+              {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
             </button>
-          </div>
+          </form>
+
+          <p className="switch">
+            Chưa có tài khoản?
+            <span onClick={() => navigate('/register')}> Đăng ký</span>
+          </p>
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="auth-footer">
-        <div className="footer-content">
-          <div className="footer-logo">
-            <img src={logo} alt="VUATROVN" />
-          </div>
-
-          <div className="badges">
-            <img src={appstore} alt="App Store" />
-            <img src={googleplay} alt="Google Play" />
-          </div>
-
-          <div className="footer-links">
-            <a href="#">Chính Sách Bảo Mật</a> •
-            <a href="#">Giải Quyết Tranh Chấp</a> •
-            <a href="#">Điều Khoản Sử Dụng</a>
-          </div>
-
-          <div className="contact">
-            <p>Email: <strong>Trogiup@VuaTro.Com</strong></p>
-            <p>CSKH: 987 654 (1.000đ/phút)</p>
-            <p>Địa chỉ: ABC XYZ Nha Trang</p>
-          </div>
-        </div>
-
-        <div className="certified">
-          <img src={bocongthuong} alt="Đã đăng ký Bộ Công Thương" />
-        </div>
-      </footer>
-    </div>
+      <button type="submit" className="btn-login" disabled={loading}>
+        {loading ? 'Đang đăng nhập...' : 'Đăng Nhập'}
+      </button>
+  </div>
   );
 };
 
