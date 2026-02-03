@@ -1,19 +1,24 @@
 import logo from "assets/images/logo.png";
-import location1 from "assets/icons/location1.png";
-import down from "assets/icons/down.png";
-import heart from "assets/icons/heart.png";
+import locationIcon from "assets/icons/location1.png";
+import downIcon from "assets/icons/down.png";
+import heartIcon from "assets/icons/heart.png";
+import accountIcon from "assets/icons/account.png";
+
 import "./Header.scss";
-import account from "assets/icons/account.png";
+
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
+  const navigate = useNavigate();
+
   const [showLocation, setShowLocation] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
 
   const locationRef = useRef(null);
   const avatarRef = useRef(null);
 
-  // CLICK RA NGOÀI → ĐÓNG DROPDOWN
+  // 👉 Click ngoài dropdown thì đóng
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (locationRef.current && !locationRef.current.contains(e.target)) {
@@ -26,6 +31,7 @@ function Header() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -33,8 +39,16 @@ function Header() {
 
   return (
     <header className="header">
+      {/* LEFT */}
       <div className="header__left">
-        <img src={logo} alt="VuaTro" className="logo" />
+        {/* LOGO */}
+        <img
+          src={logo}
+          alt="logo"
+          className="logo"
+          onClick={() => navigate("/")}
+          style={{ cursor: "pointer" }}
+        />
 
         {/* LOCATION */}
         <div className="location" ref={locationRef}>
@@ -42,9 +56,9 @@ function Header() {
             className="location-box"
             onClick={() => setShowLocation(!showLocation)}
           >
-            <img src={location1} alt="location" />
+            <img src={locationIcon} alt="location" />
             <span>Ninh Thuận</span>
-            <img src={down} alt="down" />
+            <img src={downIcon} alt="down" />
           </div>
 
           {showLocation && (
@@ -63,19 +77,31 @@ function Header() {
         </div>
       </div>
 
+      {/* RIGHT */}
       <div className="header__right">
-        <img src={heart} alt="heart" className="favourite" />
+        <img src={heartIcon} alt="heart" className="favourite" />
+
         <span className="notification">🔔</span>
 
+        {/* LOGIN */}
+        <button
+          className="btn btn-login"
+          onClick={() => navigate("/login")}
+        >
+          Đăng nhập
+        </button>
 
-        <button className="btn btn-login">Đăng nhập</button>
+        {/* POST */}
         <button className="btn btn-postnew">Đăng tin</button>
 
         {/* AVATAR */}
         <div className="avatar-menu" ref={avatarRef}>
-          <div className="avatar-trigger" onClick={() => setShowAvatar(!showAvatar)}>
-            <img src={account} alt="account" className="avatar-img" />
-            <img src={down} alt="down" className="arrow" />
+          <div
+            className="avatar-trigger"
+            onClick={() => setShowAvatar(!showAvatar)}
+          >
+            <img src={accountIcon} alt="avatar" className="avatar-img" />
+            <img src={downIcon} alt="down" className="arrow" />
           </div>
 
           {showAvatar && (
