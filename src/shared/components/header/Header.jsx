@@ -5,6 +5,8 @@ import heart from "assets/icons/heart.png";
 import "./Header.scss";
 import account from "assets/icons/account.png";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Header() {
   const [showLocation, setShowLocation] = useState(false);
@@ -12,6 +14,8 @@ function Header() {
 
   const locationRef = useRef(null);
   const avatarRef = useRef(null);
+
+  const navigate = useNavigate();
 
   // CLICK RA NGOÀI → ĐÓNG DROPDOWN
   useEffect(() => {
@@ -34,7 +38,13 @@ function Header() {
   return (
     <header className="header">
       <div className="header__left">
-        <img src={logo} alt="VuaTro" className="logo" />
+        <img
+          src={logo}
+          alt="VuaTro"
+          className="logo"
+          onClick={() => navigate("/")}
+        />
+
 
         {/* LOCATION */}
         <div className="location" ref={locationRef}>
@@ -68,7 +78,12 @@ function Header() {
         <span className="notification">🔔</span>
 
         <button className="btn btn-login">Đăng nhập</button>
-        <button className="btn btn-postnew">Đăng tin</button>
+        <button
+          className="btn btn-postnew"
+          onClick={() => navigate("/post-news")}
+        >
+          Đăng tin
+        </button>
 
         {/* AVATAR */}
         <div className="avatar-menu" ref={avatarRef}>
@@ -80,7 +95,9 @@ function Header() {
           {showAvatar && (
             <div className="avatar-dropdown">
               <div className="dropdown-item">Thông Tin Người Dùng</div>
-              <div className="dropdown-item">Nâng Cấp Tài Khoản</div>
+              <Link to="/upgrade-account" className="dropdown-item">
+                Nâng Cấp Tài Khoản
+              </Link>
               <div className="dropdown-item">Bài Đăng Của Tôi</div>
               <div className="dropdown-item logout">Đăng Xuất</div>
             </div>
