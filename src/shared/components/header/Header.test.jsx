@@ -16,7 +16,7 @@ describe("Header Component", () => {
     </MemoryRouter>
   );
 
-    expect(screen.getByAltText("VuaTro")).toBeInTheDocument();
+    expect(screen.getByAltText("logo")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Tìm Bất Động Sản...")).toBeInTheDocument();
     expect(screen.getByText("Đăng nhập")).toBeInTheDocument();
     expect(screen.getByText("Đăng tin")).toBeInTheDocument();
