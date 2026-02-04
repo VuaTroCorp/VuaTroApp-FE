@@ -1,0 +1,162 @@
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+}
+
+.auth-container {
+  flex: 1;
+  display: flex;
+  max-width: 1100px;
+  margin: 40px auto;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+/* LEFT */
+.auth-left {
+  flex: 1;
+  background: url("../../../assets/images/Background.png") center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .brand {
+    text-align: center;
+    color: white;
+
+    .logo {
+      width: 220px;
+      margin-bottom: 20px;
+    }
+
+    .slogan {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+  }
+}
+
+/* RIGHT */
+.auth-right {
+  flex: 1;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    color: #f57c00;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+}
+
+/* FORM */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  input {
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+
+    &:focus {
+      border-color: #ff9800;
+      outline: none;
+    }
+  }
+}
+
+.password-group {
+  position: relative;
+
+  .toggle-icon {
+    position: absolute;
+    right: 15px;
+    top: 38px;
+    cursor: pointer;
+  }
+}
+
+.checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-login {
+  background: linear-gradient(to right, #ff9800, #f57c00);
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* OPTIONS */
+.auth-options {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    cursor: pointer;
+    color: #000000;
+  }
+}
+
+/* GOOGLE */
+.social-login {
+  text-align: center;
+  margin-top: 30px;
+
+  .google-btn {
+    margin-top: 10px;
+    padding: 10px 50px;
+    border-radius: 8px;
+    border: none;
+    background: #adadad;
+    color: rgb(0, 0, 0);
+    display: inline-flex;
+    gap: 10px;
+    cursor: pointer;
+
+    img {
+      width: 20px;
+    }
+  }
+}
+
+/* ERROR */
+.error-message {
+  background: #ffebee;
+  color: red;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-left {
+    height: 250px;
+  }
+}

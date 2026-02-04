@@ -1,0 +1,11 @@
+@import "../Login/Login.scss";
+
+.btn-register {
+  background: linear-gradient(to right, #ff9800, #f57c00);
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
