@@ -5,5 +5,5 @@
     "target": "esnext",
     "jsx": "react"
   },
-  "include": ["src"]
+  "include": ["src", "fileMock.js"]
 }
