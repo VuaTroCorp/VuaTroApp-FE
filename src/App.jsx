@@ -4,7 +4,6 @@ import Login from "features/Login/Login/Login";
 import Register from "features/Login/Register/Register";
 import Home from "features/home/Home";
 import PostNews from "features/postNews/postNews";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UpgradeAccount from "features/upgradeAccount/upgrade.jsx";
 
 function App() {
