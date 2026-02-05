@@ -10,13 +10,13 @@ jest.mock("assets/icons/account.png", () => "account.png");
 
 describe("Header Component", () => {
   test("renders header component correctly", () => {
-      render(
-    <MemoryRouter>
-      <Header />
-    </MemoryRouter>
-  );
+    render(
+      <MemoryRouter>
+        <Header />
+      </MemoryRouter>
+    );
 
-    expect(screen.getByAltText("logo")).toBeInTheDocument();
+    expect(screen.getByAltText("VuaTro")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Tìm Bất Động Sản...")).toBeInTheDocument();
     expect(screen.getByText("Đăng nhập")).toBeInTheDocument();
     expect(screen.getByText("Đăng tin")).toBeInTheDocument();
