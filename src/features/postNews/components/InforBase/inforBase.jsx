@@ -67,10 +67,15 @@ function InforBase() {
                 <div className="info-base__form">
                     <h3 className="section-title">I. Thông Tin Cơ Bản</h3>
 
-                    <div className="form-group horizontal">
-                        <label className="inputName">Tên Dự Án:</label>
-                        <input type="text" placeholder="Nhập Tên Dự Án" />
+                    <div className="form-group">
+                        <label>Tên Dự Án:</label>
+                        <input
+                            type="text"
+                            className="project-name-input"
+                            placeholder="Nhập Tên Dự Án"
+                        />
                     </div>
+
 
                     {/* ✅ LOẠI HÌNH */}
                     <div className="form-group">
@@ -131,10 +136,15 @@ function InforBase() {
                             ))}
                         </select>
                     </div>
-                    <div className="form-group horizontal">
-                        <label className="inputName">Địa Chỉ Cụ Thể:</label>
-                        <input type="text" placeholder="Nhập Địa Chỉ Cụ Thể" />
+                    <div className="form-group">
+                        <label>Địa Chỉ Cụ Thể:</label>
+                        <input
+                            type="text"
+                            className="project-name-input"
+                            placeholder="Nhập Địa Chỉ Cụ Thể"
+                        />
                     </div>
+
                 </div>
 
                 {/* RIGHT */}

@@ -6,31 +6,34 @@ function InforContact() {
             <h3 className="section-title">III. Thông Tin Liên Hệ</h3>
 
             <div className="contact-form">
-                {/* Tên liên hệ */}
-                <div className="form-group">
-                    <label>Tên Liên Hệ:</label>
-                    <input
-                        type="text"
-                        placeholder="Nhập Tên Liên Hệ"
-                    />
+                {/* ROW 1 */}
+                <div className="form-row">
+                    <div className="form-group">
+                        <label>Tên Liên Hệ:</label>
+                        <input
+                            type="text"
+                            placeholder="Nhập thông tin Liên Hệ"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Email:</label>
+                        <input
+                            type="email"
+                            placeholder="Nhập Địa Chỉ Email"
+                        />
+                    </div>
                 </div>
 
-                {/* Email */}
-                <div className="form-group">
-                    <label className="input-email" >Email:</label>
-                    <input
-                        type="email"
-                        placeholder="Nhập Địa Chỉ Email"
-                    />
-                </div>
-
-                {/* Số điện thoại */}
-                <div className="form-group">
-                    <label>Số Điện Thoại:</label>
-                    <input
-                        type="text"
-                        placeholder="Nhập Số Điện Thoại"
-                    />
+                {/* ROW 2 */}
+                <div className="form-row">
+                    <div className="form-group">
+                        <label>Số Điện Thoại:</label>
+                        <input
+                            type="text"
+                            placeholder="Nhập Số Điện Thoại"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
