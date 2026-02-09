@@ -77,7 +77,12 @@ function Header() {
         <img src={heart} alt="heart" className="favourite" />
         <span className="notification">🔔</span>
 
-        <button className="btn btn-login">Đăng nhập</button>
+        <button
+          className="btn btn-header-login"
+          onClick={() => navigate("/login")}
+        >
+          Đăng nhập
+        </button>
 
         <button
           className="btn btn-postnew"
