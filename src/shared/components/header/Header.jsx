@@ -1,24 +1,24 @@
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+
 import logo from "assets/images/logo.png";
-import locationIcon from "assets/icons/location1.png";
-import downIcon from "assets/icons/down.png";
-import heartIcon from "assets/icons/heart.png";
-import accountIcon from "assets/icons/account.png";
+import location1 from "assets/icons/location1.png";
+import down from "assets/icons/down.png";
+import heart from "assets/icons/heart.png";
+import account from "assets/icons/account.png";
 
 import "./Header.scss";
 
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 function Header() {
-  const navigate = useNavigate();
-
   const [showLocation, setShowLocation] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
 
   const locationRef = useRef(null);
   const avatarRef = useRef(null);
 
-  // 👉 Click ngoài dropdown thì đóng
+  const navigate = useNavigate();
+
+  // CLICK RA NGOÀI → ĐÓNG DROPDOWN
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (locationRef.current && !locationRef.current.contains(e.target)) {
@@ -31,7 +31,6 @@ function Header() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -39,15 +38,12 @@ function Header() {
 
   return (
     <header className="header">
-      {/* LEFT */}
       <div className="header__left">
-        {/* LOGO */}
         <img
           src={logo}
-          alt="logo"
+          alt="VuaTro"
           className="logo"
           onClick={() => navigate("/")}
-          style={{ cursor: "pointer" }}
         />
 
         {/* LOCATION */}
@@ -56,9 +52,9 @@ function Header() {
             className="location-box"
             onClick={() => setShowLocation(!showLocation)}
           >
-            <img src={locationIcon} alt="location" />
+            <img src={location1} alt="location" />
             <span>Ninh Thuận</span>
-            <img src={downIcon} alt="down" />
+            <img src={down} alt="down" />
           </div>
 
           {showLocation && (
@@ -77,22 +73,23 @@ function Header() {
         </div>
       </div>
 
-      {/* RIGHT */}
       <div className="header__right">
-        <img src={heartIcon} alt="heart" className="favourite" />
-
+        <img src={heart} alt="heart" className="favourite" />
         <span className="notification">🔔</span>
 
-        {/* LOGIN */}
         <button
-          className="btn btn-login"
+          className="btn btn-header-login"
           onClick={() => navigate("/login")}
         >
           Đăng nhập
         </button>
 
-        {/* POST */}
-        <button className="btn btn-postnew">Đăng tin</button>
+        <button
+          className="btn btn-postnew"
+          onClick={() => navigate("/post-news")}
+        >
+          Đăng tin
+        </button>
 
         {/* AVATAR */}
         <div className="avatar-menu" ref={avatarRef}>
@@ -100,14 +97,18 @@ function Header() {
             className="avatar-trigger"
             onClick={() => setShowAvatar(!showAvatar)}
           >
-            <img src={accountIcon} alt="avatar" className="avatar-img" />
-            <img src={downIcon} alt="down" className="arrow" />
+            <img src={account} alt="account" className="avatar-img" />
+            <img src={down} alt="down" className="arrow" />
           </div>
 
           {showAvatar && (
             <div className="avatar-dropdown">
               <div className="dropdown-item">Thông Tin Người Dùng</div>
-              <div className="dropdown-item">Nâng Cấp Tài Khoản</div>
+
+              <Link to="/upgrade-account" className="dropdown-item">
+                Nâng Cấp Tài Khoản
+              </Link>
+
               <div className="dropdown-item">Bài Đăng Của Tôi</div>
               <div className="dropdown-item logout">Đăng Xuất</div>
             </div>

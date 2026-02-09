@@ -1,0 +1,41 @@
+.post-news-wrapper {
+  background-color: #f1eeee; // 👈 full desktop
+  width: 100%;
+}
+
+.post-news {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.post-news-action {         // chiếm toàn màn hình
+    display: flex;
+    justify-content: center;   // căn giữa desktop
+    margin: 5px 0;
+}
+
+
+
+.btn-post {
+    background: #e53935;
+    color: #fff;
+    border: none;
+    padding: 14px 48px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #d32f2f;
+    }
+
+    &:active {
+        transform: scale(0.97);
+    }
+}
