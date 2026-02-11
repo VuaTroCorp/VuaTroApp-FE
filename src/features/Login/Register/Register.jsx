@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import Footer from "shared/components/footer/Footer";
-
 import logo from "assets/images/logo.png";
 import googleLogo from "assets/icons/google-logo.png";
-
 import "./Register.scss";
 
 const Register = () => {
