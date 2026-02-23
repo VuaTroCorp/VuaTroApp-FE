@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "shared/components/footer/Footer";
-
 import logo from "assets/images/logo.png";
 import googleLogo from "assets/icons/google-logo.png";
 import "./Login.scss";
@@ -127,7 +125,7 @@ const Login = () => {
             <span onClick={() => navigate("/register")}>
               Đăng ký tài khoản
             </span>
-            <span>Quên mật khẩu?</span>
+            <span onClick={() => navigate("/forgot-password")}>Quên mật khẩu?</span>
           </div>
 
           <div className="social-login">

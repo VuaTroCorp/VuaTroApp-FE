@@ -18,8 +18,12 @@ function Header() {
 
   const navigate = useNavigate();
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   // CLICK RA NGOÀI → ĐÓNG DROPDOWN
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
     const handleClickOutside = (e) => {
       if (locationRef.current && !locationRef.current.contains(e.target)) {
         setShowLocation(false);
@@ -34,6 +38,7 @@ function Header() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+
   }, []);
 
   return (
@@ -74,46 +79,65 @@ function Header() {
       </div>
 
       <div className="header__right">
-        <img src={heart} alt="heart" className="favourite" />
-        <span className="notification">🔔</span>
+        <div className="header__right">
+          <img src={heart} alt="heart" className="favourite" />
+          <span className="notification">🔔</span>
 
-        <button
-          className="btn btn-header-login"
-          onClick={() => navigate("/login")}
-        >
-          Đăng nhập
-        </button>
+          {/* CHƯA LOGIN */}
+          {!isLoggedIn && (
+            <button
+              className="btn btn-header-login"
+              onClick={() => navigate("/login")}
+            >
+              Đăng nhập
+            </button>
+          )}
 
-        <button
-          className="btn btn-postnew"
-          onClick={() => navigate("/post-news")}
-        >
-          Đăng tin
-        </button>
-
-        {/* AVATAR */}
-        <div className="avatar-menu" ref={avatarRef}>
-          <div
-            className="avatar-trigger"
-            onClick={() => setShowAvatar(!showAvatar)}
+          <button
+            className="btn btn-postnew"
+            onClick={() => navigate("/post-news")}
           >
-            <img src={account} alt="account" className="avatar-img" />
-            <img src={down} alt="down" className="arrow" />
-          </div>
+            Đăng tin
+          </button>
 
-          {showAvatar && (
-            <div className="avatar-dropdown">
-              <div className="dropdown-item">Thông Tin Người Dùng</div>
+          {/* ĐÃ LOGIN */}
+          {isLoggedIn && (
+            <div className="avatar-menu" ref={avatarRef}>
+              <div
+                className="avatar-trigger"
+                onClick={() => setShowAvatar(!showAvatar)}
+              >
+                <img src={account} alt="account" className="avatar-img" />
+                <img src={down} alt="down" className="arrow" />
+              </div>
 
-              <Link to="/upgrade-account" className="dropdown-item">
-                Nâng Cấp Tài Khoản
-              </Link>
+              {showAvatar && (
+                <div className="avatar-dropdown">
+                  <div className="dropdown-item">Thông Tin Người Dùng</div>
 
-              <div className="dropdown-item">Bài Đăng Của Tôi</div>
-              <div className="dropdown-item logout">Đăng Xuất</div>
+                  <Link to="/upgrade-account" className="dropdown-item">
+                    Nâng Cấp Tài Khoản
+                  </Link>
+
+                  <div className="dropdown-item">Bài Đăng Của Tôi</div>
+
+                  <div
+                    className="dropdown-item logout"
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      setIsLoggedIn(false);
+                      setShowAvatar(false);
+                      navigate("/");
+                    }}
+                  >
+                    Đăng Xuất
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
+
       </div>
     </header>
   );
