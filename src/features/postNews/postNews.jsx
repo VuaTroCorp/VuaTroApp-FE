@@ -1,4 +1,3 @@
-import Header from "shared/components/header/Header";
 import InforBase from "./components/InforBase/inforBase";
 import "./postNews.scss";
 import InforDes from "./components/InforDes/inforDes";
@@ -9,7 +8,6 @@ import InforPackage from "./components/InforPackage/inforPackage";
 function PostNews() {
     return (
         <>
-            <Header />
             <div className="post-news-wrapper">
                 <div className="post-news">
                     <InforBase />

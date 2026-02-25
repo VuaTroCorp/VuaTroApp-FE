@@ -1,15 +1,13 @@
-import Header from "shared/components/header/Header";
-import Footer from "shared/components/footer/Footer";
 import FilterBar from "shared/components/filter-bar/FilterBar";
 import NewShow from "./components/news/NewShow";
-
+import Footer from "components/footer/Footer";
 import "./Home.scss";
+import Navbar from "components/header/Navbar";
 
 function Home() {
   return (
     <>
-      <Header />
-
+      <Navbar />
       <div className="home-page">
         <div className="filter-wrapper">
           <FilterBar />
