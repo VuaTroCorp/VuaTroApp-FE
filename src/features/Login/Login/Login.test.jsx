@@ -8,12 +8,12 @@ jest.mock("react-router-dom", () => ({
     useNavigate: () => jest.fn(),
 }));
 
-jest.mock("assets/images/logo.png", () => "");
-jest.mock("assets/icons/google-logo.png", () => "");
+jest.mock("assets/images/logo.png", () => "test-logo.png");
+jest.mock("assets/icons/google-logo.png", () => "test-google.png");
 
 describe("Login component", () => {
     beforeEach(() => {
-        jest.spyOn(window, "alert").mockImplementation(() => { });
+        jest.spyOn(console, "log").mockImplementation(() => { });
         localStorage.clear();
     });
 
@@ -24,9 +24,9 @@ describe("Login component", () => {
             </BrowserRouter>
         );
 
-        expect(screen.getByText("ĐĂNG NHẬP VUATROVN")).toBeInTheDocument();
+        expect(screen.getByText("CHÀO MỪNG BẠN ĐẾN VỚI VUATROVN")).toBeInTheDocument();
         expect(
-            screen.getByPlaceholderText("Nhập email hoặc số điện thoại")
+            screen.getByPlaceholderText("Email Hoặc Số Điện Thoại")
         ).toBeInTheDocument();
     });
 
@@ -37,7 +37,7 @@ describe("Login component", () => {
             </BrowserRouter>
         );
 
-        fireEvent.click(screen.getByText("Đăng nhập"));
+        fireEvent.click(screen.getByText("Đăng Nhập"));
 
         expect(
             screen.getByText("Vui lòng nhập Email hoặc SĐT")
@@ -55,17 +55,17 @@ describe("Login component", () => {
         );
 
         fireEvent.change(
-            screen.getByPlaceholderText("Nhập email hoặc số điện thoại"),
+            screen.getByPlaceholderText("Email Hoặc Số Điện Thoại"),
             { target: { value: "test@gmail.com" } }
         );
 
         fireEvent.change(
-            screen.getByDisplayValue(""),
+            screen.getByPlaceholderText("Mật Khẩu"),
             { target: { value: "123456" } }
         );
 
-        fireEvent.click(screen.getByText("Đăng nhập"));
+        fireEvent.click(screen.getByText("Đăng Nhập"));
 
-        expect(localStorage.getItem("token")).toBe("demo-token");
+        expect(console.log).toHaveBeenCalledWith("Login successful");
     });
 });

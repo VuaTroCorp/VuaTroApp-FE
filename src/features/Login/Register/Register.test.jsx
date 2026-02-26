@@ -2,9 +2,6 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import Register from "./Register";
 
-/* ================= MOCK ================= */
-
-// mock useNavigate
 const mockNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
@@ -12,15 +9,11 @@ jest.mock("react-router-dom", () => ({
     useNavigate: () => mockNavigate,
 }));
 
-// mock image imports
-jest.mock("assets/images/logo.png", () => "");
-jest.mock("assets/icons/google-logo.png", () => "");
-
-/* ================= TEST ================= */
+jest.mock("assets/images/logo.png", () => "test-logo.png");
 
 describe("Register component", () => {
     beforeEach(() => {
-        jest.spyOn(window, "alert").mockImplementation(() => { });
+        jest.spyOn(console, "log").mockImplementation(() => { });
         mockNavigate.mockClear();
     });
 
@@ -31,12 +24,12 @@ describe("Register component", () => {
             </BrowserRouter>
         );
 
-        expect(screen.getByText("ĐĂNG KÝ VUATROVN")).toBeInTheDocument();
+        expect(screen.getByText("Đăng Ký Tài Khoản Mới")).toBeInTheDocument();
         expect(
-            screen.getByPlaceholderText("Nhập họ và tên")
+            screen.getByPlaceholderText("Họ Và Tên")
         ).toBeInTheDocument();
         expect(
-            screen.getByPlaceholderText("Nhập email hoặc số điện thoại")
+            screen.getByPlaceholderText("Nhập Vào Email/ Số Điện Thoại")
         ).toBeInTheDocument();
     });
 
@@ -47,25 +40,24 @@ describe("Register component", () => {
             </BrowserRouter>
         );
 
-        fireEvent.click(screen.getByText("Đăng ký"));
+        fireEvent.click(screen.getByText("Đăng Ký"));
 
         expect(
-            screen.getByText("Vui lòng nhập họ tên")
+            screen.getByText("Vui lòng nhập họ và tên")
         ).toBeInTheDocument();
 
         expect(
-            screen.getByText("Vui lòng nhập email hoặc SĐT")
+            screen.getByText("Vui lòng nhập Email hoặc SĐT")
         ).toBeInTheDocument();
 
         expect(
-            screen.getByText("Mật khẩu tối thiểu 6 ký tự")
+            screen.getByText("Vui lòng nhập mật khẩu")
         ).toBeInTheDocument();
 
         expect(
-            screen.getByText("Bạn phải đồng ý điều khoản")
+            screen.getByText("Bạn cần chấp nhận điều khoản")
         ).toBeInTheDocument();
     });
-
 
     test("đăng ký thành công khi nhập đúng dữ liệu", () => {
         render(
@@ -75,30 +67,30 @@ describe("Register component", () => {
         );
 
         fireEvent.change(
-            screen.getByPlaceholderText("Nhập họ và tên"),
+            screen.getByPlaceholderText("Họ Và Tên"),
             { target: { value: "Nguyễn Văn A" } }
         );
 
         fireEvent.change(
-            screen.getByPlaceholderText("Nhập email hoặc số điện thoại"),
+            screen.getByPlaceholderText("Nhập Vào Email/ Số Điện Thoại"),
             { target: { value: "test@gmail.com" } }
         );
 
         fireEvent.change(
-            screen.getAllByPlaceholderText("••••••••")[0],
+            screen.getByPlaceholderText("Nhập Vào Mật Khẩu"),
             { target: { value: "123456" } }
         );
 
         fireEvent.change(
-            screen.getAllByPlaceholderText("••••••••")[1],
+            screen.getByPlaceholderText("Nhập Lại Mật Khẩu"),
             { target: { value: "123456" } }
         );
 
-        fireEvent.click(screen.getByLabelText("Tôi đồng ý điều khoản sử dụng"));
+        const checkbox = screen.getByRole("checkbox", { name: /Chấp Nhận Điều Khoản/i });
+        fireEvent.click(checkbox);
 
-        fireEvent.click(screen.getByText("Đăng ký"));
+        fireEvent.click(screen.getByText("Đăng Ký"));
 
-        expect(window.alert).toHaveBeenCalledWith("Đăng ký thành công!");
-        expect(mockNavigate).toHaveBeenCalledWith("/login");
+        expect(console.log).toHaveBeenCalledWith("Register successful", expect.any(Object));
     });
 });

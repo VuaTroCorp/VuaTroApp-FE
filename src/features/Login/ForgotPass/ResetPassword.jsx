@@ -1,103 +1,130 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import logo from "assets/images/logo.png";
+import background from "assets/images/background.png";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Key, Eye, EyeOff } from "lucide-react";
+import "./ResetPassword.scss";
+
+// Preload ảnh nền để không bị chớp trắng
+const preloadImage = new Image();
+preloadImage.src = background;
 
 const ResetPassword = () => {
-    const navigate = useNavigate();
-    const { state } = useLocation();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Xóa lỗi khi người dùng bắt đầu nhập lại
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
 
-    const handleReset = (e) => {
-        e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = {};
 
-        if (!password || !confirmPassword) {
-            setError("Vui lòng nhập đầy đủ thông tin");
-            return;
-        }
+    if (!formData.password) {
+      newErrors.password = "Vui lòng nhập mật khẩu mới";
+    }
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Vui lòng xác nhận lại mật khẩu";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Mật khẩu không khớp";
+    }
 
-        if (password !== confirmPassword) {
-            setError("Mật khẩu xác nhận không khớp");
-            return;
-        }
+    setErrors(newErrors);
 
-        setError("");
+    if (Object.keys(newErrors).length === 0) {
+      console.log("Password reset successfully with:", formData.password);
+      // Gọi API đổi mật khẩu ở đây...
 
-        // TODO: call API reset password
-        // resetPassword(state?.identifier, password)
+      // Chuyển hướng về trang đăng nhập sau khi thành công
+      alert("Đổi mật khẩu thành công!");
+      navigate("/login");
+    }
+  };
 
-        // giả lập thành công
-        navigate("/login");
-    };
-
-    return (
-        <div className="auth-page">
-            <div className="auth-container">
-                {/* LEFT */}
-                <div className="auth-left">
-                    <div className="brand">
-                        <img src={logo} alt="logo" className="logo" />
-                        <p className="slogan">
-                            Tìm nhà trọ tốt - Uy tín nhất!
-                        </p>
-                    </div>
-                </div>
-
-                {/* RIGHT */}
-                <div className="auth-right">
-                    <h1>ĐỔI MẬT KHẨU</h1>
-                    <p className="subtitle">
-                        Vui lòng nhập mật khẩu mới của bạn
-                    </p>
-
-                    <form className="auth-form" onSubmit={handleReset}>
-                        <div className="form-group">
-                            <label>Mật khẩu mới</label>
-                            <input
-                                type="password"
-                                placeholder="Nhập mật khẩu mới"
-                                value={password}
-                                onChange={(e) => {
-                                    setPassword(e.target.value);
-                                    setError("");
-                                }}
-                                className={error ? "input-error shake" : ""}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Xác nhận mật khẩu</label>
-                            <input
-                                type="password"
-                                placeholder="Nhập lại mật khẩu mới"
-                                value={confirmPassword}
-                                onChange={(e) => {
-                                    setConfirmPassword(e.target.value);
-                                    setError("");
-                                }}
-                                className={error ? "input-error shake" : ""}
-                            />
-                            {error && (
-                                <span className="field-error">{error}</span>
-                            )}
-                        </div>
-
-                        <button type="submit" className="btn-login">
-                            Xác nhận
-                        </button>
-                    </form>
-
-                    <div className="auth-options">
-                        <span onClick={() => navigate("/login")}>
-                            Quay lại đăng nhập
-                        </span>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div
+      className="reset-page"
+      style={{ backgroundImage: `url(${background})` }}
+    >
+      <div className="reset-card">
+        {/* Vòng tròn khóa */}
+        <div className="icon-badge">
+          <Key size={32} color="#000" strokeWidth={2.5} />
         </div>
-    );
+
+        <h2 className="reset-title">Quên Mật khẩu?</h2>
+
+        <form className="reset-form" onSubmit={handleSubmit}>
+          {/* Mật khẩu mới */}
+          <div className="form-group">
+            <label>Nhập mật khẩu mới</label>
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Mật khẩu mới"
+                value={formData.password}
+                onChange={handleChange}
+                className={errors.password ? "input-error" : ""}
+              />
+              <button
+                type="button"
+                className="eye-btn"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+            <div className="error-message-container">
+              {errors.password && (
+                <span className="error-text">{errors.password}</span>
+              )}
+            </div>
+          </div>
+
+          {/* Nhập lại mật khẩu */}
+          <div className="form-group">
+            <label>Nhập lại mật khẩu</label>
+            <div className="password-input-wrapper">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Nhập lại mật khẩu"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={errors.confirmPassword ? "input-error" : ""}
+              />
+              <button
+                type="button"
+                className="eye-btn"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+            <div className="error-message-container">
+              {errors.confirmPassword && (
+                <span className="error-text">{errors.confirmPassword}</span>
+              )}
+            </div>
+          </div>
+
+          <button type="submit" className="submit-btn">
+            Xác Nhận
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default ResetPassword;

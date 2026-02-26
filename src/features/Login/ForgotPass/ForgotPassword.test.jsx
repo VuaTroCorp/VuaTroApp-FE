@@ -2,48 +2,67 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import ForgotPassword from "./ForgotPassword";
 
+jest.mock("assets/images/background.png", () => "test-background.png", {
+  virtual: true,
+});
+
 const mockNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
-    ...jest.requireActual("react-router-dom"),
-    useNavigate: () => mockNavigate,
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => mockNavigate,
 }));
 
 describe("ForgotPassword", () => {
-    beforeEach(() => {
-        mockNavigate.mockClear();
-    });
+  beforeEach(() => {
+    mockNavigate.mockClear();
+    jest.spyOn(console, "log").mockImplementation(() => {});
+  });
 
-    test("hiển thị lỗi khi submit rỗng", () => {
-        render(
-            <MemoryRouter>
-                <ForgotPassword />
-            </MemoryRouter>
-        );
+  test("hiển thị form quên mật khẩu", () => {
+    render(
+      <MemoryRouter>
+        <ForgotPassword />
+      </MemoryRouter>,
+    );
 
-        fireEvent.click(screen.getByText("Gửi yêu cầu"));
+    expect(screen.getByText("Quên Mật Khẩu ?")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Vui Lòng Nhập Email Hoặc Số Điện Thoại"),
+    ).toBeInTheDocument();
+  });
 
-        expect(
-            screen.getByText("Vui lòng nhập Email hoặc SĐT")
-        ).toBeInTheDocument();
-    });
+  test("hiển thị lỗi khi submit rỗng", () => {
+    render(
+      <MemoryRouter>
+        <ForgotPassword />
+      </MemoryRouter>,
+    );
 
-    test("chuyển sang verify khi nhập email hợp lệ", () => {
-        render(
-            <MemoryRouter>
-                <ForgotPassword />
-            </MemoryRouter>
-        );
+    fireEvent.click(screen.getByText("Gửi Mã Xác Nhận"));
 
-        fireEvent.change(
-            screen.getByPlaceholderText("Nhập email hoặc số điện thoại"),
-            { target: { value: "test@gmail.com" } }
-        );
+    expect(
+      screen.getByText("Vui lòng nhập Email hoặc Số Điện Thoại"),
+    ).toBeInTheDocument();
+  });
 
-        fireEvent.click(screen.getByText("Gửi yêu cầu"));
+  test("gọi console.log khi nhập email hợp lệ", () => {
+    render(
+      <MemoryRouter>
+        <ForgotPassword />
+      </MemoryRouter>,
+    );
 
-        expect(mockNavigate).toHaveBeenCalledWith("/verify-otp", {
-            state: { identifier: "test@gmail.com" },
-        });
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText("Vui Lòng Nhập Email Hoặc Số Điện Thoại"),
+      { target: { value: "test@gmail.com" } },
+    );
+
+    fireEvent.click(screen.getByText("Gửi Mã Xác Nhận"));
+
+    expect(console.log).toHaveBeenCalledWith(
+      "Request reset password for:",
+      "test@gmail.com",
+    );
+  });
 });
