@@ -2,6 +2,8 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import ResetPassword from "./ResetPassword";
 
+jest.mock("assets/images/background.png", () => "test-background.png");
+
 const mockNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
