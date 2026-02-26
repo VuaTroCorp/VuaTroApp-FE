@@ -12,7 +12,7 @@ jest.mock("react-router-dom", () => ({
     }),
 }));
 
-jest.mock("assets/images/background.png", () => "test-background.png");
+jest.mock("../../../assets/images/background.png", () => "test-background.png");
 
 describe("ResetPassword", () => {
     beforeEach(() => {
