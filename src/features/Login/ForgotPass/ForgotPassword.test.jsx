@@ -9,8 +9,6 @@ jest.mock("react-router-dom", () => ({
     useNavigate: () => mockNavigate,
 }));
 
-jest.mock("../../../assets/images/background.png", () => "test-background.png");
-
 describe("ForgotPassword", () => {
     beforeEach(() => {
         mockNavigate.mockClear();
