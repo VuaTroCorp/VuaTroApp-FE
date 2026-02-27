@@ -1,7 +1,8 @@
 import axios from "axios";
 import { clearAuth } from "./auth";
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+// Lấy baseURL từ env - Vite sẽ replace process.env trong build time
+const baseURL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
 
 export const api = axios.create({
   baseURL,
