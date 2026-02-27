@@ -1,5 +1,5 @@
 import axios from "axios";
-import { clearAuth } from "./auth";
+import { clearAuth, setAuthToken, getAuthToken, getRefreshToken } from "./auth";
 
 // Lấy baseURL từ env - Vite sẽ replace process.env trong build time
 const baseURL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
@@ -14,7 +14,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("authToken");
+  const token = getAuthToken();
   if (token) {
     config.headers = config.headers || {};
     config.headers["Authorization"] = `Bearer ${token}`;
@@ -34,7 +34,7 @@ api.interceptors.response.use(
 
       try {
         // Thử refresh token nếu có
-        const refreshToken = localStorage.getItem("refreshToken");
+        const refreshToken = getRefreshToken();
         if (refreshToken) {
           const response = await axios.post(`${baseURL}/api/auth/refresh`, {
             refreshToken,
@@ -70,10 +70,3 @@ api.interceptors.response.use(
   },
 );
 
-export function setAuthToken(token) {
-  if (token) {
-    localStorage.setItem("authToken", token);
-  } else {
-    localStorage.removeItem("authToken");
-  }
-}
