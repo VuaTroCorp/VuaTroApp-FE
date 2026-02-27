@@ -3,8 +3,8 @@ import "@testing-library/jest-dom";
 // Mock import.meta cho Jest
 global.importMeta = {
   env: {
-    VITE_API_BASE_URL: "http://localhost:8080"
-  }
+    VITE_API_BASE_URL: "http://localhost:8080",
+  },
 };
 
 // Mock localStorage cho Jest
