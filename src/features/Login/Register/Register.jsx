@@ -71,24 +71,28 @@ const Register = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      const result = await signup({
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-        confirmPassword: formData.confirmPassword,
-      });
+      try {
+        const response = await signup({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        });
 
-      if (result.success) {
+        // Xử lý response thành công
         toast.success(
-          result.message ||
-            "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.",
+          response?.message ||
+            "Đăng ký thành công. Vui lòng kiểm tra email để xác thực.",
         );
         setTimeout(() => navigate("/login"), 2000);
-      } else {
-        if (result.errors && typeof result.errors === "object") {
-          setErrors(result.errors);
-        }
-        toast.error(result.error || "Đăng ký thất bại. Vui lòng thử lại.");
+      } catch (error) {
+        // Xử lý error từ backend
+        const errorMessage =
+          error.response?.data?.message ||
+          "Đăng ký thất bại. Vui lòng thử lại.";
+
+        // Hiển thị toast error
+        toast.error(errorMessage);
       }
     }
   };

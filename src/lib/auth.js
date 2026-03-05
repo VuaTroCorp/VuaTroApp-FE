@@ -1,4 +1,4 @@
-const USER_KEY = "authUser";
+const USER_KEY = "authUser"; // Khóa để lưu/lấy thông tin user trong localStorage
 const TOKEN_KEY = "authToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 

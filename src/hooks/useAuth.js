@@ -3,7 +3,6 @@ import { authAPI } from "../lib/apiService";
 import {
   setAuthToken,
   getAuthToken,
-  setRefreshToken,
   setCurrentUser,
   getCurrentUser,
   clearAuth,
@@ -55,24 +54,10 @@ export const AuthProvider = ({ children }) => {
 
   // Đăng ký tài khoản
   const signup = async (userData) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await authAPI.signup(userData);
-
-      return {
-        success: true,
-        message:
-          response.data?.message ||
-          "Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.",
-        data: response.data,
-      };
-    } catch (error) {
-      console.error("Signup error:", error);
-      return {
-        success: false,
-        error: error.response?.data?.message || "Đăng ký thất bại",
-        errors: error.response?.data?.errors || {},
-      };
+      return response.data;
     } finally {
       setLoading(false);
     }
@@ -80,39 +65,32 @@ export const AuthProvider = ({ children }) => {
 
   // Đăng nhập
   const login = async (credentials) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await authAPI.login(credentials);
 
-      const token = response.data?.token || response.data?.accessToken;
-      const refreshToken = response.data?.refreshToken;
-      const userData =
-        response.data?.user || response.data?.User || response.data;
+      // Response format: { status, token, role, message }
+      const token = response.data?.token;
+      const role = response.data?.role;
 
       if (!token) {
         throw new Error("Không nhận được token từ server");
       }
 
-      // Lưu tokens và user info
+      // Tạo userData object từ response
+      const userData = {
+        email: credentials.email,
+        role: role,
+      };
+
+      // Lưu token và user info
       setAuthToken(token);
-      if (refreshToken) {
-        setRefreshToken(refreshToken);
-      }
       setCurrentUser(userData);
 
       setUser(userData);
       setIsAuthenticated(true);
 
-      return { success: true, user: userData };
-    } catch (error) {
-      console.error("Login error:", error);
-      return {
-        success: false,
-        error:
-          error.response?.data?.message ||
-          error.message ||
-          "Đăng nhập thất bại",
-      };
+      return userData;
     } finally {
       setLoading(false);
     }
@@ -138,18 +116,10 @@ export const AuthProvider = ({ children }) => {
 
   // Xác thực email
   const verifyEmail = async (token) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await authAPI.verifyEmail(token);
-      return {
-        success: true,
-        message: response.data?.message || "Xác thực email thành công!",
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.message || "Xác thực email thất bại",
-      };
+      return response.data;
     } finally {
       setLoading(false);
     }
@@ -157,19 +127,10 @@ export const AuthProvider = ({ children }) => {
 
   // Quên mật khẩu
   const forgotPassword = async (email) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await authAPI.forgotPassword(email);
-      return {
-        success: true,
-        message:
-          response.data?.message || "Đã gửi email hướng dẫn reset mật khẩu!",
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.message || "Gửi email thất bại",
-      };
+      return response.data;
     } finally {
       setLoading(false);
     }
@@ -177,18 +138,10 @@ export const AuthProvider = ({ children }) => {
 
   // Reset mật khẩu
   const resetPassword = async (token, newPassword) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await authAPI.resetPassword(token, newPassword);
-      return {
-        success: true,
-        message: response.data?.message || "Đổi mật khẩu thành công!",
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.message || "Đổi mật khẩu thất bại",
-      };
+      return response.data;
     } finally {
       setLoading(false);
     }
@@ -196,18 +149,10 @@ export const AuthProvider = ({ children }) => {
 
   // Đổi mật khẩu (khi đã đăng nhập)
   const changePassword = async (oldPassword, newPassword) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await authAPI.changePassword(oldPassword, newPassword);
-      return {
-        success: true,
-        message: response.data?.message || "Đổi mật khẩu thành công!",
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.message || "Đổi mật khẩu thất bại",
-      };
+      return response.data;
     } finally {
       setLoading(false);
     }
@@ -221,15 +166,11 @@ export const AuthProvider = ({ children }) => {
 
   // Làm mới thông tin user từ server
   const refreshUser = async () => {
-    try {
-      const response = await authAPI.getProfile();
-      const userData = response.data?.user || response.data;
-      setCurrentUser(userData);
-      setUser(userData);
-      return { success: true, user: userData };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
+    const response = await authAPI.getProfile();
+    const userData = response.data?.user || response.data;
+    setCurrentUser(userData);
+    setUser(userData);
+    return userData;
   };
 
   const value = {
