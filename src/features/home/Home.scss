@@ -1,5 +1,10 @@
 .home-page {
-  min-height: 100vh;
   background-color: #f1eeee; // xám nhạt
-  padding: 24px;
+  padding: 28px 20px;
+  display: flex;
+  gap: 20px;
+}
+.right-container-admin{
+  width: 100%;
+  
 }

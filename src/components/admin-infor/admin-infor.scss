@@ -1,0 +1,29 @@
+.admin-right-container {
+  background-color: #ffffff;
+  height: 790px;
+  // width: 100%;
+  border-radius: 15px;
+  border: 1px solid hsla(0, 0%, 0%, 0.251);
+  padding: 10px 60px;
+}
+
+.button-edit {
+  transition: 0.4s;
+  text-align: end;
+  padding: 15px 15px 15px 43px;
+  background-color: #e1a730;
+}
+
+.button-edit:hover {
+  box-shadow: 0 4px 10px #00000040;
+}
+
+.button-confirm {
+  transition: 0.4s;
+  text-align: center;
+  padding: 15px 30px 15px 30px;
+}
+.button-confirm:hover {
+  box-shadow: 0 4px 10px #00000040;
+  transform: translate(0, -4px);
+}
