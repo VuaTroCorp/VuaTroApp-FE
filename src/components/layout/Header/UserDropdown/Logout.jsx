@@ -1,5 +1,5 @@
 import React from "react";
-import "./LogOut.scss";
+import "./Logout.scss";
 import { LogOut } from "lucide-react";
 
 const Logout = ({ setShowLogout }) => {

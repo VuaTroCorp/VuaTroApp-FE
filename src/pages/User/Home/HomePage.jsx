@@ -2,6 +2,7 @@ import "./HomePage.scss";
 import HomeFilterHeader from "components/shared/User/HomeFilterHeader/HomeFilterHeader";
 import RoomCard from "components/shared/User/RoomCard/RoomCard";
 import OptionSection from "components/shared/User/OptionSection/OptionSection";
+import NewPostSection from "components/shared/User/NewPostSection/NewPostSection";
 import SelectionSection from "components/shared/User/SelectionSection/SelectionSection";
 import ServiceSection from "components/shared/User/ServiceSection/ServiceSection";
 
@@ -45,6 +46,7 @@ function HomePage() {
 
         <aside className="right-content">
           <OptionSection />
+          <NewPostSection />
           <SelectionSection /> 
         </aside>
 
