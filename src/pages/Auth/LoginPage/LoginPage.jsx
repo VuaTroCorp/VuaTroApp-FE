@@ -13,7 +13,6 @@ const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    remember: false,
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -77,7 +76,7 @@ const LoginPage = () => {
         <div className="login-content">
           <h2 className="login-title">CHÀO MỪNG BẠN ĐẾN VỚI VUATROVN</h2>
 
-          <form className="login-form" onSubmit={handleSubmit}>
+          <form className="login-form" onSubmit={handleSubmit} noValidate>
             <div className="form-group">
               <label>Email</label>
               <input
@@ -97,7 +96,9 @@ const LoginPage = () => {
             </div>
 
             <div className="form-group">
-              <label>Mật Khẩu</label>
+              <label>
+                Mật Khẩu <span className="required">*</span>
+              </label>
               <div className="password-input-wrapper">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -154,7 +155,11 @@ const LoginPage = () => {
             </button>
           </form>
 
-          <button className="google-login-btn">
+          <button 
+            className="google-login-btn"
+            onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/google'}
+            type="button"
+          >
             <img src={googleLogo} alt="G" />
             <span>Đăng nhập bằng Google</span>
           </button>

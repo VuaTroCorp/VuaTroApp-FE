@@ -67,6 +67,12 @@ $error-red: #d32f2f;
       font-weight: 600;
       margin-bottom: 8px;
       font-size: 13px;
+
+      .required {
+        color: $error-red;
+        margin-left: 2px;
+        font-weight: 700;
+      }
     }
 
     input {
@@ -129,24 +135,6 @@ $error-red: #d32f2f;
       cursor: pointer;
       display: flex;
       padding: 0;
-    }
-  }
-}
-
-.remember-row {
-  display: flex;
-  margin: 7px 0;
-  .checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #444;
-    input {
-      width: 14px;
-      height: 14px;
-      margin: 0;
     }
   }
 }
