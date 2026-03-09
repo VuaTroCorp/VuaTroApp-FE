@@ -13,7 +13,6 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    remember: false,
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -56,13 +55,20 @@ const Login = () => {
         });
 
         // Đăng nhập thành công
-        toast.success("Đăng nhập thành công!");
+        toast.success("Đăng nhập thành công!", {
+          autoClose: false,
+          closeButton: true,
+        });
         navigate("/");
       } catch (error) {
         // Xử lý error từ backend
         const errorMessage =
-          error.response?.data?.message || "Đăng nhập thất bại. Vui lòng thử lại.";
-        toast.error(errorMessage);
+          error.response?.data?.message ||
+          "Đăng nhập thất bại. Vui lòng thử lại.";
+        toast.error(errorMessage, {
+          autoClose: false,
+          closeButton: true,
+        });
       }
     }
   };
@@ -77,9 +83,11 @@ const Login = () => {
         <div className="login-content">
           <h2 className="login-title">CHÀO MỪNG BẠN ĐẾN VỚI VUATROVN</h2>
 
-          <form className="login-form" onSubmit={handleSubmit}>
+          <form className="login-form" onSubmit={handleSubmit} noValidate>
             <div className="form-group">
-              <label>Email</label>
+              <label>
+                Email <span className="required">*</span>
+              </label>
               <input
                 type="email"
                 name="email"
@@ -97,7 +105,9 @@ const Login = () => {
             </div>
 
             <div className="form-group">
-              <label>Mật Khẩu</label>
+              <label>
+                Mật Khẩu <span className="required">*</span>
+              </label>
               <div className="password-input-wrapper">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -124,19 +134,6 @@ const Login = () => {
               </div>
             </div>
 
-            <div className="remember-row">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="remember"
-                  checked={formData.remember}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                />
-                <span>Ghi nhớ mật khẩu</span>
-              </label>
-            </div>
-
             <div className="link-row">
               <span
                 className="blue-link"
@@ -154,7 +151,11 @@ const Login = () => {
             </button>
           </form>
 
-          <button className="google-login-btn">
+          <button 
+            className="google-login-btn"
+            onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/google'}
+            type="button"
+          >
             <img src={googleLogo} alt="G" />
             <span>Đăng nhập bằng Google</span>
           </button>

@@ -34,7 +34,7 @@ describe("Login Component", () => {
     return render(
       <BrowserRouter>
         <Login />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
   };
 
@@ -42,15 +42,20 @@ describe("Login Component", () => {
     test("hiển thị tất cả các trường form", () => {
       renderLogin();
 
-      expect(screen.getByText("CHÀO MỪNG BẠN ĐẾN VỚI VUATROVN")).toBeInTheDocument();
+      expect(
+        screen.getByText("CHÀO MỪNG BẠN ĐẾN VỚI VUATROVN"),
+      ).toBeInTheDocument();
       expect(screen.getByText("Email")).toBeInTheDocument();
       expect(screen.getByText("Mật Khẩu")).toBeInTheDocument();
-      expect(screen.getByPlaceholderText("Nhập địa chỉ email")).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText("Nhập địa chỉ email"),
+      ).toBeInTheDocument();
       expect(screen.getByPlaceholderText("Mật Khẩu")).toBeInTheDocument();
-      expect(screen.getByText("Ghi nhớ mật khẩu")).toBeInTheDocument();
       expect(screen.getByText("Quên Mật Khẩu?")).toBeInTheDocument();
       expect(screen.getByText("Đăng Ký Tài Khoản")).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "Đăng Nhập" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Đăng Nhập" }),
+      ).toBeInTheDocument();
     });
 
     test("hiển thị logo", () => {
@@ -111,7 +116,9 @@ describe("Login Component", () => {
       fireEvent.change(emailInput, { target: { value: "test@example.com" } });
 
       await waitFor(() => {
-        expect(screen.queryByText("Vui lòng nhập email")).not.toBeInTheDocument();
+        expect(
+          screen.queryByText("Vui lòng nhập email"),
+        ).not.toBeInTheDocument();
       });
     });
   });
@@ -183,7 +190,9 @@ describe("Login Component", () => {
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith("Email hoặc mật khẩu không đúng");
+        expect(toast.error).toHaveBeenCalledWith(
+          "Email hoặc mật khẩu không đúng",
+        );
       });
 
       expect(mockNavigate).not.toHaveBeenCalled();
@@ -201,7 +210,9 @@ describe("Login Component", () => {
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith("Đăng nhập thất bại. Vui lòng thử lại.");
+        expect(toast.error).toHaveBeenCalledWith(
+          "Đăng nhập thất bại. Vui lòng thử lại.",
+        );
       });
     });
   });
@@ -217,8 +228,9 @@ describe("Login Component", () => {
 
       expect(screen.getByPlaceholderText("Nhập địa chỉ email")).toBeDisabled();
       expect(screen.getByPlaceholderText("Mật Khẩu")).toBeDisabled();
-      expect(screen.getByRole("checkbox")).toBeDisabled();
-      expect(screen.getByRole("button", { name: "Đang xử lý..." })).toBeDisabled();
+      expect(
+        screen.getByRole("button", { name: "Đang xử lý..." }),
+      ).toBeDisabled();
     });
 
     test("hiển thị text 'Đang xử lý...' khi loading", () => {
@@ -249,21 +261,6 @@ describe("Login Component", () => {
       fireEvent.click(registerLink);
 
       expect(mockNavigate).toHaveBeenCalledWith("/register");
-    });
-  });
-
-  describe("Remember Me", () => {
-    test("có thể check/uncheck ghi nhớ mật khẩu", () => {
-      renderLogin();
-
-      const rememberCheckbox = screen.getByRole("checkbox");
-      expect(rememberCheckbox).not.toBeChecked();
-
-      fireEvent.click(rememberCheckbox);
-      expect(rememberCheckbox).toBeChecked();
-
-      fireEvent.click(rememberCheckbox);
-      expect(rememberCheckbox).not.toBeChecked();
     });
   });
 });

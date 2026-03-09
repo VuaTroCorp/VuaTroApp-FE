@@ -105,9 +105,11 @@ const Register = () => {
         </div>
         <div className="auth-content">
           <h2 className="register-title">Đăng Ký Tài Khoản Mới</h2>
-          <form className="auth-form" onSubmit={handleSubmit}>
+          <form className="auth-form" onSubmit={handleSubmit} noValidate>
             <div className="form-group">
-              <label>Tên Tài Khoản</label>
+              <label>
+                Tên Tài Khoản <span className="required">*</span>
+              </label>
               <input
                 type="text"
                 name="username"
@@ -125,7 +127,9 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label>Email</label>
+              <label>
+                Email <span className="required">*</span>
+              </label>
               <input
                 type="email"
                 name="email"
@@ -143,7 +147,9 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label>Mật Khẩu</label>
+              <label>
+                Mật Khẩu <span className="required">*</span>
+              </label>
               <div className="password-input-wrapper">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -171,7 +177,9 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label>Xác Nhận Mật Khẩu</label>
+              <label>
+                Xác Nhận Mật Khẩu <span className="required">*</span>
+              </label>
               <div className="password-input-wrapper">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
