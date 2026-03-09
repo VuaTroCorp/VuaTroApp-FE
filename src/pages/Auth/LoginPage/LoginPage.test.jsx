@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { toast } from "react-toastify";
-import Login from "./Login";
+import LoginPage from "./LoginPage";
 import { useAuth } from "hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -33,7 +33,7 @@ describe("Login Component", () => {
   const renderLogin = () => {
     return render(
       <BrowserRouter>
-        <Login />
+        <LoginPage />
       </BrowserRouter>,
     );
   };
@@ -169,10 +169,7 @@ describe("Login Component", () => {
         });
       });
 
-      expect(toast.success).toHaveBeenCalledWith("Đăng nhập thành công!", {
-        autoClose: false,
-        closeButton: true,
-      });
+      expect(toast.success).toHaveBeenCalledWith("Đăng nhập thành công!");
       expect(mockNavigate).toHaveBeenCalledWith("/");
     });
 
@@ -195,10 +192,6 @@ describe("Login Component", () => {
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
           "Email hoặc mật khẩu không đúng",
-          {
-            autoClose: false,
-            closeButton: true,
-          }
         );
       });
 
@@ -219,10 +212,6 @@ describe("Login Component", () => {
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
           "Đăng nhập thất bại. Vui lòng thử lại.",
-          {
-            autoClose: false,
-            closeButton: true,
-          }
         );
       });
     });

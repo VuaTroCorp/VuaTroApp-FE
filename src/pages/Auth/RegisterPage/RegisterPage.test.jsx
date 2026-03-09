@@ -1,6 +1,9 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import RegisterPage from "./RegisterPage";
+import { useAuth } from "hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // Mock dependencies
 jest.mock("assets/images/logo.png", () => "test-logo.png");
@@ -35,7 +38,7 @@ describe("Register Component", () => {
   const renderRegister = () => {
     return render(
       <BrowserRouter>
-        <Register />
+        <RegisterPage />
       </BrowserRouter>,
     );
   };
