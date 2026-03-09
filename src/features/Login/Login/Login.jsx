@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
 import logo from "assets/images/logo.png";
 import googleLogo from "assets/icons/google-logo.png";
+import { useAuth } from "hooks/useAuth";
 import "./Login.scss";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login, isLoading } = useAuth();
   const [formData, setFormData] = useState({
-    identifier: "",
+    email: "",
     password: "",
-    remember: false,
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -24,16 +26,50 @@ const Login = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
-    if (!formData.identifier)
-      newErrors.identifier = "Vui lòng nhập Email hoặc SĐT";
-    if (!formData.password) newErrors.password = "Vui lòng nhập mật khẩu";
+
+    if (!formData.email) {
+      newErrors.email = "Vui lòng nhập email";
+    } else if (!isValidEmail(formData.email)) {
+      newErrors.email = "Email không hợp lệ";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Vui lòng nhập mật khẩu";
+    }
 
     setErrors(newErrors);
+
     if (Object.keys(newErrors).length === 0) {
-      console.log("Login successful");
+      try {
+        await login({
+          email: formData.email,
+          password: formData.password,
+        });
+
+        // Đăng nhập thành công
+        toast.success("Đăng nhập thành công!", {
+          autoClose: false,
+          closeButton: true,
+        });
+        navigate("/");
+      } catch (error) {
+        // Xử lý error từ backend
+        const errorMessage =
+          error.response?.data?.message ||
+          "Đăng nhập thất bại. Vui lòng thử lại.";
+        toast.error(errorMessage, {
+          autoClose: false,
+          closeButton: true,
+        });
+      }
     }
   };
 
@@ -47,26 +83,31 @@ const Login = () => {
         <div className="login-content">
           <h2 className="login-title">CHÀO MỪNG BẠN ĐẾN VỚI VUATROVN</h2>
 
-          <form className="login-form" onSubmit={handleSubmit}>
+          <form className="login-form" onSubmit={handleSubmit} noValidate>
             <div className="form-group">
-              <label>Email / Số Điện Thoại</label>
+              <label>
+                Email <span className="required">*</span>
+              </label>
               <input
-                type="text"
-                name="identifier"
-                placeholder="Email Hoặc Số Điện Thoại"
-                value={formData.identifier}
+                type="email"
+                name="email"
+                placeholder="Nhập địa chỉ email"
+                value={formData.email}
                 onChange={handleChange}
-                className={errors.identifier ? "input-error" : ""}
+                className={errors.email ? "input-error" : ""}
+                disabled={isLoading}
               />
               <div className="error-message-container">
-                {errors.identifier && (
-                  <span className="error-text">{errors.identifier}</span>
+                {errors.email && (
+                  <span className="error-text">{errors.email}</span>
                 )}
               </div>
             </div>
 
             <div className="form-group">
-              <label>Mật Khẩu</label>
+              <label>
+                Mật Khẩu <span className="required">*</span>
+              </label>
               <div className="password-input-wrapper">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -75,11 +116,13 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className={errors.password ? "input-error" : ""}
+                  disabled={isLoading}
                 />
                 <button
                   type="button"
                   className="eye-btn"
                   onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -89,18 +132,6 @@ const Login = () => {
                   <span className="error-text">{errors.password}</span>
                 )}
               </div>
-            </div>
-
-            <div className="remember-row">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="remember"
-                  checked={formData.remember}
-                  onChange={handleChange}
-                />
-                <span>Ghi nhớ mật khẩu</span>
-              </label>
             </div>
 
             <div className="link-row">
@@ -115,12 +146,16 @@ const Login = () => {
               </span>
             </div>
 
-            <button type="submit" className="submit-btn">
-              Đăng Nhập
+            <button type="submit" className="submit-btn" disabled={isLoading}>
+              {isLoading ? "Đang xử lý..." : "Đăng Nhập"}
             </button>
           </form>
 
-          <button className="google-login-btn">
+          <button 
+            className="google-login-btn"
+            onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/google'}
+            type="button"
+          >
             <img src={googleLogo} alt="G" />
             <span>Đăng nhập bằng Google</span>
           </button>

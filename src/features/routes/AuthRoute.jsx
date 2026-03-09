@@ -2,8 +2,8 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 export default function AuthRoute() {
-    const isAuthenticated = Boolean(localStorage.getItem("token"));
+  const isAuthenticated = Boolean(localStorage.getItem("authToken"));
 
-    // Đã login thì không cho vào login / register
-    return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
+  // Đã login thì không cho vào login / register
+  return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
 }
