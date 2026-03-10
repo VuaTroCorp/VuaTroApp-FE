@@ -71,13 +71,13 @@ describe("Register Component", () => {
       ).toBeInTheDocument();
     });
 
-    test("hiển thị form đăng ký", () => {
-        render(
-            <BrowserRouter>
-                <RegisterPage />
-            </BrowserRouter>
-        );
-      });
+    test("hiển thị logo", () => {
+      renderRegister();
+      const logo = screen.getByAltText("Vuatrovn");
+      expect(logo).toBeInTheDocument();
+      expect(logo).toHaveAttribute("src", "test-logo.png");
+    });
+  });
 
   describe("Form Validation", () => {
     test("hiển thị lỗi khi submit form trống", async () => {
@@ -103,12 +103,8 @@ describe("Register Component", () => {
       expect(mockSignup).not.toHaveBeenCalled();
     });
 
-    test("hiển thị lỗi khi submit rỗng", async() => {
-        render(
-            <BrowserRouter>
-                <RegisterPage />
-            </BrowserRouter>
-        );
+    test("hiển thị lỗi khi username quá ngắn", async () => {
+      renderRegister();
 
       const usernameInput = screen.getByPlaceholderText("Nhập tên tài khoản");
       fireEvent.change(usernameInput, { target: { value: "ab" } });
@@ -123,12 +119,8 @@ describe("Register Component", () => {
       });
     });
 
-    test("đăng ký thành công khi nhập đúng dữ liệu", async () => {
-        render(
-            <BrowserRouter>
-                <RegisterPage />
-            </BrowserRouter>
-        );
+    test("hiển thị lỗi khi email không hợp lệ", async () => {
+      renderRegister();
 
       const emailInput = screen.getByPlaceholderText("Nhập địa chỉ email");
       fireEvent.change(emailInput, { target: { value: "invalid-email" } });
@@ -374,5 +366,4 @@ describe("Register Component", () => {
       expect(mockNavigate).toHaveBeenCalledWith("/login");
     });
   });
-})
 });

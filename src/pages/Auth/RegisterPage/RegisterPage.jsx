@@ -105,7 +105,7 @@ const Register = () => {
         </div>
         <div className="auth-content">
           <h2 className="register-title">Đăng Ký Tài Khoản Mới</h2>
-          <form className="auth-form" onSubmit={handleSubmit}>
+          <form className="auth-form" onSubmit={handleSubmit} noValidate>
             <div className="form-group">
               <label>
                 Tên Tài Khoản <span className="required">*</span>
@@ -127,7 +127,9 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label>Email</label>
+              <label>
+                Email <span className="required">*</span>
+              </label>
               <input
                 type="email"
                 name="email"
