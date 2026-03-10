@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Header from "./Header";
+import Navbar from "./Header";
 import { MemoryRouter } from "react-router-dom";
 
 jest.mock("assets/images/logo.png", () => "logo.png");
@@ -8,11 +8,11 @@ jest.mock("assets/icons/down.png", () => "down.png");
 jest.mock("assets/icons/heart.png", () => "heart.png");
 jest.mock("assets/icons/account.png", () => "account.png");
 
-describe("Header Component", () => {
-  test("renders header component correctly", () => {
+describe("Navbar Component", () => {
+  test("renders navbar component correctly", () => {
     render(
       <MemoryRouter>
-        <Header />
+        <Navbar />
       </MemoryRouter>
     );
 

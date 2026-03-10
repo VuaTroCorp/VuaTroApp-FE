@@ -1,146 +1,124 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-
+import React, { useState } from "react";
 import logo from "assets/images/logo.png";
-import location1 from "assets/icons/location1.png";
-import down from "assets/icons/down.png";
-import heart from "assets/icons/heart.png";
-import account from "assets/icons/account.png";
-
 import "./Header.scss";
+import {
+  Heart,
+  LogIn,
+  ChevronUp,
+  ChevronDown,
+  Bell,
+  Search,
+} from "lucide-react";
+import DropDownUserInf from "../dropdownUserInfor/DropDownUserInf";
+// import {auth} from './lib/auth';
 
-function Header() {
-  const [showLocation, setShowLocation] = useState(false);
-  const [showAvatar, setShowAvatar] = useState(false);
+const Header = ({ setShowLogout }) => {
 
-  const locationRef = useRef(null);
-  const avatarRef = useRef(null);
-
-  const navigate = useNavigate();
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // CLICK RA NGOÀI → ĐÓNG DROPDOWN
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-    const handleClickOutside = (e) => {
-      if (locationRef.current && !locationRef.current.contains(e.target)) {
-        setShowLocation(false);
-      }
-
-      if (avatarRef.current && !avatarRef.current.contains(e.target)) {
-        setShowAvatar(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-
-  }, []);
+  const [openDrop, setOpenDrop] = useState(false);
+  const isLogin = localStorage.token ? true : false;
+  const [dropArrow, setDropArrow] = useState(false);
 
   return (
-    <header className="header">
-      <div className="header__left">
-        <img
-          src={logo}
-          alt="VuaTro"
-          className="logo"
-          onClick={() => navigate("/")}
-        />
+    <div className="main-container">
+      <div
+        style={{
+          display: "flex",
+          gap: "50px",
+          height: "100%",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <img className="logo-container" src={logo} alt="logo" />
+        </div>
 
-        {/* LOCATION */}
-        <div className="location" ref={locationRef}>
-          <div
-            className="location-box"
-            onClick={() => setShowLocation(!showLocation)}
-          >
-            <img src={location1} alt="location" />
-            <span>Ninh Thuận</span>
-            <img src={down} alt="down" />
+        <div className="search-container">
+          <div className="search-box">
+            <input
+              className="search-input"
+              type="text"
+              placeholder="Tìm phòng trọ, căn hộ, chung cư..."
+            />
           </div>
 
-          {showLocation && (
-            <div className="location-list">
-              <div className="location-item">Ninh Thuận</div>
-              <div className="location-item">Khánh Hòa</div>
-              <div className="location-item">TP HCM</div>
-            </div>
-          )}
-        </div>
-
-        {/* SEARCH */}
-        <div className="search">
-          <input placeholder="Tìm Bất Động Sản..." />
-          <button className="search__btn">🔍</button>
-        </div>
-      </div>
-
-      <div className="header__right">
-        <div className="header__right">
-          <img src={heart} alt="heart" className="favourite" />
-          <span className="notification">🔔</span>
-
-          {/* CHƯA LOGIN */}
-          {!isLoggedIn && (
-            <button
-              className="btn btn-header-login"
-              onClick={() => navigate("/login")}
-            >
-              Đăng nhập
-            </button>
-          )}
-
-          <button
-            className="btn btn-postnew"
-            onClick={() => navigate("/post-news")}
-          >
-            Đăng tin
+          <button className="search-btn">
+            <Search color="white" size={16} />
           </button>
-
-          {/* ĐÃ LOGIN */}
-          {isLoggedIn && (
-            <div className="avatar-menu" ref={avatarRef}>
-              <div
-                className="avatar-trigger"
-                onClick={() => setShowAvatar(!showAvatar)}
-              >
-                <img src={account} alt="account" className="avatar-img" />
-                <img src={down} alt="down" className="arrow" />
-              </div>
-
-              {showAvatar && (
-                <div className="avatar-dropdown">
-                  <div className="dropdown-item">Thông Tin Người Dùng</div>
-
-                  <Link to="/upgrade-account" className="dropdown-item">
-                    Nâng Cấp Tài Khoản
-                  </Link>
-
-                  <div className="dropdown-item">Bài Đăng Của Tôi</div>
-
-                  <div
-                    className="dropdown-item logout"
-                    onClick={() => {
-                      localStorage.removeItem("token");
-                      setIsLoggedIn(false);
-                      setShowAvatar(false);
-                      navigate("/");
-                    }}
-                  >
-                    Đăng Xuất
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
         </div>
-
       </div>
-    </header>
+
+      <div className="infor-container">
+        <Heart color="#E1A730" />
+        <Bell color="#E1A730" />
+        <button className="upload-button">Đăng tin</button>
+        {isLogin ? (
+          <div style={{ position: "relative" }}>
+            <span
+              onClick={() => {
+                setOpenDrop(!openDrop);
+                setDropArrow(!dropArrow);
+              }}
+              className="user-infor"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "10px 15px",
+                width: "220px",
+                justifyContent: "space-between",
+                cursor: "pointer",
+                fontWeight: "bold",
+                fontSize: "16px",
+              }}
+            >
+              <span
+                style={{
+                  display: "block",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                Lê Hoàng Tuyển
+              </span>
+              {dropArrow ? (
+                <span style={{ display: "flex", alignItems: "end" }}>
+                  <ChevronDown size={28} />
+                </span>
+              ) : (
+                <span style={{ display: "flex", alignItems: "end" }}>
+                  <ChevronUp size={28} />
+                </span>
+              )}
+            </span>
+            {openDrop && (
+              <DropDownUserInf
+                setOpenDrop={setOpenDrop}
+                setShowLogout={setShowLogout}
+                setDropArrow={setDropArrow}
+              />
+            )}
+          </div>
+        ) : (
+          <span
+            className="user-infor"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "10px 15px",
+              fontWeight: "500",
+            }}
+          >
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <LogIn size={18} />
+            </span>
+            <span>Đăng nhập</span>
+          </span>
+        )}
+      </div>
+    </div>
   );
-}
+};
 
 export default Header;

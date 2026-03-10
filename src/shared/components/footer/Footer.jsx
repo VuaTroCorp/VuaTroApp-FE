@@ -1,83 +1,116 @@
+import React from "react";
 import "./Footer.scss";
 import logo from "assets/images/logo.png";
-import appstore from "assets/images/appstore.png";
+import { MapPin } from "lucide-react";
+import { PhoneCall } from "lucide-react";
+import { Mail } from "lucide-react";
 import googleplay from "assets/images/googleplay.png";
-import linkedin from "assets/images/linkedin.png";
-import facebook from "assets/images/facebook.png";
-import boCongThuong from "assets/images/bocongthuong.png";
+import appstore from "assets/images/appstore.png";
 
 const Footer = () => {
   return (
-    <footer className="footer">
-      <div className="footer-top">
-        {/* LEFT */}
-        <div className="footer-col left">
-          <div className="brand-row">
-            <img src={logo} alt="VuaTroVN" className="logo" />
-            <h3>
-              TÌM NƠI Ở TỐT UY TÍN NHẤT <br />
-              TRÊN <span>VUATROVN</span>
-            </h3>
-          </div>
-
-          <div className="store">
-            <img src={appstore} alt="App Store" />
-            <img src={googleplay} alt="Google Play" />
+    <div className="footer-container">
+      <div className="top-container">
+        <div className="left-container">
+          <img className="logo-footer" src={logo} alt="logo" />
+          <div>
+            <div className="address-container">
+              <MapPin color="#E1A730" />
+              <p className="address">
+                Số ABC, Đường DEF, Phường GHI, Thành Phố JKL, Việt Nam
+              </p>
+            </div>
+            <div className="hotline-container">
+              <PhoneCall color="#E1A730" />
+              <p className="hotline">(024) 1234 5678 - (024) 2345 8271</p>
+            </div>
           </div>
         </div>
 
-        {/* CENTER */}
-        <div className="footer-col center">
-          <h4>Về Nhà Tốt</h4>
-          <ul>
-            <li>Chính Sách Bảo Mật</li>
-            <li>Giải Quyết Tranh Chấp</li>
-            <li>Điều Khoản Sử Dụng</li>
-          </ul>
+        <div className="middle-main-container">
+          <div className="middle-container-top">
+            <div className="middle-logo">
+              <PhoneCall size={36} color="#E1A730" />
+            </div>
+            <div className="middle-container">
+              <p>
+                <b>Hotline</b>
+              </p>
+              <p>
+                <b>1900 1000</b>{" "}
+              </p>
+            </div>
+          </div>
+          <div className="middle-container-bottom">
+            <p>
+              <b>HƯỚNG DẪN</b>
+            </p>
+            <div className="content-container">
+              <p className="p">Về chúng tôi</p>
+              <p className="p">Báo giá và hỗ trợ</p>
+              <p className="p">Câu hỏi thường gặp</p>
+              <p className="p">Góp ý báo lỗi</p>
+              <p className="p">&nbsp;</p>
+            </div>
+          </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="footer-col right">
-          <h4>Liên Kết</h4>
-          <div className="social">
-            <img src={linkedin} alt="LinkedIn" />
-            <img src={facebook} alt="Facebook" />
+        <div className="middle-main-container">
+          <div className="middle-container-top">
+            <div className="middle-logo">
+              <Mail color="#E1A730" size={36} />
+            </div>
+            <div className="middle-container">
+              <p>
+                <b>CHĂM SÓC KHÁCH HÀNG</b>{" "}
+              </p>
+              <p>
+                <b>hotro@vuatro.com.vn</b>{" "}
+              </p>
+            </div>
           </div>
+          <div className="middle-container-bottom">
+            <p>
+              <b>QUY ĐỊNH</b>
+            </p>
+            <div className="content-container">
+              <p className="p">Quy định đăng tin</p>
+              <p className="p">Quy chế hoạt động</p>
+              <p className="p">Điều kiện thỏa thuận</p>
+              <p className="p">Chính sách bảo mật</p>
+              <p className="p">Giải quyết khiếu nại</p>
+            </div>
+          </div>
+        </div>
 
-          <p>
-            Email: <strong>Trogup@VuaTro.Com</strong>
-          </p>
-          <p>
-            CSKH: <strong>987654 (1.000đ/Phút)</strong>
-          </p>
-          <p>
-            Địa Chỉ: <strong>ABC XYZ Nha Trang</strong>
-          </p>
+        <div className="download-container">
+          <a href="">
+            <img className="logo" src={googleplay} alt="ch play" />
+          </a>
+          <a href="">
+            <img className="logo" src={appstore} alt="" />
+          </a>
         </div>
       </div>
 
-      {/* BOTTOM */}
-      <div className="footer-bottom">
-        <div className="copyright">
-          <p>Copyright © 2025 VuaTroVN</p>
-          <p>
-            Giấy Chứng Nhận Đăng Ký Kinh Doanh Số ............. Do ............. Cấp
-            Ngày .............
-          </p>
-          <p>
-            Giấy Phép Thiết Lập Trang Thông Tin Điện Tử Tổng Hợp Trên Mạng Số
-            ............. Do ............. Cấp Ngày .............
-          </p>
-          <p>
-            Trang Thông Tin Điện Tử Tổng Hợp VuaTroVN Hiện Đang Trong Quá Trình Xây
-            Dựng Và Hoàn Thiện Hệ Thống.
-          </p>
-          <p>Nếu Cần Hỗ Trợ, Vui Lòng Liên Hệ Hotline: .............</p>
-        </div>
+      <hr />
 
-        <img src={boCongThuong} alt="Bộ Công Thương" className="bct" />
+      <div className="bottom-footer-container">
+        <p className="bottom-footer">Copyright © 2026 VuaTroVN. Mọi quyền được bảo lưu.</p>
+        <p className="bottom-footer">
+          Giấy Chứng Nhận Đăng Ký Kinh Doanh Số 0123456789 Do Sở KH&ĐT Tỉnh
+          Khánh Hòa Cấp Ngày 01/01/2023.
+        </p>
+        <p className="bottom-footer">
+          Giấy Phép Thiết Lập Trang Thông Tin Điện Tử Tổng Hợp Trên Mạng Số
+          123/GP-TTĐT Do Cục PTTH & TTĐT Cấp Ngày 01/01/2023.
+        </p>
+        <p className="bottom-footer">
+          VuaTroVN Hiện Đang Trong Quá Trình Xây Dựng Và Hoàn Thiện Hệ Thống
+          Phục Vụ Người Dùng Tốt Nhất.
+        </p>
       </div>
-    </footer>
+    </div>
   );
 };
 

@@ -1,5 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import { useEffect, useState } from "react";
+import {
+    MapContainer,
+    TileLayer,
+    Marker,
+    Popup,
+    useMapEvents,
+    useMap
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -9,7 +16,42 @@ const userIcon = new L.Icon({
     iconAnchor: [12, 41],
 });
 
-// Component bắt sự kiện click map
+
+// ===== MAP BAY TỚI TỈNH quận huyện (KHÔNG HARDCODE) =====
+function MapFly({ province, district, ward }) {
+
+    const map = useMap();
+
+    useEffect(() => {
+
+        const location = ward || district || province;
+
+        if (!location) return;
+
+        fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`
+        )
+            .then(res => res.json())
+            .then(data => {
+
+                if (data.length > 0) {
+
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+
+                    map.flyTo([lat, lon], 15);
+
+                }
+
+            });
+
+    }, [province, district, ward, map]);
+
+    return null;
+}
+
+
+// ===== CLICK MAP =====
 function MapClickHandler({ onSelect }) {
     useMapEvents({
         click(e) {
@@ -19,12 +61,13 @@ function MapClickHandler({ onSelect }) {
     return null;
 }
 
-function GOOGLE({ onChange }) {
-    const mapRef = useRef(null);
+
+function GOOGLE({ onChange, province, district, ward }) {
+
     const [userPos, setUserPos] = useState(null);
     const [selectedPos, setSelectedPos] = useState(null);
 
-    // 📍 Lấy GPS người dùng
+    // ===== LẤY GPS =====
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
             (pos) => {
@@ -33,53 +76,86 @@ function GOOGLE({ onChange }) {
                     lng: pos.coords.longitude,
                 });
             },
-            () => alert("Không lấy được vị trí GPS")
+            () => {
+                // fallback Nha Trang
+                setUserPos({
+                    lat: 12.2585,
+                    lng: 109.0526,
+                });
+            }
         );
     }, []);
 
-    const handleSelect = (latlng) => {
+
+    // ===== CLICK MAP =====
+    const handleSelect = async (latlng) => {
+
         setSelectedPos(latlng);
 
-        // ⬅️ Trả tọa độ về component cha (InforBase)
-        if (onChange) {
-            onChange({
-                lat: latlng.lat,
-                lng: latlng.lng,
-            });
+        console.log("Lat:", latlng.lat);
+        console.log("Lng:", latlng.lng);
+
+        try {
+            const res = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}`
+            );
+
+            const data = await res.json();
+            const address = data.address || {};
+
+            if (onChange) {
+                onChange({
+                    lat: latlng.lat,
+                    lng: latlng.lng,
+                    province: address.state || "",
+                    district: address.city || address.town || "",
+                    ward: address.suburb || address.village || "",
+                    street: address.road || "",
+                    fullAddress: data.display_name
+                        .replace(/\b\d{5}\b,?\s*/g, "")
+                        .replace(", Việt Nam", "")
+                });
+            }
+
+        } catch (err) {
+            console.error("Lỗi reverse geocode:", err);
         }
     };
 
+
     if (!userPos) {
-        return (
-            <div className="map-placeholder">
-                Đang lấy vị trí GPS...
-            </div>
-        );
+        return <div>Đang lấy vị trí...</div>;
     }
 
+
     return (
-        <div className="map-placeholder">
-            <MapContainer
-                center={[userPos.lat, userPos.lng]}
-                zoom={16}
-                style={{ height: "100%", width: "100%" }}
-                whenCreated={(map) => (mapRef.current = map)}
-            >
-                <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution="© OpenStreetMap"
-                />
+        <MapContainer
+            center={[userPos.lat, userPos.lng]}
+            zoom={16}
+            style={{ height: "100%", width: "100%" }}
+        >
 
-                {/* Marker vị trí hiện tại */}
-                <Marker position={[userPos.lat, userPos.lng]} icon={userIcon}>
-                    <Popup>Vị trí của bạn</Popup>
+            <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+
+            {/* bay tới tỉnh */}
+            <MapFly province={province}
+                district={district}
+                ward={ward} />
+
+            {selectedPos && (
+                <Marker
+                    position={[selectedPos.lat, selectedPos.lng]}
+                    icon={userIcon}
+                >
+                    <Popup>Vị trí bạn chọn</Popup>
                 </Marker>
+            )}
 
+            <MapClickHandler onSelect={handleSelect} />
 
-
-                <MapClickHandler onSelect={handleSelect} />
-            </MapContainer>
-        </div>
+        </MapContainer>
     );
 }
 
