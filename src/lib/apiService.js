@@ -19,13 +19,23 @@ export const authAPI = {
   getProfile: () => api.get("/api/auth/profile"),
 };
 
-// ==================== Thêm API services khác ở đây khi backend đã có ====================
-//
-// VÍ DỤ: Khi backend có API rooms, thêm như sau:
-// export const roomAPI = {
-//   getAll: (params) => api.get("/api/rooms", { params }),
-//   getById: (id) => api.get(`/api/rooms/${id}`),
-//   create: (data) => api.post("/api/rooms", data),
-//   update: (id, data) => api.put(`/api/rooms/${id}`, data),
-//   delete: (id) => api.delete(`/api/rooms/${id}`),
-// };
+// ==================== POST APIs ====================
+export const postAPI = {
+  /**
+   * Tìm kiếm bài đăng với bộ lọc động
+   * GET /api/posts/search
+   */
+  search: (searchRequest = {}, page = 0, size = 10, sort = "id,desc") => {
+    return api.get("/api/posts/search", {
+      params: {
+        ...searchRequest,
+        page,
+        size,
+        sort,
+      },
+    });
+  },
+
+  // Lấy chi tiết bài đăng
+  getById: (id) => api.get(`/api/posts/${id}`),
+};

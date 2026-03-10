@@ -2,9 +2,28 @@ import React, { useState } from "react";
 import { CircleChevronRight } from "lucide-react";
 import "./HomeFilterHeader.scss";
 
-function HomeFilterHeader({ count = 0 }) {
+function HomeFilterHeader({ 
+    count = 0, 
+    onProvinceChange, 
+    activeProvince, 
+    onSortChange 
+}) {
     const LOCATIONS = ["Ninh Thuận", "Khánh Hòa", "Cam Ranh", "Phú Yên"];
     const [activeType, setActiveType] = useState("Đề xuất");
+
+    const handleProvinceClick = (location) => {
+        if (onProvinceChange) {
+            onProvinceChange(location);
+        }
+    };
+
+    const handleSortClick = (type) => {
+        setActiveType(type);
+        if (onSortChange) {
+            const sortValue = type === "Mới đăng" ? "id,desc" : "id,asc";
+            onSortChange(sortValue);
+        }
+    };
 
     return (
         <div className="home-filter-header">
@@ -14,7 +33,11 @@ function HomeFilterHeader({ count = 0 }) {
             <h3 className="section-label">TỈNH THÀNH</h3>
             <div className="area-container">
                 {LOCATIONS.map((loc, index) => (
-                    <div className="area-item" key={index}>
+                    <div 
+                        className={`area-item ${activeProvince === loc ? "active" : ""}`}
+                        key={index}
+                        onClick={() => handleProvinceClick(loc)}
+                    >
                         <span>Phòng trọ</span>
                         <b>{loc}</b>
                     </div>
@@ -31,7 +54,7 @@ function HomeFilterHeader({ count = 0 }) {
                     <div 
                         key={type}
                         className={`type-item ${activeType === type ? "active" : ""}`}
-                        onClick={() => setActiveType(type)}
+                        onClick={() => handleSortClick(type)}
                     >
                         {type}
                     </div>
