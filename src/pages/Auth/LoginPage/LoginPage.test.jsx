@@ -189,10 +189,10 @@ describe("Login Component", () => {
         });
       });
 
-      expect(toast.success).toHaveBeenCalledWith(
-        "Đăng nhập thành công!",
-        expect.any(Object),
-      );
+      expect(toast.success).toHaveBeenCalledWith("Đăng nhập thành công!", {
+        autoClose: false,
+        closeButton: true,
+      });
       expect(mockNavigate).toHaveBeenCalledWith("/");
     });
 
@@ -215,7 +215,10 @@ describe("Login Component", () => {
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
           "Email hoặc mật khẩu không đúng",
-          expect.any(Object),
+          {
+            autoClose: false,
+            closeButton: true,
+          },
         );
       });
 
@@ -236,7 +239,10 @@ describe("Login Component", () => {
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
           "Đăng nhập thất bại. Vui lòng thử lại.",
-          expect.any(Object),
+          {
+            autoClose: false,
+            closeButton: true,
+          },
         );
       });
     });

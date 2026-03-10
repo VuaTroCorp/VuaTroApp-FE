@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import avt from "assets/images/avatar1.png";
 import "./UserDropdown.scss";
-// import "./DropdownAdmin.scss";
 import {
   UserCog,
   History,

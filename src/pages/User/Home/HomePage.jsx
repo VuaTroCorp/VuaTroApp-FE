@@ -5,47 +5,102 @@ import OptionSection from "components/shared/User/OptionSection/OptionSection";
 import NewPostSection from "components/shared/User/NewPostSection/NewPostSection";
 import SelectionSection from "components/shared/User/SelectionSection/SelectionSection";
 import ServiceSection from "components/shared/User/ServiceSection/ServiceSection";
+import { usePostSearch } from "hooks/usePostSearch";
 
 function HomePage() {
+  const {
+    posts,
+    loading,
+    error,
+    totalElements,
+    filters,
+    updateFilters,
+    setSort,
+  } = usePostSearch();
 
-  const mockRooms = [
-    {
-      id: 1,
-      title: "PHÒNG TRỌ CAO CẤP GẦN ĐẠI HỌC NHA TRANG, VĨNH HẢI",
-      price: 2500000,
-      area: 25,
-      location: "Vĩnh Hải, Nha Trang",
-      rating: 5,
-      description: "Phòng mới xây, đầy đủ nội thất, wifi tốc độ cao. Gần chợ Vĩnh Hải, an ninh tốt, giờ giấc tự do",
-      images: [
-        "https://img.freepik.com/.../main.jpg",
-        "https://img.freepik.com/.../sub1.jpg",
-        "https://img.freepik.com/.../sub2.jpg",
-        "https://img.freepik.com/.../sub3.jpg"
-      ],
-      landlord: {
-        name: "Đoàn Thàm Vĩnh Huân",
-        avatar: "https://img.freepik.com/.../avatar.jpg",
-        contact: "0974131489"
-      },
-      postDate: "Hôm nay"
+  // Handler cho province filter (với toggle)
+  const handleProvinceChange = (province) => {
+    if (filters.keyword === province) {
+      // Click lần 2 -> bỏ filter
+      updateFilters({ keyword: "" });
+    } else {
+      // Click lần 1 -> set filter
+      updateFilters({ keyword: province });
     }
-  ];
+  };
+
+  // Handler cho sort tabs (với toggle)
+  const handleSortChange = (sortValue) => {
+    setSort(sortValue);
+  };
+
+  // Handler cho price filter (với toggle)
+  const handlePriceChange = (priceRange) => {
+    const { min, max } = priceRange;
+    
+    // Check nếu đang active thì toggle off
+    if (filters.minPrice === min && filters.maxPrice === max) {
+      updateFilters({ minPrice: null, maxPrice: null });
+    } else {
+      updateFilters({ minPrice: min, maxPrice: max });
+    }
+  };
+
+  // Handler cho area filter (với toggle)
+  const handleAreaChange = (areaRange) => {
+    const { min, max } = areaRange;
+    
+    // Check nếu đang active thì toggle off
+    if (filters.minArea === min && filters.maxArea === max) {
+      updateFilters({ minArea: null, maxArea: null });
+    } else {
+      updateFilters({ minArea: min, maxArea: max });
+    }
+  };
 
   return (
     <div className="home-page">
       <main className="main-content">
         <section className="left-content">
-          <HomeFilterHeader count={mockRooms.length} />
+          <HomeFilterHeader 
+            count={totalElements}
+            onProvinceChange={handleProvinceChange}
+            activeProvince={filters.keyword}
+            onSortChange={handleSortChange}
+          />
+          
           <div className="view-room-list">
-            {mockRooms.map(room => (
-              <RoomCard key={room.id} data={room} />
+            {loading && (
+              <div className="loading-state">
+                <p>Đang tải dữ liệu...</p>
+              </div>
+            )}
+            
+            {error && (
+              <div className="error-state">
+                <p>❌ {error}</p>
+              </div>
+            )}
+            
+            {!loading && !error && posts.length === 0 && (
+              <div className="empty-state">
+                <p>Không tìm thấy bài đăng phù hợp</p>
+              </div>
+            )}
+            
+            {!loading && !error && posts.length > 0 && posts.map(post => (
+              <RoomCard key={post.id} data={post} />
             ))}
           </div>
         </section>
 
         <aside className="right-content">
-          <OptionSection />
+          <OptionSection 
+            onPriceChange={handlePriceChange}
+            activePriceRange={{ min: filters.minPrice, max: filters.maxPrice }}
+            onAreaChange={handleAreaChange}
+            activeAreaRange={{ min: filters.minArea, max: filters.maxArea }}
+          />
           <NewPostSection />
           <SelectionSection /> 
         </aside>

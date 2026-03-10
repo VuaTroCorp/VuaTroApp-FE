@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 export default function AuthRoute() {
-    const isAuthenticated = Boolean(localStorage.getItem("token"));
+    const isAuthenticated = Boolean(localStorage.getItem("authToken"));
     const userRole = localStorage.getItem("role");
 
     if (isAuthenticated) {

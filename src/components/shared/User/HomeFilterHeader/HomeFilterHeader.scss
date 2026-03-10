@@ -43,6 +43,12 @@ $shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
                 color: #fff;
             }
 
+            &.active {
+                background-color: $brand-gold;
+                color: #fff;
+                transform: translateY(-3px);
+            }
+
             b {
                 display: block;
                 font-weight: 700;

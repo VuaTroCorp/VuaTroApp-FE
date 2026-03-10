@@ -85,7 +85,9 @@ const LoginPage = () => {
 
           <form className="login-form" onSubmit={handleSubmit} noValidate>
             <div className="form-group">
-              <label>Email</label>
+              <label>
+                Email <span className="required">*</span>
+              </label>
               <input
                 type="email"
                 name="email"
@@ -132,19 +134,6 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <div className="remember-row">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="remember"
-                  checked={formData.remember}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                />
-                <span>Ghi nhớ mật khẩu</span>
-              </label>
-            </div>
-
             <div className="link-row">
               <span
                 className="blue-link"
@@ -162,9 +151,12 @@ const LoginPage = () => {
             </button>
           </form>
 
-          <button 
+          <button
             className="google-login-btn"
-            onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/google'}
+            onClick={() =>
+              (window.location.href =
+                "http://localhost:8080/oauth2/authorization/google")
+            }
             type="button"
           >
             <img src={googleLogo} alt="G" />
