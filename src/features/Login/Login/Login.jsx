@@ -1,143 +1,166 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
 import logo from "assets/images/logo.png";
 import googleLogo from "assets/icons/google-logo.png";
+import { useAuth } from "hooks/useAuth";
 import "./Login.scss";
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const { login, isLoading } = useAuth();
   const [formData, setFormData] = useState({
-    identifier: "",
+    email: "",
     password: "",
-    remember: false,
   });
-
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
-
-    // clear error khi user gõ lại
-    setErrors(prev => ({ ...prev, [name]: "" }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const newErrors = {};
 
-    if (!formData.identifier.trim()) {
-      newErrors.identifier = "Vui lòng nhập Email hoặc SĐT";
+    if (!formData.email) {
+      newErrors.email = "Vui lòng nhập email";
+    } else if (!isValidEmail(formData.email)) {
+      newErrors.email = "Email không hợp lệ";
     }
 
-    if (!formData.password.trim()) {
+    if (!formData.password) {
       newErrors.password = "Vui lòng nhập mật khẩu";
     }
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length > 0) return;
+    if (Object.keys(newErrors).length === 0) {
+      try {
+        await login({
+          email: formData.email,
+          password: formData.password,
+        });
 
-    localStorage.setItem("token", "demo-token");
-    alert("Đăng nhập thành công!");
-    navigate("/");
+        // Đăng nhập thành công
+        toast.success("Đăng nhập thành công!", {
+          autoClose: false,
+          closeButton: true,
+        });
+        navigate("/");
+      } catch (error) {
+        // Xử lý error từ backend
+        const errorMessage =
+          error.response?.data?.message ||
+          "Đăng nhập thất bại. Vui lòng thử lại.";
+        toast.error(errorMessage, {
+          autoClose: false,
+          closeButton: true,
+        });
+      }
+    }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-
-        {/* LEFT */}
-        <div className="auth-left">
-          <div className="brand">
-            <img src={logo} alt="logo" className="logo" />
-            <p className="slogan">Tìm nhà trọ tốt - Uy tín nhất!</p>
-          </div>
+    <div className="login-page">
+      <div className="login-container">
+        <div className="login-sidebar">
+          <img src={logo} alt="Vuatrovn" className="logo-img" />
         </div>
 
-        {/* RIGHT */}
-        <div className="auth-right">
-          <h1>ĐĂNG NHẬP VUATROVN</h1>
-          <p className="subtitle">Chào mừng bạn quay trở lại</p>
+        <div className="login-content">
+          <h2 className="login-title">CHÀO MỪNG BẠN ĐẾN VỚI VUATROVN</h2>
 
-          <form className="auth-form" onSubmit={handleSubmit}>
-
-            {/* Identifier */}
+          <form className="login-form" onSubmit={handleSubmit} noValidate>
             <div className="form-group">
-              <label>Email hoặc SĐT</label>
+              <label>
+                Email <span className="required">*</span>
+              </label>
               <input
-                name="identifier"
-                placeholder="Nhập email hoặc số điện thoại"
-                value={formData.identifier}
+                type="email"
+                name="email"
+                placeholder="Nhập địa chỉ email"
+                value={formData.email}
                 onChange={handleChange}
-                className={errors.identifier ? "input-error shake" : ""}
+                className={errors.email ? "input-error" : ""}
+                disabled={isLoading}
               />
-              {errors.identifier && (
-                <span className="field-error">{errors.identifier}</span>
-              )}
+              <div className="error-message-container">
+                {errors.email && (
+                  <span className="error-text">{errors.email}</span>
+                )}
+              </div>
             </div>
 
-            {/* Password */}
-            <div className="form-group password-group">
-              <label>Mật khẩu</label>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? "input-error shake" : ""}
-              />
+            <div className="form-group">
+              <label>
+                Mật Khẩu <span className="required">*</span>
+              </label>
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Mật Khẩu"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={errors.password ? "input-error" : ""}
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  className="eye-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              <div className="error-message-container">
+                {errors.password && (
+                  <span className="error-text">{errors.password}</span>
+                )}
+              </div>
+            </div>
+
+            <div className="link-row">
               <span
-                className="toggle-icon"
-                onClick={() => setShowPassword(!showPassword)}
+                className="blue-link"
+                onClick={() => navigate("/forgot-password")}
               >
-                {showPassword ? "🙈" : "👁️"}
+                Quên Mật Khẩu?
               </span>
-              {errors.password && (
-                <span className="field-error">{errors.password}</span>
-              )}
+              <span className="blue-link" onClick={() => navigate("/register")}>
+                Đăng Ký Tài Khoản
+              </span>
             </div>
 
-            <div className="remember-row">
-              <input
-                type="checkbox"
-                name="remember"
-                id="remember"
-                checked={formData.remember}
-                onChange={handleChange}
-              />
-              <label htmlFor="remember">Ghi nhớ đăng nhập</label>
-            </div>
-
-            <button type="submit" className="btn-login">
-              Đăng nhập
+            <button type="submit" className="submit-btn" disabled={isLoading}>
+              {isLoading ? "Đang xử lý..." : "Đăng Nhập"}
             </button>
           </form>
 
-          <div className="auth-options">
-            <span onClick={() => navigate("/register")}>
-              Đăng ký tài khoản
-            </span>
-            <span onClick={() => navigate("/forgot-password")}>Quên mật khẩu?</span>
-          </div>
-
-          <div className="social-login">
-            <p>Hoặc đăng nhập bằng</p>
-            <button className="google-btn">
-              <img src={googleLogo} alt="google" />
-              Tiếp tục với Google
-            </button>
-          </div>
+          <button 
+            className="google-login-btn"
+            onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/google'}
+            type="button"
+          >
+            <img src={googleLogo} alt="G" />
+            <span>Đăng nhập bằng Google</span>
+          </button>
         </div>
       </div>
-
     </div>
   );
 };

@@ -1,8 +1,201 @@
 .main-container-expired-manage {
   background-color: #ffffff;
-  height: auto;
-  // width: 100%;
+  min-height: 500px;
   border-radius: 15px;
   border: 1px solid hsla(0, 0%, 0%, 0.251);
   padding: 10px 60px;
+  display: flex;
+  flex-direction: column;
+
+  .expired-manage-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      padding-top: 20px;
+      height: 40px;
+      .title {
+        font-size: 22px;
+      }
+    }
+
+    .header-right {
+      display: flex;
+      width: 60%;
+      align-items: end;
+      // padding-bottom: 2px;
+
+      .summary-text {
+        width: 100%;
+        span {
+          color: #e1a730;
+          font-weight: bold;
+        }
+      }
+
+      .search-box {
+        position: relative;
+        display: flex;
+        justify-content: end;
+        width: auto;
+        input {
+          width: 243px;
+          height: 35px;
+          border: 1px solid #bdbdbd;
+          background-color: #fff;
+          padding: 0 35px 0 12px;
+          border-radius: 6px;
+          outline: none;
+        }
+        .search-icon {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #bdbdbd;
+        }
+      }
+    }
+  }
+
+  .divider {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+  }
+
+  .expired-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 9px;
+
+    .item-expired {
+      display: grid;
+      grid-template-columns: 1.8fr 3.6fr 2fr;
+      gap: 25px;
+      padding: 12px 17px;
+      border: 2px solid #f5f5f5;
+      border-radius: 15px;
+      transition: 0.3s;
+
+      &:hover {
+        border-color: #e1a730;
+      }
+
+      .image-container img {
+        width: 100%;
+        border-radius: 15px;
+        object-fit: cover;
+      }
+
+      .info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        .info-title {
+          font-size: 19px;
+          margin-bottom: 15px;
+        }
+        .info-address {
+          display: flex;
+          gap: 5px;
+          color: #757575;
+          align-items: center;
+        }
+        .info-price {
+          color: #e1a730;
+          font-size: 24px;
+        }
+        .info-stats-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .currency {
+            color: #757575;
+          }
+          .stats {
+            display: flex;
+            gap: 37px;
+            .stat-item {
+              display: flex;
+              gap: 5px;
+              align-items: center;
+              color: #757575;
+            }
+          }
+        }
+      }
+
+      .action-container {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        justify-content: center;
+
+        .status-box {
+          border-radius: 10px;
+          height: 110px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          padding: 0 15px;
+          gap: 6px;
+          font-size: 14px;
+
+          &.status-expired {
+            background-color: #feefcb;
+            border: 1px solid #e6ac28;
+            color: #925400;
+          }
+          &.status-success {
+            background-color: #e9f5ce;
+            border: 1px solid #9bc438;
+            color: #436f00;
+          }
+          &.status-deleted {
+            background-color: #ffecee;
+            border: 1px solid #ff99a1;
+            color: #bb2a33;
+          }
+        }
+
+        .btn-group {
+          display: flex;
+          justify-content: center;
+          gap: 25px;
+
+          .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+
+            &:hover {
+              transform: translateY(-2px);
+            }
+
+            &.btn-renew {
+              background-color: #feefcb;
+              border: 1px solid #e6ac28;
+              color: #925400;
+            }
+            &.btn-delete {
+              background-color: #ffecee;
+              border: 1px solid #bb2a33;
+              color: #bb2a33;
+            }
+          }
+        }
+      }
+    }
+  }
 }

@@ -15,15 +15,16 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-const DropdownAdmin = ({ setOption }) => {
+const DropdownAdmin = ({ setOption, userName }) => {
   const [active, setActive] = useState("infor");
   const [open, setOpen] = useState(false);
   const [arrow, setArrow] = useState(false);
 
   return (
     <div className="admin-left-container">
+      {/* Khối Profile phía trên */}
       <div className="drop-main-container">
-        <div>
+        <div className="avt-wrapper">
           <div className="avt-container">
             <img className="avt" src={avt} alt="" />
           </div>
@@ -32,21 +33,20 @@ const DropdownAdmin = ({ setOption }) => {
         <div className="admin-inf">
           <div>
             <p>
-              <b>Đoàn Thàm Vĩnh Huân</b>
+              <b>{userName}</b>
             </p>
           </div>
           <div className="role-container">
             <CircleCheck size={18} color="#21A3FF" />
-            <p style={{ color: "#21A3FF" }} className="role">
-              Chủ căn hộ
-            </p>
+            <p className="role">Chủ căn hộ</p>
           </div>
         </div>
       </div>
 
+      {/* Khối Option Menu phía dưới */}
       <div className="option-main-container">
+        {/* Thông tin cá nhân */}
         <div
-          style={{ cursor: "pointer" }}
           onClick={() => {
             setActive("infor");
             setOpen(false);
@@ -60,37 +60,33 @@ const DropdownAdmin = ({ setOption }) => {
             <b>Thông tin cá nhân</b>
           </p>
         </div>
+
+        {/* Quản lý bài đăng (Có mũi tên xổ xuống) */}
         <div
-          style={{ cursor: "pointer" }}
           onClick={() => {
             setActive("manage");
             setOpen(!open);
             setArrow(!arrow);
           }}
-          className={`option-left ${active === "manage" ? "active" : ""}`}
+          className={`option-left drop ${active === "manage" ? "active" : ""}`}
         >
-          <div>
-            <CalendarDays />
-          </div>
-          <p>
-            <b>Quản lý bài đăng</b>
-          </p>
-          {!arrow ? (
-            <div className={`arrow ${arrow === true ? "arrow" : ""}`}>
-              <ChevronRight />
-            </div>
-          ) : (
+          <div className="left-drop-item">
             <div>
-              <div className={`arrow ${arrow === true ? "arrow" : ""}`}>
-                <ChevronDown />
-              </div>
+              <CalendarDays />
             </div>
-          )}
+            <p className="item-options">
+              <b>Quản lý bài đăng</b>
+            </p>
+          </div>
+          <div className="arrow-box">
+            {!arrow ? <ChevronRight /> : <ChevronDown />}
+          </div>
         </div>
-        {open ? (
+
+        {/* Danh sách con khi 'open' là true */}
+        {open && (
           <div className="option-left-list-container">
             <div
-              style={{ cursor: "pointer" }}
               onClick={() => {
                 setActive("upload");
                 setOption("list-upload");
@@ -103,7 +99,6 @@ const DropdownAdmin = ({ setOption }) => {
               </p>
             </div>
             <div
-              style={{ cursor: "pointer" }}
               onClick={() => {
                 setActive("approve");
                 setOption("wait-upload");
@@ -116,7 +111,6 @@ const DropdownAdmin = ({ setOption }) => {
               </p>
             </div>
             <div
-              style={{ cursor: "pointer" }}
               onClick={() => {
                 setActive("refuse");
                 setOption("cancel-upload");
@@ -129,7 +123,6 @@ const DropdownAdmin = ({ setOption }) => {
               </p>
             </div>
             <div
-              style={{ cursor: "pointer" }}
               onClick={() => {
                 setActive("exp");
                 setOption("exp-upload");
@@ -142,12 +135,10 @@ const DropdownAdmin = ({ setOption }) => {
               </p>
             </div>
           </div>
-        ) : (
-          <></>
         )}
 
+        {/* Quản lý đặt trước */}
         <div
-          style={{ cursor: "pointer" }}
           onClick={() => {
             setActive("order");
             setOpen(false);
@@ -161,8 +152,9 @@ const DropdownAdmin = ({ setOption }) => {
             <b>Quản lý đặt trước</b>
           </p>
         </div>
+
+        {/* Lịch sử giao dịch */}
         <div
-          style={{ cursor: "pointer" }}
           onClick={() => {
             setActive("history");
             setOpen(false);

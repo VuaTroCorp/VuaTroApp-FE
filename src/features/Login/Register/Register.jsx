@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
 import logo from "assets/images/logo.png";
-import googleLogo from "assets/icons/google-logo.png";
+import { useAuth } from "hooks/useAuth";
 import "./Register.scss";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { signup, isLoading } = useAuth();
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    identifier: "",
+    username: "",
+    email: "",
     password: "",
     confirmPassword: "",
-    agreeTerms: false,
+    acceptTerms: false,
   });
 
   const [errors, setErrors] = useState({});
@@ -21,183 +24,217 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-
-    // clear error when user types
-    setErrors((prev) => ({
-      ...prev,
-      [name]: "",
-    }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const newErrors = {};
 
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = "Vui lòng nhập họ tên";
+    if (!formData.username) {
+      newErrors.username = "Vui lòng nhập tên tài khoản";
+    } else if (formData.username.length < 3) {
+      newErrors.username = "Tên tài khoản phải có ít nhất 3 ký tự";
     }
 
-    if (!formData.identifier.trim()) {
-      newErrors.identifier = "Vui lòng nhập email hoặc SĐT";
+    if (!formData.email) {
+      newErrors.email = "Vui lòng nhập email";
+    } else if (!isValidEmail(formData.email)) {
+      newErrors.email = "Email không hợp lệ";
     }
 
-    if (formData.password.length < 6) {
-      newErrors.password = "Mật khẩu tối thiểu 6 ký tự";
+    if (!formData.password) {
+      newErrors.password = "Vui lòng nhập mật khẩu";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Mật khẩu phải có ít nhất 6 ký tự";
     }
 
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Mật khẩu xác nhận không khớp";
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Mật khẩu không khớp";
     }
 
-    if (!formData.agreeTerms) {
-      newErrors.agreeTerms = "Bạn phải đồng ý điều khoản";
+    if (!formData.acceptTerms) {
+      newErrors.acceptTerms = "Bạn cần chấp nhận điều khoản";
     }
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length > 0) return;
+    if (Object.keys(newErrors).length === 0) {
+      try {
+        const response = await signup({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        });
 
-    alert("Đăng ký thành công!");
-    navigate("/login");
+        // Xử lý response thành công
+        toast.success(
+          response?.message ||
+            "Đăng ký thành công. Vui lòng kiểm tra email để xác thực.",
+        );
+        setTimeout(() => navigate("/login"), 2000);
+      } catch (error) {
+        // Xử lý error từ backend
+        const errorMessage =
+          error.response?.data?.message ||
+          "Đăng ký thất bại. Vui lòng thử lại.";
+
+        // Hiển thị toast error
+        toast.error(errorMessage);
+      }
+    }
   };
 
   return (
     <div className="auth-page">
       <div className="auth-container">
-        {/* LEFT */}
-        <div className="auth-left">
-          <div className="brand">
-            <img src={logo} alt="logo" className="logo" />
-            <p className="slogan">Tìm nhà trọ tốt - Uy tín nhất!</p>
-          </div>
+        <div className="auth-sidebar">
+          <img src={logo} alt="Vuatrovn" className="logo-img" />
         </div>
-
-        {/* RIGHT */}
-        <div className="auth-right">
-          <h1>ĐĂNG KÝ VUATROVN</h1>
-          <p className="subtitle">Tạo tài khoản mới</p>
-
-          <form onSubmit={handleSubmit} className="auth-form">
-            {/* FULL NAME */}
+        <div className="auth-content">
+          <h2 className="register-title">Đăng Ký Tài Khoản Mới</h2>
+          <form className="auth-form" onSubmit={handleSubmit} noValidate>
             <div className="form-group">
-              <label>Họ và tên</label>
+              <label>
+                Tên Tài Khoản <span className="required">*</span>
+              </label>
               <input
-                name="fullName"
-                value={formData.fullName}
+                type="text"
+                name="username"
+                placeholder="Nhập tên tài khoản"
+                value={formData.username}
                 onChange={handleChange}
-                className={errors.fullName ? "input-error shake" : ""}
-                placeholder="Nhập họ và tên"
+                className={errors.username ? "input-error" : ""}
+                disabled={isLoading}
               />
-              {errors.fullName && (
-                <span className="field-error">{errors.fullName}</span>
-              )}
+              <div className="error-message-container">
+                {errors.username && (
+                  <span className="error-text">{errors.username}</span>
+                )}
+              </div>
             </div>
 
-            {/* EMAIL / PHONE */}
             <div className="form-group">
-              <label>Email hoặc SĐT</label>
+              <label>
+                Email <span className="required">*</span>
+              </label>
               <input
-                name="identifier"
-                value={formData.identifier}
+                type="email"
+                name="email"
+                placeholder="Nhập địa chỉ email"
+                value={formData.email}
                 onChange={handleChange}
-                className={errors.identifier ? "input-error shake" : ""}
-                placeholder="Nhập email hoặc số điện thoại"
+                className={errors.email ? "input-error" : ""}
+                disabled={isLoading}
               />
-              {errors.identifier && (
-                <span className="field-error">{errors.identifier}</span>
-              )}
+              <div className="error-message-container">
+                {errors.email && (
+                  <span className="error-text">{errors.email}</span>
+                )}
+              </div>
             </div>
 
-            {/* PASSWORD */}
-            <div className="form-group password-group">
-              <label>Mật khẩu</label>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? "input-error shake" : ""}
-                placeholder="••••••••"
-              />
-              <span
-                className="toggle-icon"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "🙈" : "👁️"}
+            <div className="form-group">
+              <label>
+                Mật Khẩu <span className="required">*</span>
+              </label>
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={errors.password ? "input-error" : ""}
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  className="eye-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              <div className="error-message-container">
+                {errors.password && (
+                  <span className="error-text">{errors.password}</span>
+                )}
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>
+                Xác Nhận Mật Khẩu <span className="required">*</span>
+              </label>
+              <div className="password-input-wrapper">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="Nhập lại mật khẩu"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={errors.confirmPassword ? "input-error" : ""}
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  className="eye-btn"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  disabled={isLoading}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={16} />
+                  ) : (
+                    <Eye size={16} />
+                  )}
+                </button>
+              </div>
+              <div className="error-message-container">
+                {errors.confirmPassword && (
+                  <span className="error-text">{errors.confirmPassword}</span>
+                )}
+              </div>
+            </div>
+
+            <div className="terms-row">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  name="acceptTerms"
+                  checked={formData.acceptTerms}
+                  onChange={handleChange}
+                  disabled={isLoading}
+                />
+                <span>Chấp Nhận Điều Khoản</span>
+              </label>
+              <span className="blue-link" onClick={() => navigate("/login")}>
+                Tiếp Tục Đăng Nhập
               </span>
-              {errors.password && (
-                <span className="field-error">{errors.password}</span>
+            </div>
+            <div className="error-message-container checkbox-error">
+              {errors.acceptTerms && (
+                <span className="error-text">{errors.acceptTerms}</span>
               )}
             </div>
 
-            {/* CONFIRM PASSWORD */}
-            <div className="form-group password-group">
-              <label>Xác nhận mật khẩu</label>
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={errors.confirmPassword ? "input-error shake" : ""}
-                placeholder="••••••••"
-              />
-              <span
-                className="toggle-icon"
-                onClick={() =>
-                  setShowConfirmPassword(!showConfirmPassword)
-                }
-              >
-                {showConfirmPassword ? "🙈" : "👁️"}
-              </span>
-              {errors.confirmPassword && (
-                <span className="field-error">
-                  {errors.confirmPassword}
-                </span>
-              )}
-            </div>
-
-            {/* TERMS */}
-            {/* TERMS */}
-            <div className="remember-row">
-              <input
-                type="checkbox"
-                name="agreeTerms"
-                id="terms"
-                checked={formData.agreeTerms}
-                onChange={handleChange}
-              />
-              <label htmlFor="terms">Tôi đồng ý điều khoản sử dụng</label>
-            </div>
-
-            {errors.agreeTerms && (
-              <span className="field-error">{errors.agreeTerms}</span>
-            )}
-
-            {/* SUBMIT */}
-            <button type="submit" className="btn-register">
-              Đăng ký
+            <button type="submit" className="submit-btn" disabled={isLoading}>
+              {isLoading ? "Đang xử lý..." : "Đăng Ký"}
             </button>
           </form>
-
-          <div className="auth-options">
-            <span onClick={() => navigate("/login")}>
-              Đã có tài khoản? Đăng nhập
-            </span>
-          </div>
-
-          <div className="social-login">
-            <p>Hoặc đăng ký bằng</p>
-            <button className="google-btn">
-              <img src={googleLogo} alt="google" />
-              Tiếp tục với Google
-            </button>
-          </div>
         </div>
       </div>
     </div>

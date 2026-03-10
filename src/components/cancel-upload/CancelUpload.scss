@@ -1,17 +1,205 @@
-.item-cancel {
-  display: grid;
-  grid-template-columns: 1.8fr 3.6fr 1.65fr;
-  gap: 25px;
-  padding: 12px 17px;
-  border: 2px solid #f5f5f5;
-  border-radius: 15px;
-}
-
 .main-container-cancel-manage {
   background-color: #ffffff;
   height: auto;
-  // width: 100%;
+  min-height: 500px;
   border-radius: 15px;
   border: 1px solid hsla(0, 0%, 0%, 0.251);
   padding: 10px 60px;
+  display: flex;
+  flex-direction: column;
+
+  .cancel-manage-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      padding-top: 20px;
+      height: 40px;
+      .title {
+        font-size: 22px;
+      }
+    }
+
+    .header-right {
+      display: flex;
+      width: 60%;
+      align-items: end;
+      // padding-bottom: 2px;
+
+      .summary-text {
+        width: 100%;
+        span {
+          color: #e1a730;
+          font-weight: bold;
+        }
+      }
+
+      .search-box {
+        position: relative;
+        display: flex;
+        justify-content: end;
+        width: auto;
+        input {
+          width: 243px;
+          height: 35px;
+          border: 1px solid #bdbdbd;
+          background-color: #fff;
+          padding: 0 35px 0 12px;
+          border-radius: 6px;
+          outline: none;
+        }
+        .search-icon {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #bdbdbd;
+        }
+      }
+    }
+  }
+
+  .divider {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+  }
+
+  .cancel-content-wrapper {
+    margin-top: 9px;
+
+    .item-cancel {
+      display: grid;
+      grid-template-columns: 1.8fr 3.6fr 2fr; // Tăng nhẹ cột cuối để chứa box thông báo
+      gap: 25px;
+      padding: 12px 17px;
+      border: 2px solid #f5f5f5;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: #bb2a33; // Đổi sang màu đỏ vì đây là bài bị từ chối
+        box-shadow: 0 4px 12px rgba(187, 42, 51, 0.05);
+      }
+
+      .image-container img {
+        width: 100%;
+        border-radius: 15px;
+        object-fit: cover;
+      }
+
+      .info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+
+        .info-title {
+          margin-bottom: 15px;
+          font-size: 19px;
+        }
+
+        .info-address {
+          display: flex;
+          gap: 5px;
+          color: #757575;
+          align-items: center;
+        }
+
+        .info-price {
+          display: flex;
+          align-items: baseline;
+          gap: 8px;
+          b {
+            color: #e1a730;
+            font-size: 24px;
+          }
+          .currency {
+            color: #757575;
+            font-size: 14px;
+          }
+        }
+
+        .info-stats {
+          display: flex;
+          justify-content: flex-end;
+          gap: 37px;
+          margin-top: auto;
+
+          .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #757575;
+          }
+        }
+      }
+
+      .action-container {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        justify-content: center;
+
+        .error-alert-box {
+          background-color: #ffecee;
+          border: 1px solid #8c161f;
+          border-radius: 10px;
+          min-height: 110px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 0 15px;
+          gap: 5px;
+
+          .alert-icon {
+            text-align: center;
+          }
+          .alert-text {
+            color: #8c161f;
+            font-size: 13px;
+            text-align: justify;
+            line-height: 1.4;
+          }
+        }
+
+        .btn-group {
+          display: flex;
+          justify-content: center;
+          gap: 25px;
+
+          .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            &.btn-edit {
+              background-color: #d9f5fd;
+              color: #0063b8;
+              border-color: #5cc1ee;
+            }
+
+            &.btn-delete {
+              background-color: #ffecee;
+              color: #bb2a33;
+              border-color: #ff99a1;
+            }
+          }
+        }
+      }
+    }
+  }
 }

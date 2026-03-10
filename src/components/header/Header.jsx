@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import logo from "assets/images/logo.png";
+import { useNavigate } from "react-router-dom";
 import "./Navbar.scss";
 import {
   Heart,
@@ -10,26 +11,21 @@ import {
   Search,
 } from "lucide-react";
 import DropDownUserInf from "components/dropdownUserInfor/DropDownUserInf";
-// import {auth} from './lib/auth';
 
-const Header = ({ setShowLogout }) => {
-
+const Header = ({ setShowLogout, userName }) => {
   const [openDrop, setOpenDrop] = useState(false);
-  const isLogin = localStorage.token ? true : false;
+  const isLogin = localStorage.authToken ? true : false;
   const [dropArrow, setDropArrow] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="main-container">
-      <div
-        style={{
-          display: "flex",
-          gap: "50px",
-          height: "100%",
-          alignItems: "center",
-        }}
-      >
-        <div>
-          <img className="logo-container" src={logo} alt="logo" />
+      {console.log(1)}
+
+      {/* --- Cụm bên trái: Logo & Search --- */}
+      <div className="header-left">
+        <div className="logo-box" onClick={() => navigate("/")}>
+          <img className="logo-img" src={logo} alt="logo" />
         </div>
 
         <div className="search-container">
@@ -40,57 +36,35 @@ const Header = ({ setShowLogout }) => {
               placeholder="Tìm phòng trọ, căn hộ, chung cư..."
             />
           </div>
-
           <button className="search-btn">
             <Search color="white" size={16} />
           </button>
         </div>
       </div>
 
+      {/* --- Cụm bên phải: Icons & Auth --- */}
       <div className="infor-container">
         <Heart color="#E1A730" />
         <Bell color="#E1A730" />
         <button className="upload-button">Đăng tin</button>
+
         {isLogin ? (
-          <div style={{ position: "relative" }}>
+          <div className="user-wrapper">
             <span
               onClick={() => {
                 setOpenDrop(!openDrop);
                 setDropArrow(!dropArrow);
               }}
-              className="user-infor"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "10px 15px",
-                width: "220px",
-                justifyContent: "space-between",
-                cursor: "pointer",
-                fontWeight: "bold",
-                fontSize: "16px",
-              }}
+              className="user-infor logged-in"
             >
-              <span
-                style={{
-                  display: "block",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                Lê Hoàng Tuyển
+              <span className="user-name-text">
+                {userName}
               </span>
-              {dropArrow ? (
-                <span style={{ display: "flex", alignItems: "end" }}>
-                  <ChevronDown size={28} />
-                </span>
-              ) : (
-                <span style={{ display: "flex", alignItems: "end" }}>
-                  <ChevronUp size={28} />
-                </span>
-              )}
+              <span className="arrow-icon">
+                {dropArrow ? <ChevronDown size={28} /> : <ChevronUp size={28} />}
+              </span>
             </span>
+
             {openDrop && (
               <DropDownUserInf
                 setOpenDrop={setOpenDrop}
@@ -100,21 +74,15 @@ const Header = ({ setShowLogout }) => {
             )}
           </div>
         ) : (
-          <span
-            className="user-infor"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "10px 15px",
-              fontWeight: "500",
-            }}
+          <button
+            onClick={() => navigate("/login")}
+            className="user-infor login-btn"
           >
-            <span style={{ display: "flex", alignItems: "center" }}>
+            <span className="icon-login">
               <LogIn size={18} />
             </span>
             <span>Đăng nhập</span>
-          </span>
+          </button>
         )}
       </div>
     </div>

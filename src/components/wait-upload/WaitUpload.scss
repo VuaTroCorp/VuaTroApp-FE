@@ -1,12 +1,132 @@
 .main-container-waiting {
-  border: 1px solid hsla(0, 0%, 0%, 0.251);
-}
-
-.item-wating {
-  display: grid;
-  grid-template-columns: 1.8fr 3.6fr 1.65fr;
-  gap: 25px;
-  padding: 12px 17px;
-  border: 2px solid #f5f5f5;
+  background-color: #ffffff;
+  min-height: 500px;
   border-radius: 15px;
+  border: 1px solid hsla(0, 0%, 0%, 0.251);
+  padding: 10px 60px;
+  display: flex;
+  flex-direction: column;
+
+  .waiting-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      padding-top: 20px;
+      height: 40px;
+      .title { font-size: 22px; }
+    }
+
+    .header-right {
+      display: flex;
+      width:60%;
+      align-items: end;
+      // padding-bottom: 2px;
+
+      .summary-text {
+        width: 100%;
+        span {
+          color: #e1a730;
+          font-weight: bold;
+        }
+      }
+
+      .search-box {
+        position: relative;
+        display: flex;
+        justify-content: end;
+        width: auto;
+        input {
+          width: 243px;
+          height: 35px;
+          border: 1px solid #bdbdbd;
+          background-color: #fff;
+          padding: 0 35px 0 12px;
+          border-radius: 6px;
+          outline: none;
+        }
+        .search-icon {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #bdbdbd;
+        }
+      }
+    }
+  }
+
+  .divider {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+  }
+
+  .waiting-content-wrapper {
+    margin-top: 9px;
+
+    .item-waiting {
+      display: grid;
+      grid-template-columns: 1.8fr 3.6fr 1.65fr;
+      gap: 25px;
+      padding: 12px 17px;
+      border: 2px solid #f5f5f5;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: #0063B8; // Màu xanh dương cho bài chờ duyệt
+        box-shadow: 0 4px 12px rgba(0, 99, 184, 0.05);
+      }
+
+      .image-container img { width: 100%; border-radius: 15px; object-fit: cover; }
+
+      .info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        .info-title { font-size: 19px; margin-bottom: 15px; }
+        .info-address { display: flex; gap: 5px; color: #757575; align-items: center; }
+        .info-price {
+          display: flex; align-items: baseline; gap: 8px;
+          b { color: #e1a730; font-size: 24px; }
+          .currency { color: #757575; font-size: 14px; }
+        }
+        .info-stats {
+          display: flex; justify-content: flex-end; gap: 37px; margin-top: auto;
+          .stat-item { display: flex; align-items: center; gap: 5px; color: #757575; }
+        }
+      }
+
+      .action-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        justify-content: center;
+        align-items: center; // Canh giữa các nút trong cột
+
+        .btn-action {
+          display: flex;
+          align-items: center;
+          justify-content: center; // Luôn canh giữa icon và text
+          gap: 8px;
+          padding: 8px 0;
+          width: 80%; // Bạn có thể chỉnh lại độ rộng tùy ý
+          border-radius: 6px;
+          cursor: pointer;
+          font-weight: 500;
+          transition: 0.2s;
+          border: 1px solid transparent;
+
+          &:hover { transform: translateY(-2px); }
+
+          &.btn-detail { background-color: #D9F5FD; color: #0063B8; border-color: #5CC1EE; }
+          &.btn-repost { background-color: #FEEFCB; color: #925400; border-color: #E6AC28; }
+          &.btn-cancel { background-color: #FFECEE; color: #BB2A33; border-color: #FF99A1; }
+        }
+      }
+    }
+  }
 }

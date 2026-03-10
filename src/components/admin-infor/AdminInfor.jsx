@@ -5,7 +5,7 @@ import { Pen } from "lucide-react";
 
 const AdminInfor = () => {
   const [edit, setEdit] = useState(false);
-  
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [pass, setPass] = useState("");
@@ -17,166 +17,85 @@ const AdminInfor = () => {
   const [emailEdit, setEmailEdit] = useState("");
 
   const [editButton, setEditButton] = useState(false);
+
   return (
     <div className="admin-right-container">
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          paddingTop: "20px",
-          height: "40px",
-        }}
-      >
-        <b style={{ fontSize: "22px" }}>Thông Tin Cá Nhân</b>
+      {/* Header */}
+      <div className="admin-header">
+        <b className="header-title">Thông Tin Cá Nhân</b>
       </div>
-      <hr style={{ border: "1px solid #ddd" }} />
+      <hr className="header-divider" />
+
       <div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ height: "210px", display: "flex", alignItems: "end" }}>
-            <img style={{ height: "90%" }} src={avt} alt="ảnh đại diện" />
+        {/* Section Avatar */}
+        <div className="profile-section">
+          <div className="avatar-wrapper">
+            <img className="avatar-img" src={avt} alt="ảnh đại diện" />
           </div>
           <div>
-            <button
-              style={{
-                backgroundColor: "#8C9AA3",
-                color: "#fff",
-                padding: "9px 12px",
-                border: "none",
-                borderRadius: "8px",
-              }}
-            >
-              Đổi ảnh đại diện
-            </button>
+            <button className="btn-change-avatar">Đổi ảnh đại diện</button>
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            marginTop: "47px",
-            gap: "30px",
-          }}
-        >
-          <div style={{ display: "flex", gap: "128px" }}>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "5px" }}
-            >
-              <p>
-                <b>Họ và Tên</b>
-              </p>
+
+        {/* Section Form Infor */}
+        <div className="form-section">
+          {/* Lưới Grid Container để chia cột thẳng tắp */}
+          <div className="form-grid-container">
+            <div className="form-group">
+              <p><b>Họ và Tên</b></p>
               <input
                 onChange={(e) => setName(e.target.value)}
-                style={{
-                  backgroundColor: "#fff",
-                  padding: "15px 25px 15px 12px",
-                  border: "1px solid #ddd",
-                  cursor: edit ? "" : "not-allowed",
-                  backgroundColor: edit ? "#fff" : " #f5f5f5",
-                }}
+                className={`input-field ${!edit ? 'readonly' : ''}`}
                 type="text"
                 value={name}
                 readOnly={!edit}
               />
             </div>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "5px" }}
-            >
-              <p>
-                <b>Số điện thoại</b>
-              </p>
+            
+            <div className="form-group">
+              <p><b>Số điện thoại</b></p>
               <input
                 onChange={(e) => setPhone(e.target.value)}
-                style={{
-                  backgroundColor: "#fff",
-                  padding: "15px 25px 15px 12px",
-                  border: "1px solid #ddd",
-                  cursor: edit ? "" : "not-allowed",
-                  backgroundColor: edit ? "#fff" : " #f5f5f5",
-                }}
+                className={`input-field ${!edit ? 'readonly' : ''}`}
                 type="text"
                 value={phone}
                 readOnly={!edit}
               />
             </div>
-          </div>
-          <div>
-            <div
-              style={{
-                marginRight: "342px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "5px",
-              }}
-            >
-              <p>
-                <b>Mật khẩu</b>
-              </p>
+
+            <div className="form-group">
+              <p><b>Mật khẩu</b></p>
               <input
                 onChange={(e) => setPass(e.target.value)}
-                style={{
-                  backgroundColor: "#fff",
-                  padding: "15px 25px 15px 12px",
-                  border: "1px solid #ddd",
-                  cursor: edit ? "" : "not-allowed",
-                  backgroundColor: edit ? "#fff" : " #f5f5f5",
-                }}
+                className={`input-field ${!edit ? 'readonly' : ''}`}
                 type="password"
                 value={pass}
                 readOnly={!edit}
               />
             </div>
-          </div>
-          <div>
-            <div
-              style={{
-                marginRight: "342px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "5px",
-                width: "100%",
-              }}
-            >
-              <p>
-                <b>Email</b>
-              </p>
+
+            <div className="form-group email-group">
+              <p><b>Email</b></p>
               <input
                 onChange={(e) => setEmail(e.target.value)}
-                style={{
-                  backgroundColor: "#fff",
-                  padding: "15px 25px 15px 12px",
-                  width: "100%",
-                  border: "1px solid #ddd",
-                  cursor: edit ? "" : "not-allowed",
-                  backgroundColor: edit ? "#fff" : " #f5f5f5",
-                }}
+                className={`input-field ${!edit ? 'readonly' : ''}`}
                 type="email"
                 value={email}
                 readOnly={!edit}
               />
             </div>
           </div>
+
+          {/* Section Buttons */}
           {!editButton ? (
-            <div
-              onClick={() => setEditButton(true)}
-              style={{ position: "relative" }}
-            >
-              <div style={{ position: "absolute", top: "41px", left: "15px" }}>
-                <Pen size={22} color="#fff" />
+            <div className="action-buttons">
+              <div className="pen-icon-wrapper">
+                <Pen size={20} color="#fff" />
               </div>
               <button
-                onClick={() => setEdit(true)}
-                style={{
-                  border: "none",
-                  color: "#fff",
-                  borderRadius: "15px",
-                  marginTop: "30px",
+                onClick={() => {
+                  setEditButton(true);
+                  setEdit(true);
                 }}
                 className="button-edit"
               >
@@ -184,43 +103,25 @@ const AdminInfor = () => {
               </button>
             </div>
           ) : (
-            <div style={{ display: "flex", gap:'18px'}}>
-              <div>
-                <button
-                  onClick={() => {
-                    setEditButton(false);
-                    setEdit(false);
-                  }}
-                  className="button-confirm"
-                  style={{
-                    backgroundColor: "#c61a09",
-                    border: "none",
-                    color: "#fff",
-                    borderRadius: "15px",
-                    marginTop: "30px",
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-              <div>
-                <button
-                  onClick={() => {
-                    setEditButton(false);
-                    setEdit(false);
-                  }}
-                  className="button-confirm"
-                  style={{
-                    backgroundColor: "#1d9c31",
-                    border: "none",
-                    color: "#fff",
-                    borderRadius: "15px",
-                    marginTop: "30px",
-                  }}
-                >
-                  Save
-                </button>
-              </div>
+            <div className="action-group">
+              <button
+                onClick={() => {
+                  setEditButton(false);
+                  setEdit(false);
+                }}
+                className="button-confirm btn-cancel"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setEditButton(false);
+                  setEdit(false);
+                }}
+                className="button-confirm btn-save"
+              >
+                Save
+              </button>
             </div>
           )}
         </div>
