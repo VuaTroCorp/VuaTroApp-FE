@@ -10,7 +10,7 @@ import {
   Trash2,
   Search
 } from "lucide-react";
-import { MOCK_ROOMS } from "../../../../hooks/constant-list-manage.js";
+import { MOCK_ROOMS } from "../../../../../hooks/constant-list-manage.js";
 
 const PostList = () => {
   const specialNumb = 5;

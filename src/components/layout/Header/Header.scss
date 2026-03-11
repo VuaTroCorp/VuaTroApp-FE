@@ -73,15 +73,15 @@
   /* Cụm bên phải */
   .infor-container {
     display: flex;
-    gap: 60px;
+    gap: 40px;
     margin-left: 164px;
     align-items: center;
 
     .upload-button {
       background-color: #e1a730;
       color: white;
-      padding: 12px 15px;
-      border-radius: 10px;
+      padding: 11px 15px;
+      border-radius: 18px;
       border: none;
       font-size: 15px;
       font-weight: 500;
@@ -103,7 +103,7 @@
 
       /* Style cho nút Đăng nhập khi chưa login */
       &.login-btn {
-        padding: 10px 15px;
+        padding: 7px 15px;
         font-weight: 500;
         border: none;
         .icon-login { display: flex; align-items: center; }
@@ -131,6 +131,11 @@
       }
     }
   }
+}
+
+.button-header-container{
+  display: flex;
+  gap: 8px;
 }
 
 /* --- Responsive Breakpoints --- */

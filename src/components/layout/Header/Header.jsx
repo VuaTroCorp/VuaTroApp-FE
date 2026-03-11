@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
 import "./Header.scss";
@@ -12,11 +12,29 @@ import {
 } from "lucide-react";
 import UserDropdown from "components/layout/Header/UserDropdown/UserDropdown";
 
-const Header = ({ setShowLogout, userName }) => {
+const Header = ({ setShowLogout }) => {
   const [openDrop, setOpenDrop] = useState(false);
   const isLogin = localStorage.authToken ? true : false;
   const [dropArrow, setDropArrow] = useState(false);
   const navigate = useNavigate();
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (!token) return null;
+    else {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join(""),
+      );
+      const name = JSON.parse(jsonPayload);
+      setUserName((name.username))
+    }
+  }, []);
 
   return (
     <div className="main-container">
@@ -44,7 +62,22 @@ const Header = ({ setShowLogout, userName }) => {
       <div className="infor-container">
         <Heart color="#E1A730" />
         <Bell color="#E1A730" />
-        <button className="upload-button">Đăng tin</button>
+
+        <div className="button-header-container">
+          <button
+            onClick={() => navigate("/post-news")}
+            className="upload-button"
+          >
+            Nâng cấp
+          </button>
+
+          <button
+            onClick={() => navigate("/post-news")}
+            className="upload-button"
+          >
+            Đăng tin
+          </button>
+        </div>
 
         {isLogin ? (
           <div className="user-wrapper">
@@ -55,11 +88,13 @@ const Header = ({ setShowLogout, userName }) => {
               }}
               className="user-infor logged-in"
             >
-              <span className="user-name-text">
-                {userName}
-              </span>
+              <span className="user-name-text">{userName}</span>
               <span className="arrow-icon">
-                {dropArrow ? <ChevronDown size={28} /> : <ChevronUp size={28} />}
+                {dropArrow ? (
+                  <ChevronDown size={28} />
+                ) : (
+                  <ChevronUp size={28} />
+                )}
               </span>
             </span>
 

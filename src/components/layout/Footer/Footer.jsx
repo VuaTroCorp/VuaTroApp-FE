@@ -84,10 +84,10 @@ const Footer = () => {
         </div>
 
         <div className="download-container">
-          <a href="">
+          <a href="https://www.google.com/">
             <img className="logo" src={googleplay} alt="ch play" />
           </a>
-          <a href="">
+          <a href="https://www.google.com/">
             <img className="logo" src={appstore} alt="" />
           </a>
         </div>
