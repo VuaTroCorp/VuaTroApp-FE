@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./InforBase.scss";
 import locationPost from "assets/icons/locationPost.png";
-import light from "assets/icons/light.png";
 import document from "assets/icons/document.png";
 import notice from "assets/icons/notice.png";
 import contact from "assets/icons/contact.png";
@@ -25,7 +24,7 @@ const InforBase = () => {
     const [price, setPrice] = useState("");
     const [area, setArea] = useState("");
 
-    const [roomQuantity, setRoomQuantity] = useState(0);
+    const [roomQuantity, _setRoomQuantity] = useState(0);
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
 

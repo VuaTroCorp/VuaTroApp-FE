@@ -19,6 +19,26 @@ describe("Login Component", () => {
   let mockLogin;
   let mockNavigate;
 
+  beforeAll(() => {
+    jest.spyOn(console, "warn").mockImplementation((...args) => {
+      const [firstArg] = args;
+      if (
+        typeof firstArg === "string" &&
+        firstArg.includes("⚠️ React Router Future Flag Warning")
+      ) {
+        return;
+      }
+      // preserve normal warning behavior for everything else
+      // eslint-disable-next-line no-console
+      console.warn(...args);
+    });
+  });
+
+  afterAll(() => {
+    // eslint-disable-next-line no-console
+    console.warn.mockRestore();
+  });
+
   beforeEach(() => {
     mockLogin = jest.fn();
     mockNavigate = jest.fn();
