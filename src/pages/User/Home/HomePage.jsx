@@ -7,6 +7,7 @@ import SelectionSection from "components/shared/User/common/SelectionSection/Sel
 import ServiceSection from "components/shared/User/common/ServiceSection/ServiceSection";
 import { usePostSearch } from "hooks/usePostSearch";
 
+
 function HomePage() {
   const {
     posts,
