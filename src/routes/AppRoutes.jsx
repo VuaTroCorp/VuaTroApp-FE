@@ -30,16 +30,17 @@ export default function AppRoutes() {
             </Route>
 
             <Route element={<UserLayout/>}>
-                <Route index element={<HomePage/>}/>
-                <Route element={<RoleBasedRoute allowedRoles={["USER"]}/>}>
+                {/* <Route index element={<HomePage/>}/> */}
+                <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]}/>}>
+                    <Route path="home" element={<HomePage/>}/>
                     <Route path="post-news" element={<PostNewsPage/>}/>
                 </Route>
             </Route>
 
             <Route element={<AdminLayout />}>
-                <Route index element={<HomePage/>}/>
-                <Route element={<RoleBasedRoute allowedRoles={["ADMIN"]}/>}>
-
+                {/* <Route index element={<HomePage/>}/> */}
+                <Route path="admin" element={<RoleBasedRoute allowedRoles={["ADMIN"]}/>}>
+                    {/* <Route path="dashboard" element={<DashboardPage/>}/> */}
                 </Route>
             </Route>
 

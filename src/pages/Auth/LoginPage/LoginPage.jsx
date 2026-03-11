@@ -7,7 +7,7 @@ import googleLogo from "assets/icons/google-logo.png";
 import { useAuth } from "hooks/useAuth";
 import "./LoginPage.scss";
 
-const LoginPage = () => {
+const Login = () => {
   const navigate = useNavigate();
   const { login, isLoading } = useAuth();
   const [formData, setFormData] = useState({
@@ -55,13 +55,20 @@ const LoginPage = () => {
         });
 
         // Đăng nhập thành công
-        toast.success("Đăng nhập thành công!");
+        toast.success("Đăng nhập thành công!", {
+          autoClose: false,
+          closeButton: true,
+        });
         navigate("/");
       } catch (error) {
         // Xử lý error từ backend
         const errorMessage =
-          error.response?.data?.message || "Đăng nhập thất bại. Vui lòng thử lại.";
-        toast.error(errorMessage);
+          error.response?.data?.message ||
+          "Đăng nhập thất bại. Vui lòng thử lại.";
+        toast.error(errorMessage, {
+          autoClose: false,
+          closeButton: true,
+        });
       }
     }
   };
@@ -78,7 +85,9 @@ const LoginPage = () => {
 
           <form className="login-form" onSubmit={handleSubmit} noValidate>
             <div className="form-group">
-              <label>Email</label>
+              <label>
+                Email <span className="required">*</span>
+              </label>
               <input
                 type="email"
                 name="email"
@@ -125,19 +134,6 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <div className="remember-row">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="remember"
-                  checked={formData.remember}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                />
-                <span>Ghi nhớ mật khẩu</span>
-              </label>
-            </div>
-
             <div className="link-row">
               <span
                 className="blue-link"
@@ -169,4 +165,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Login;

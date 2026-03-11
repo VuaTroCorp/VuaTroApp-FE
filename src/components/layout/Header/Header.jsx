@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import logo from "assets/images/logo.png";
+import { useNavigate } from "react-router-dom";
 import "./Header.scss";
 import {
   Heart,
@@ -9,15 +10,14 @@ import {
   Bell,
   Search,
 } from "lucide-react";
-import UserDropdown from "./UserDropdown/UserDropdown";
+import UserDropdown from "components/layout/Header/UserDropdown/UserDropdown";
 // import {auth} from './lib/auth';
 
 const Header = ({ setShowLogout }) => {
-
   const [openDrop, setOpenDrop] = useState(false);
-  const isLogin = localStorage.token ? true : false;
+  const isLogin = localStorage.authToken ? true : false;
   const [dropArrow, setDropArrow] = useState(false);
-
+  const navigate = useNavigate();
   return (
     <div className="main-container">
       <div
@@ -63,7 +63,7 @@ const Header = ({ setShowLogout }) => {
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",
-                padding: "10px 15px",
+                padding: "8px 15px",
                 width: "220px",
                 justifyContent: "space-between",
                 cursor: "pointer",
@@ -100,7 +100,8 @@ const Header = ({ setShowLogout }) => {
             )}
           </div>
         ) : (
-          <span
+          <button
+            onClick={() => navigate("/login")}
             className="user-infor"
             style={{
               display: "flex",
@@ -108,13 +109,14 @@ const Header = ({ setShowLogout }) => {
               gap: "8px",
               padding: "10px 15px",
               fontWeight: "500",
+              border: "none",
             }}
           >
             <span style={{ display: "flex", alignItems: "center" }}>
               <LogIn size={18} />
             </span>
             <span>Đăng nhập</span>
-          </span>
+          </button>
         )}
       </div>
     </div>
