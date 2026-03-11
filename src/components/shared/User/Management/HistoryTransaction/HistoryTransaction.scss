@@ -1,0 +1,33 @@
+.main-container-history-manage {
+  background-color: #ffffff;
+  height: auto;
+  // width: 100%;
+  border-radius: 15px;
+  border: 1px solid hsla(0, 0%, 0%, 0.251);
+  padding: 10px 60px;
+}
+
+.report-container{
+       display: grid;
+       grid-template-columns: 1.3fr 1fr 1fr;
+       column-gap: 19px;
+}
+
+.refind-container{
+       display: grid;
+       grid-template-columns: 1fr 1fr 1fr 1fr;
+       column-gap: 29px;
+       border: 2px solid #F8F8F8;
+       padding: 10px 12px;
+       border-radius: 10px;
+}
+
+.history-content-container{
+       display: flex;
+       flex-direction: column;
+       gap: 12px;
+}
+
+.item-history{
+       box-shadow: 5px 5px 10px #F8F8F8;
+}

@@ -23,6 +23,34 @@
                 display: flex;
                 flex-direction: column;
                 gap: 20px;
+
+                .loading-state,
+                .error-state,
+                .empty-state {
+                    background-color: #fff;
+                    padding: 40px 20px;
+                    border-radius: 10px;
+                    text-align: center;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+                    p {
+                        font-size: 18px;
+                        color: #666;
+                        margin: 0;
+                    }
+                }
+
+                .loading-state p {
+                    color: #0063B8;
+                }
+
+                .error-state p {
+                    color: #dc3545;
+                }
+
+                .empty-state p {
+                    color: #6c757d;
+                }
             }
         }
 

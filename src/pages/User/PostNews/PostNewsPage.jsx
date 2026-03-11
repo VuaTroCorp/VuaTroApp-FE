@@ -1,5 +1,5 @@
 import "./PostNewsPage.scss";
-import InforBase from "components/shared/User/InforBase/InforBase";
+import InforBase from "components/shared/User/Post/InforBase/InforBase";
 
 
 function PostNewsPage() {

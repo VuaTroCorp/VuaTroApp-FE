@@ -151,9 +151,12 @@ const Login = () => {
             </button>
           </form>
 
-          <button 
+          <button
             className="google-login-btn"
-            onClick={() => window.location.href = 'http://localhost:8080/oauth2/authorization/google'}
+            onClick={() =>
+              (window.location.href =
+                "http://localhost:8080/oauth2/authorization/google")
+            }
             type="button"
           >
             <img src={googleLogo} alt="G" />

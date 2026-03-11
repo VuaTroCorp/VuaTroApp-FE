@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import avt from "assets/images/avatar1.png";
+import React from "react";
 import "./UserDropdown.scss";
-// import "./DropdownAdmin.scss";
 import {
   UserCog,
   History,
@@ -16,10 +14,6 @@ const UserDropdown = ({
   setOpenDrop,
   setDropArrow,
 }) => {
-  const [active, setActive] = useState("infor");
-  const [open, setOpen] = useState(false);
-  const [arrow, setArrow] = useState(false);
-
   return (
     <div className="dropdown-user-main-container">
       <div

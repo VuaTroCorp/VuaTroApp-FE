@@ -1,14 +1,17 @@
 import React from "react";
-import "./Logout.scss";
+import "./LogoutModal.scss";
 import { LogOut } from "lucide-react";
+import { clearAuth } from "lib/auth";
+import { useNavigate } from "react-router-dom";
 
-const Logout = ({ setShowLogout }) => {
+const LogoutModal = ({ setShowLogout }) => {
+    const navigate = useNavigate();
   return (
     <div
       style={{
         backgroundColor: "#00000080",
         position: "fixed",
-        zIndex: "22",
+        zIndex: "1009",
         height: "100%",
         width: "100%",
         display: "grid",
@@ -84,6 +87,7 @@ const Logout = ({ setShowLogout }) => {
 
           <div>
             <button
+              onClick={() => {clearAuth(); navigate('/login')}}
               className="button-logout"
               style={{
                 color: "#FFFFFF",
@@ -104,4 +108,4 @@ const Logout = ({ setShowLogout }) => {
     </div>
   );
 };
-export default Logout;
+export default LogoutModal;

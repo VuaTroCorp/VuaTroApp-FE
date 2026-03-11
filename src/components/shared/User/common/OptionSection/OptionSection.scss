@@ -49,6 +49,16 @@ $bg-gray: #F8F8F8;
                 }
             }
 
+            &.active {
+                .filter-label {
+                    color: $brand-gold;
+                    font-weight: 700;
+                }
+                .filter-icon {
+                    transform: translateX(2px);
+                }
+            }
+
             .filter-icon {
                 color: $brand-gold;
                 flex-shrink: 0;
