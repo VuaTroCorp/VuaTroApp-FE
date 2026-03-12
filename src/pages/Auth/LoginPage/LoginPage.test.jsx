@@ -21,7 +21,11 @@ describe("Login Component", () => {
 
   beforeAll(() => {
     jest.spyOn(console, "warn").mockImplementation((...args) => {
-      if (typeof args[0] === "string" && args[0].includes("React Router Future Flag Warning")) return;
+      if (
+        typeof args[0] === "string" &&
+        args[0].includes("React Router Future Flag Warning")
+      )
+        return;
       console.warn(...args);
     });
   });
@@ -45,7 +49,7 @@ describe("Login Component", () => {
     return render(
       <BrowserRouter>
         <LoginPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
   };
 
@@ -78,10 +82,62 @@ describe("Login Component", () => {
         });
       });
 
-      expect(toast.success).toHaveBeenCalledWith("Đăng nhập thành công!", expect.any(Object));
-      
-      // SỬA TẠI ĐÂY: Trong LoginPage bạn navigate đến /user/home chứ không phải /
-      expect(mockNavigate).toHaveBeenCalledWith("/user/home");
+      expect(toast.success).toHaveBeenCalledWith("Đăng nhập thành công!", {
+        autoClose: false,
+        closeButton: true,
+      });
+      expect(mockNavigate).toHaveBeenCalledWith("/");
+    });
+
+    test("hiển thị lỗi khi email hoặc password sai", async () => {
+      mockLogin.mockRejectedValue({
+        response: {
+          data: {
+            message: "Email hoặc mật khẩu không đúng",
+            status: 401,
+          },
+        },
+      });
+
+      renderLogin();
+      fillValidForm();
+
+      const submitButton = screen.getByRole("button", { name: "Đăng Nhập" });
+      fireEvent.click(submitButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "Email hoặc mật khẩu không đúng",
+          {
+            autoClose: false,
+            closeButton: true,
+          },
+        );
+      });
+
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    test("hiển thị lỗi mặc định khi không có message từ backend", async () => {
+      mockLogin.mockRejectedValue({
+        response: {},
+      });
+
+      renderLogin();
+      fillValidForm();
+
+      const submitButton = screen.getByRole("button", { name: "Đăng Nhập" });
+      fireEvent.click(submitButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          "Đăng nhập thất bại. Vui lòng thử lại.",
+          {
+            autoClose: false,
+            closeButton: true,
+          },
+        );
+      });
     });
   });
 
@@ -93,12 +149,11 @@ describe("Login Component", () => {
       expect(passwordInput).toHaveAttribute("type", "password");
 
       // SỬA TẠI ĐÂY: Vì button không có text, ta nên tìm theo class hoặc cấu trúc
-      const eyeButton = screen.getByRole("button", { name: "" }); 
+      const eyeButton = screen.getByRole("button", { name: "" });
       // Nếu vẫn fail, hãy thêm aria-label="toggle password" vào component LoginPage và dùng nó ở đây
-      
+
       fireEvent.click(eyeButton);
       expect(passwordInput).toHaveAttribute("type", "text");
-
 
       fireEvent.click(eyeButton);
       expect(passwordInput).toHaveAttribute("type", "password");

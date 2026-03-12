@@ -12,6 +12,7 @@ import RegisterPage from "pages/Auth/RegisterPage/RegisterPage";
 import ForgotPasswordPage from "pages/Auth/ForgotPasswordPage/ForgotPasswordPage";
 // import VerifyOtpPage from "pages/Auth/VerifyOtpPage/VerifyOtpPage";
 import ResetPasswordPage from "pages/Auth/ResetPasswordPage/ResetPasswordPage";
+import GoogleCallback from "pages/Auth/GoogleCallback/GoogleCallback";
 import HomePage from "pages/User/Home/HomePage";
 //FEATURES
 import PostNewsPage from "pages/User/PostNews/PostNewsPage";
@@ -38,9 +39,6 @@ export default function AppRoutes() {
         </Route>
         
       </Route>
-
-
-
 
       <Route element={<AdminLayout />}>
         {/* <Route index element={<HomePage/>}/> */}

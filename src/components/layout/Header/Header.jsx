@@ -18,6 +18,7 @@ const Header = ({ setShowLogout }) => {
   const [dropArrow, setDropArrow] = useState(false);
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -31,12 +32,29 @@ const Header = ({ setShowLogout }) => {
           .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
           .join(""),
       );
-      const name = JSON.parse(jsonPayload);
-      setUserName(name.username);
-    } catch (error) {
-      console.error('Fail to connect!!!');
+      const payload = JSON.parse(jsonPayload);
+      if (payload?.username) {
+        setUserName(payload.username);
+      }
+    } catch (e) {
+      console.error("Failed to parse auth token", e);
     }
   }, []);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate("/");
+    }
+  };
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch(e);
+    }
+  };
 
   return (
     <div className="main-container">
@@ -52,9 +70,12 @@ const Header = ({ setShowLogout }) => {
               className="search-input"
               type="text"
               placeholder="Tìm phòng trọ, căn hộ, chung cư..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleSearchKeyPress}
             />
           </div>
-          <button className="search-btn">
+          <button className="search-btn" onClick={handleSearch}>
             <Search color="white" size={16} />
           </button>
         </div>
