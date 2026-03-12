@@ -52,7 +52,7 @@ describe("Login Component", () => {
   describe("Form Submission", () => {
     const fillValidForm = () => {
       fireEvent.change(screen.getByPlaceholderText("Nhập địa chỉ email"), {
-        target: { value: "lenguyenquangt@gmail.com" },
+        target: { value: "test1@123.com" },
       });
       fireEvent.change(screen.getByPlaceholderText("Mật Khẩu"), {
         target: { value: "123456" },
@@ -61,7 +61,7 @@ describe("Login Component", () => {
 
     test("đăng nhập thành công và chuyển hướng đến /user/home", async () => {
       mockLogin.mockResolvedValue({
-        email: "lenguyenquangt@gmail.com",
+        email: "test1@123.com",
         role: "USER",
       });
 
@@ -73,7 +73,7 @@ describe("Login Component", () => {
 
       await waitFor(() => {
         expect(mockLogin).toHaveBeenCalledWith({
-          email: "lenguyenquangt@gmail.com",
+          email: "test1@123.com",
           password: "123456",
         });
       });
@@ -99,7 +99,7 @@ describe("Login Component", () => {
       fireEvent.click(eyeButton);
       expect(passwordInput).toHaveAttribute("type", "text");
 
-      
+
       fireEvent.click(eyeButton);
       expect(passwordInput).toHaveAttribute("type", "password");
     });
