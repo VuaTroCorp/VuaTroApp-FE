@@ -21,28 +21,16 @@ describe("Login Component", () => {
 
   beforeAll(() => {
     jest.spyOn(console, "warn").mockImplementation((...args) => {
-<<<<<<< Updated upstream
-      if (typeof args[0] === "string" && args[0].includes("React Router Future Flag Warning")) return;
-=======
-      const [firstArg] = args;
       if (
-        typeof firstArg === "string" &&
-        firstArg.includes("⚠️ React Router Future Flag Warning")
-      ) {
+        typeof args[0] === "string" &&
+        args[0].includes("React Router Future Flag Warning")
+      )
         return;
-      }
-      // preserve normal warning behavior for everything else
-      // eslint-disable-next-line no-console
->>>>>>> Stashed changes
       console.warn(...args);
     });
   });
 
   afterAll(() => {
-<<<<<<< Updated upstream
-=======
-    // eslint-disable-next-line no-console
->>>>>>> Stashed changes
     console.warn.mockRestore();
   });
 
@@ -61,7 +49,7 @@ describe("Login Component", () => {
     return render(
       <BrowserRouter>
         <LoginPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
   };
 
@@ -94,7 +82,6 @@ describe("Login Component", () => {
         });
       });
 
-<<<<<<< HEAD
       expect(toast.success).toHaveBeenCalledWith("Đăng nhập thành công!", {
         autoClose: false,
         closeButton: true,
@@ -151,12 +138,6 @@ describe("Login Component", () => {
           },
         );
       });
-=======
-      expect(toast.success).toHaveBeenCalledWith("Đăng nhập thành công!", expect.any(Object));
-      
-      // SỬA TẠI ĐÂY: Trong LoginPage bạn navigate đến /user/home chứ không phải /
-      expect(mockNavigate).toHaveBeenCalledWith("/user/home");
->>>>>>> 70cd814e0f968c1d15ac2f4d2fe0892c8b0fe451
     });
   });
 
@@ -168,12 +149,11 @@ describe("Login Component", () => {
       expect(passwordInput).toHaveAttribute("type", "password");
 
       // SỬA TẠI ĐÂY: Vì button không có text, ta nên tìm theo class hoặc cấu trúc
-      const eyeButton = screen.getByRole("button", { name: "" }); 
+      const eyeButton = screen.getByRole("button", { name: "" });
       // Nếu vẫn fail, hãy thêm aria-label="toggle password" vào component LoginPage và dùng nó ở đây
-      
+
       fireEvent.click(eyeButton);
       expect(passwordInput).toHaveAttribute("type", "text");
-
 
       fireEvent.click(eyeButton);
       expect(passwordInput).toHaveAttribute("type", "password");
