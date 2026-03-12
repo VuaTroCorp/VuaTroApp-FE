@@ -40,7 +40,7 @@ const Header = ({ setShowLogout }) => {
     <div className="main-container">
       {/* --- Cụm bên trái: Logo & Search --- */}
       <div className="header-left">
-        <div className="logo-box" onClick={() => navigate("/")}>
+        <div className="logo-box" onClick={() => navigate("/user/home")}>
           <img className="logo-img" src={logo} alt="logo" />
         </div>
 
@@ -65,14 +65,14 @@ const Header = ({ setShowLogout }) => {
 
         <div className="button-header-container">
           <button
-            onClick={() => navigate("/post-news")}
+            onClick={() => navigate("/user/post-news")}
             className="upload-button"
           >
             Nâng cấp
           </button>
 
           <button
-            onClick={() => navigate("/post-news")}
+            onClick={() => navigate("/user/post-news")}
             className="upload-button"
           >
             Đăng tin

@@ -1,15 +1,15 @@
 import { Outlet } from "react-router-dom";
-import Header from "../components/layout/Header/Header";
-import Footer from "../components/layout/Footer/Footer";
+import AdminHeader from "../components/layout/AdminHeader/AdminHeader";
+import AdminSidebar from "../components/layout/AdminSidebar/AdminSidebar";
 
 function LandlordLayout() {
   return (
     <div className="admin-layout">
-      <Header />
+      <AdminHeader />
+      <AdminSidebar />
       <main className="content-container">
         <Outlet />
       </main>
-      <Footer />
     </div>
   );
 }

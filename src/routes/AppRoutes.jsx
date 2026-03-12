@@ -6,6 +6,7 @@ import AuthLayout from "layouts/AuthLayout";
 import UserLayout from "layouts/UserLayout";
 import AdminLayout from "layouts/AdminLayout";
 //AUTH PAGES
+import DashboardPage  from "pages/Admin/Dashboard/DashboardPage";
 import LoginPage from "pages/Auth/LoginPage/LoginPage";
 import RegisterPage from "pages/Auth/RegisterPage/RegisterPage";
 import ForgotPasswordPage from "pages/Auth/ForgotPasswordPage/ForgotPasswordPage";
@@ -40,7 +41,7 @@ export default function AppRoutes() {
             <Route element={<AdminLayout />}>
                 {/* <Route index element={<HomePage/>}/> */}
                 <Route path="admin" element={<RoleBasedRoute allowedRoles={["ADMIN"]}/>}>
-                    {/* <Route path="dashboard" element={<DashboardPage/>}/> */}
+                    <Route path="dashboard" element={<DashboardPage/>}/>
                 </Route>
             </Route>
 
