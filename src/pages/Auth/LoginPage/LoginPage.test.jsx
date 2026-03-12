@@ -99,6 +99,7 @@ describe("Login Component", () => {
       fireEvent.click(eyeButton);
       expect(passwordInput).toHaveAttribute("type", "text");
 
+      
       fireEvent.click(eyeButton);
       expect(passwordInput).toHaveAttribute("type", "password");
     });
