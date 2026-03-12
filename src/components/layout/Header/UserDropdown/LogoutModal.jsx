@@ -87,7 +87,7 @@ const LogoutModal = ({ setShowLogout }) => {
 
           <div>
             <button
-              onClick={() => {clearAuth(); navigate('/login')}}
+              onClick={() => {clearAuth(); navigate('/'); setShowLogout(false)}}
               className="button-logout"
               style={{
                 color: "#FFFFFF",

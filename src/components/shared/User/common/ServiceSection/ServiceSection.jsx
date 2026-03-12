@@ -54,7 +54,7 @@ function ServiceSection() {
                 <button
                     className="post-now-btn"
                     type="button"
-                    onClick={() => navigate("/post-news")}
+                    onClick={() => navigate("/user/post-news")}
                 >
                     <span className="post-now-icon">
                         <SquarePen />
