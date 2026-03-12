@@ -1,0 +1,117 @@
+.admin-left-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  /* Khối thông tin Avatar */
+  .drop-main-container {
+    display: flex;
+    width: 328px;
+    height: 101px;
+    border: 1px solid #00000040;
+    border-radius: 15px;
+    background-color: #ffffff;
+    justify-content: start;
+
+    .avt-wrapper {
+      .avt-container {
+        background-color: #ffffff;
+        width: auto;
+        height: 100%;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        padding-left: 15px; // Giữ khoảng cách cho avt
+        
+        .avt {
+          height: 80%;
+          border-radius: 50%;
+        }
+      }
+    }
+
+    .admin-inf {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      margin-left: 15px; // Thêm margin để text không dính avt
+      margin-right: 25px;
+
+      p { margin: 0; }
+
+      .role-container {
+        display: flex;
+        align-items: start;
+        gap: 5px;
+
+        .role {
+          font-size: 13.5px;
+          color: #21A3FF;
+        }
+      }
+    }
+  }
+
+  /* Khối menu options */
+  .option-main-container {
+    background-color: #ffffff;
+    width: 328px;
+    border-radius: 15px;
+    height: auto;
+    border: 1px solid #00000040;
+
+    .option-left {
+      display: flex;
+      gap: 10px;
+      padding: 15px 22px;
+      cursor: pointer; // Thay cho style inline
+      align-items: center;
+      p { margin: 0; }
+      
+      .item-options {
+        width: 140px;
+      }
+
+      .arrow-box {
+        margin-left: 40px;
+        display: flex;
+        align-items: center;
+      }
+
+      /* Các trạng thái Active */
+      &.active {
+        background-color: #e1a730;
+        color: #ffffff;
+      }
+
+      &.active-top {
+        background-color: #e1a730;
+        color: #ffffff;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+      }
+
+      &.active-bottom {
+        background-color: #e1a730;
+        color: #ffffff;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+      }
+
+      /* Danh sách thụt lề */
+      &.list {
+        padding-left: 40px;
+      }
+    }
+
+    .option-left.drop{
+      display: flex;
+      justify-content: space-between;
+    }
+    .left-drop-item{
+      display: flex;
+      gap: 10px;
+    }
+  }
+}

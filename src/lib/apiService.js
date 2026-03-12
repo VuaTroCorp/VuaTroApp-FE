@@ -1,4 +1,8 @@
 import { api } from "./api";
+import { mockPostAPI } from "mocks/mockPosts";
+
+// Toggle này để bật/tắt mock mode
+const USE_MOCK_DATA = true; // Đổi thành false để dùng API thật
 
 // ==================== AUTHENTICATION APIs ====================
 export const authAPI = {
@@ -26,6 +30,14 @@ export const postAPI = {
    * GET /api/posts/search
    */
   search: (searchRequest = {}, page = 0, size = 10, sort = "id,desc") => {
+    // Nếu bật mock mode, dùng mock data
+    if (USE_MOCK_DATA) {
+      console.log("🎭 Using MOCK data");
+      return mockPostAPI.search(searchRequest, page, size, sort);
+    }
+    
+    // Nếu không, dùng API thật
+    console.log("🌐 Using REAL API");
     return api.get("/api/posts/search", {
       params: {
         ...searchRequest,
