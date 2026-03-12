@@ -21,29 +21,28 @@ const Header = ({ setShowLogout }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-
     if (!token) return;
-
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-
-    const name = JSON.parse(jsonPayload);
-    setUserName(name.username);
-
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join(""),
+      );
+      const name = JSON.parse(jsonPayload);
+      setUserName(name.username);
+    } catch (error) {
+      console.error('Fail to connect!!!');
+    }
   }, []);
 
   return (
     <div className="main-container">
       {/* --- Cụm bên trái: Logo & Search --- */}
       <div className="header-left">
-        <div className="logo-box" onClick={() => navigate("/")}>
+        <div className="logo-box" onClick={() => navigate("/user/home ")}>
           <img className="logo-img" src={logo} alt="logo" />
         </div>
 
@@ -68,14 +67,14 @@ const Header = ({ setShowLogout }) => {
 
         <div className="button-header-container">
           <button
-            onClick={() => navigate("/post-news")}
+            onClick={() => navigate("/user/post-news")}
             className="upload-button"
           >
             Nâng cấp
           </button>
 
           <button
-            onClick={() => navigate("/post-news")}
+            onClick={() => navigate("/user/post-news")}
             className="upload-button"
           >
             Đăng tin
