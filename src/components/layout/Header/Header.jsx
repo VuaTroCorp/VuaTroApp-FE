@@ -21,19 +21,22 @@ const Header = ({ setShowLogout }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    if (!token) return null;
-    else {
-      const base64Url = token.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split("")
-          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-          .join(""),
-      );
-      const name = JSON.parse(jsonPayload);
-      setUserName((name.username))
-    }
+
+    if (!token) return;
+
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+
+    const name = JSON.parse(jsonPayload);
+    setUserName(name.username);
+
   }, []);
 
   return (

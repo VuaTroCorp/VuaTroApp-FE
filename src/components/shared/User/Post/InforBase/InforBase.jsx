@@ -10,6 +10,7 @@ import GOOGLE from "../MapSection/MapSection";
 import map from "assets/icons/map.png";
 
 const InforBase = () => {
+    const [typeId, setTypeId] = useState("");
 
     const [provinceName, setProvinceName] = useState("");
     const [districtName, setDistrictName] = useState("");
@@ -39,43 +40,78 @@ const InforBase = () => {
 
     const handleSubmit = async () => {
 
-        const postData = {
-            title: title,
-            price: Number(price),
-            area: Number(area),
-            roomQuantity: Number(roomQuantity),
-            typeId: 1,
-            latitude: latitude,
-            longitude: longitude,
-            address: addressDetail,
-            description: description,
-            imageUrls: []
-        };
+        const token = localStorage.getItem("authToken");
 
-        console.log(postData);
+        if (!token) {
+            alert("Bạn chưa đăng nhập");
+            return;
+        }
+
+        const formData = new FormData();
+
+        formData.append("title", title);
+        formData.append("price", price);
+        formData.append("area", area);
+        formData.append("roomQuantity", roomQuantity);
+        formData.append("typeId", Number(typeId));
+        formData.append("latitude", latitude);
+        formData.append("longitude", longitude);
+        formData.append("address", addressDetail);
+        formData.append("description", description);
+
+        // nếu có ảnh
+        images.forEach((img) => {
+            formData.append("images", img);
+        });
 
         try {
 
             const res = await fetch("http://localhost:8080/api/posts/create", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify(postData)
+                body: formData
             });
 
-            const data = await res.json();
+            const data = await res.json().catch(() => null);
 
-            if (data.success) {
+            console.log("STATUS:", res.status);
+            console.log("RESPONSE:", data);
+
+            if (res.ok) {
+
                 alert("Đăng bài thành công");
+
+                setTitle("");
+                setDescription("");
+                setPrice("");
+                setArea("");
+                _setRoomQuantity(0);
+
+                setAddressDetail("");
+                setLatitude(0);
+                setLongitude(0);
+
+                setProvince("");
+                setDistrict("");
+                setWard("");
+
+                setProvinceName("");
+                setDistrictName("");
+                setWardName("");
+
+                setImages([]);
+
+            } else {
+                alert(data?.message || "Đăng bài thất bại");
             }
 
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.log(error);
+            alert("Không thể kết nối server");
         }
     };
-
 
     //Up images
     const [images, setImages] = useState([]);
@@ -86,17 +122,36 @@ const InforBase = () => {
         const files = Array.from(e.target.files);
         if (!files.length) return;
 
+        const MAX_SIZE = 1 * 1024 * 1024; // 1MB
+
+        // lọc file hợp lệ
+        const validFiles = files.filter(file => {
+
+            // chỉ cho upload ảnh
+            if (!file.type.startsWith("image/")) {
+                alert(`${file.name} không phải file ảnh`);
+                return false;
+            }
+
+            // kiểm tra kích thước
+            if (file.size > MAX_SIZE) {
+                alert(`Ảnh ${file.name} vượt quá 1MB`);
+                return false;
+            }
+
+            return true;
+        });
+
         const remaining = maxImages - images.length;
         if (remaining <= 0) return;
 
         setImages((prev) => [
             ...prev,
-            ...files.slice(0, remaining),
+            ...validFiles.slice(0, remaining),
         ]);
 
         e.target.value = null;
     };
-
     // ===== REMOVE IMAGE =====
     const handleRemoveImage = (index) => {
         setImages((prev) => prev.filter((_, i) => i !== index));
@@ -124,12 +179,23 @@ const InforBase = () => {
         const files = Array.from(e.dataTransfer.files);
         if (!files.length) return;
 
+        const MAX_SIZE = 1 * 1024 * 1024; // 1MB
+
+        // lọc file hợp lệ
+        const validFiles = files.filter(file => {
+            if (file.size > MAX_SIZE) {
+                alert(`Ảnh ${file.name} vượt quá 1MB`);
+                return false;
+            }
+            return true;
+        });
+
         const remaining = maxImages - images.length;
         if (remaining <= 0) return;
 
         setImages((prev) => [
             ...prev,
-            ...files.slice(0, remaining),
+            ...validFiles.slice(0, remaining),
         ]);
     };
 
@@ -372,7 +438,14 @@ const InforBase = () => {
 
                         <div className="form-group short-input">
                             <label>Loại hình</label>
-                            <input type="text" placeholder="Ví dụ: Phòng trọ cao cấp" />
+
+                            <select value={typeId} onChange={(e) => setTypeId(Number(e.target.value))}>
+                                <option value="">Chọn loại hình</option>
+                                <option value={1}>Phòng Trọ</option>
+                                <option value={2}>Căn Hộ</option>
+                                <option value={3}>Kí Túc Xá</option>
+                            </select>
+
                         </div>
 
                         <div className="form-group short-input">
