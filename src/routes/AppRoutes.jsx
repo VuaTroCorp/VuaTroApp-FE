@@ -18,35 +18,45 @@ import PostNewsPage from "pages/User/PostNews/PostNewsPage";
 // import UpgradeAccount from "features/upgradeAccount/upgrade";
 
 export default function AppRoutes() {
-    return (
-        <Routes>
-            <Route element={<AuthRoute />}>
-                <Route element={<AuthLayout />}>
-                    <Route path="login" element={<LoginPage />} />
-                    <Route path="register" element={<RegisterPage />} />
-                    <Route path="forgot-password" element={<ForgotPasswordPage />} />
-                    {/* <Route path="verify-otp" element={<VerifyOtp />} /> */}
-                    <Route path="reset-password" element={<ResetPasswordPage />} />
-                </Route>
-            </Route>
+  return (
+    <Routes>
+      <Route element={<AuthRoute />}>
+        <Route element={<AuthLayout />}>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="forgot-password" element={<ForgotPasswordPage />} />
+          {/* <Route path="verify-otp" element={<VerifyOtp />} /> */}
+          <Route path="reset-password" element={<ResetPasswordPage />} />
+        </Route>
+      </Route>
 
-            <Route element={<UserLayout/>}>
-                {/* <Route index element={<HomePage/>}/> */}
-                <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]}/>}>
-                    <Route path="home" element={<HomePage/>}/>
-                    <Route path="post-news" element={<PostNewsPage/>}/>
-                </Route>
-            </Route>
+      <Route element={<UserLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]} />}>
+          <Route path="home" element={<HomePage />} />
+          <Route path="post-news" element={<PostNewsPage />} />
+        </Route>
+        
+      </Route>
 
-            <Route element={<AdminLayout />}>
-                {/* <Route index element={<HomePage/>}/> */}
-                <Route path="admin" element={<RoleBasedRoute allowedRoles={["ADMIN"]}/>}>
-                    <Route path="dashboard" element={<DashboardPage/>}/>
-                </Route>
-            </Route>
 
-            <Route path="/forbidden" element={<div>Bạn không có quyền truy cập trang này.</div>}/>
-            <Route path="*" element={<div>Trang không tồn tại</div>} />
-        </Routes>
-    );
+
+
+      <Route element={<AdminLayout />}>
+        {/* <Route index element={<HomePage/>}/> */}
+        <Route
+          path="admin"
+          element={<RoleBasedRoute allowedRoles={["ADMIN"]} />}
+        >
+          <Route path="dashboard" element={<DashboardPage/>}/>
+        </Route>
+      </Route>
+
+      <Route
+          path="/forbidden"
+          element={<div>Bạn không có quyền truy cập trang này.</div>}
+        />
+        <Route path="*" element={<HomePage />} />
+    </Routes>
+  );
 }

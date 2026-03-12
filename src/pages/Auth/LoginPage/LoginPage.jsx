@@ -59,7 +59,7 @@ const Login = () => {
           autoClose: false,
           closeButton: true,
         });
-        navigate("/");
+        navigate(`/user/home`);
       } catch (error) {
         // Xử lý error từ backend
         const errorMessage =
