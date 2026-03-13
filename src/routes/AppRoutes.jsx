@@ -31,6 +31,8 @@ export default function AppRoutes() {
         </Route>
       </Route>
 
+      <Route path="login/oauth2/code/google" element={<GoogleCallback />} />
+
       <Route element={<UserLayout />}>
         <Route index element={<HomePage />} />
         <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]} />}>
