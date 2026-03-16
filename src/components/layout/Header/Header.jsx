@@ -18,6 +18,7 @@ const Header = ({ setShowLogout }) => {
   const isLogin = localStorage.authToken ? true : false;
   const [dropArrow, setDropArrow] = useState(false);
   const [userName, setUserName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +26,21 @@ const Header = ({ setShowLogout }) => {
     const decodeName = decodeBase64(token);
     setUserName(decodeName.username);
   }, []);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate("/");
+    }
+  };
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch(e);
+    }
+  };
 
   return (
     <div className="main-container">
@@ -40,9 +56,12 @@ const Header = ({ setShowLogout }) => {
               className="search-input"
               type="text"
               placeholder="Tìm phòng trọ, căn hộ, chung cư..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleSearchKeyPress}
             />
           </div>
-          <button className="search-btn">
+          <button className="search-btn" onClick={handleSearch}>
             <Search color="white" size={16} />
           </button>
         </div>

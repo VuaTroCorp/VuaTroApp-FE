@@ -21,7 +21,15 @@ describe("Login Component", () => {
 
   beforeAll(() => {
     jest.spyOn(console, "warn").mockImplementation((...args) => {
+<<<<<<< HEAD
       if (typeof args[0] === "string" && args[0].includes("React Router Future Flag Warning")) return;
+=======
+      if (
+        typeof args[0] === "string" &&
+        args[0].includes("React Router Future Flag Warning")
+      )
+        return;
+>>>>>>> af49e5054bc589476832e600807dd73f1af96e35
       console.warn(...args);
     });
   });
@@ -93,12 +101,20 @@ describe("Login Component", () => {
       expect(passwordInput).toHaveAttribute("type", "password");
 
       // SỬA TẠI ĐÂY: Vì button không có text, ta nên tìm theo class hoặc cấu trúc
+<<<<<<< HEAD
       const eyeButton = screen.getByRole("button", { name: "" }); 
       // Nếu vẫn fail, hãy thêm aria-label="toggle password" vào component LoginPage và dùng nó ở đây
       
       fireEvent.click(eyeButton);
       expect(passwordInput).toHaveAttribute("type", "text");
 
+=======
+      const eyeButton = screen.getByRole("button", { name: "" });
+      // Nếu vẫn fail, hãy thêm aria-label="toggle password" vào component LoginPage và dùng nó ở đây
+
+      fireEvent.click(eyeButton);
+      expect(passwordInput).toHaveAttribute("type", "text");
+>>>>>>> af49e5054bc589476832e600807dd73f1af96e35
 
       fireEvent.click(eyeButton);
       expect(passwordInput).toHaveAttribute("type", "password");
@@ -106,4 +122,8 @@ describe("Login Component", () => {
   });
 
   // ... Các test case khác giữ nguyên vì đã ổn
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> af49e5054bc589476832e600807dd73f1af96e35
