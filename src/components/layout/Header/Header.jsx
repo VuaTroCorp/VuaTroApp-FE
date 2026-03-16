@@ -11,31 +11,19 @@ import {
   Search,
 } from "lucide-react";
 import UserDropdown from "components/layout/Header/UserDropdown/UserDropdown";
+import { decodeBase64 } from "utils/decodeBase64";
 
 const Header = ({ setShowLogout }) => {
   const [openDrop, setOpenDrop] = useState(false);
   const isLogin = localStorage.authToken ? true : false;
   const [dropArrow, setDropArrow] = useState(false);
-  const navigate = useNavigate();
   const [userName, setUserName] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    if (!token) return;
-    try {
-      const base64Url = token.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split("")
-          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-          .join(""),
-      );
-      const name = JSON.parse(jsonPayload);
-      setUserName(name.username);
-    } catch (error) {
-      console.error('Fail to connect!!!');
-    }
+    const decodeName = decodeBase64(token);
+    setUserName(decodeName.username);
   }, []);
 
   return (

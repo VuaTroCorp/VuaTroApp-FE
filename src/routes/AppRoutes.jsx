@@ -14,13 +14,17 @@ import ResetPasswordPage from "pages/Auth/ResetPasswordPage/ResetPasswordPage";
 import HomePage from "pages/User/Home/HomePage";
 //FEATURES
 import PostNewsPage from "pages/User/PostNews/PostNewsPage";
+import ProfilePage from "pages/User/Profile/ProfilePage";
+import HistoryTransactionPage from "pages/User/HistoryTransaction/HistoryTransactionPage";
+import PreOrderPage from "pages/User/PreOrderPage/PreOrderPage";
+import ManagePostPage from "pages/User/ManagePostPage/ManagePostPage";
 // import UpgradeAccount from "features/upgradeAccount/upgrade";
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<AuthRoute />}>
-        <Route element={<AuthLayout />}>
+        <Route element={<AuthLayout />}>    
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
@@ -29,24 +33,22 @@ export default function AppRoutes() {
         </Route>
       </Route>
 
-
-
-
       <Route element={<UserLayout />}>
         <Route index element={<HomePage />} />
         <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]} />}>
           <Route path="home" element={<HomePage />} />
           <Route path="post-news" element={<PostNewsPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="history-transaction" element={<HistoryTransactionPage />} />  
+          <Route path="pre-order" element={<PreOrderPage />} /> 
+          <Route path="manage-post" element={<ManagePostPage/>} />          
         </Route>
         <Route
           path="/forbidden"
           element={<div>Bạn không có quyền truy cập trang này.</div>}
         />
-        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<HomePage />} />
       </Route>
-
-
-
 
       <Route element={<AdminLayout />}>
         {/* <Route index element={<HomePage/>}/> */}

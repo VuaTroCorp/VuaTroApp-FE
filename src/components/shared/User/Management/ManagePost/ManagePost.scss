@@ -1,0 +1,240 @@
+.main-manage-post {
+  background-color: #ffffff;
+  min-height: 1170px;
+  border-radius: 15px;
+  border: 1px solid hsla(0, 0%, 0%, 0.251);
+  padding: 10px 60px;
+  display: flex;
+  flex-direction: column;
+
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    .header-left {
+      display: flex;
+      align-items: center;
+      padding-top: 20px;
+      height: 40px;
+      .title {
+        font-size: 22px;
+      }
+    }
+    .header-right {
+      display: flex;
+      width: 60%;
+      align-items: end;
+      // padding-bottom: 2px;
+
+      .summary-text {
+        width: 100%;
+        span {
+          color: #e1a730;
+          font-weight: bold;
+        }
+      }
+
+      .search-box {
+        position: relative;
+        display: flex;
+        justify-content: end;
+        width: auto;
+        input {
+          width: 243px;
+          height: 35px;
+          border: 1px solid #bdbdbd;
+          background-color: #fff;
+          padding: 0 35px 0 12px;
+          border-radius: 6px;
+          outline: none;
+        }
+        .search-icon {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #bdbdbd;
+        }
+      }
+    }
+  }
+
+  .divider {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+  }
+
+  .order-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main-post-manage-inf {
+    border-radius: 12px;
+    border: 2px solid #e0e0e066;
+  }
+
+  .topic-right-manage {
+    display: grid;
+    grid-template-columns: 0.9fr 2.8fr 2.1fr 1fr 0.9fr 0.7fr;
+    column-gap: 13px;
+    font-weight: 500;
+    font-size: 14px;
+    background-color: #e0e0e066;
+    padding: 13px 13px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    color: #565656;
+  }
+
+  .render-inf-post {
+    display: grid;
+    grid-template-columns: 0.9fr 2.8fr 2.1fr 1fr 0.9fr 0.7fr;
+    column-gap: 13px;
+    margin-top: 3px;
+    padding: 8px 13px;
+    transition: all 0.13s ease-in-out;
+  }
+
+  .render-inf-post:hover .ellipsis-container {
+    opacity: 1;
+  }
+
+  .render-inf-post:hover{
+       background-color: #e0e0e066;
+  }
+
+  .img-post-container {
+    width: 100%;
+  }
+
+  .img-room {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .img-room-text {
+    margin-left: 6px;
+  }
+
+  .room-name {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .room-address {
+    font-size: 14px;
+    color: #565656;
+  }
+
+  .inf-room {
+    font-weight: 500;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+  }
+
+  .poster {
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+
+  .post-date {
+    font-size: 15px;
+    color: #56565699;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+
+//-------Wait Status-------
+  .wait-status-post {
+    color: #e1a730;
+    font-weight: 500;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+  }
+
+  .wait-status-background {
+    background-color: #e1a73040;
+    width: auto;
+    height: auto;
+    padding: 4px 6px;
+    text-align: center;
+    border-radius: 8px;
+  }
+
+//-------Approve Status-------
+  .approve-status-post {
+    color: #477023;
+    font-weight: 500;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+  }
+
+  .approve-status-background {
+    background-color: #cce8b7;
+    width: auto;
+    height: auto;
+    padding: 4px 6px;
+    text-align: center;
+    border-radius: 8px;
+  }
+
+//-------Cancel Status-------
+  .cancel-status-post {
+    color: #890202;
+    font-weight: 500;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+  }
+
+  .cancel-status-background {
+    background-color: #ffcdd2;
+    width: auto;
+    height: auto;
+    padding: 4px 6px;
+    text-align: center;
+    border-radius: 8px;
+  }
+
+//-------Expired Status-------
+  .expired-status-post {
+    color: #242424;
+    font-weight: 500;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+  }
+
+  .expired-status-background {
+    background-color: #cccccc;
+    width: auto;
+    height: auto;
+    padding: 4px 6px;
+    text-align: center;
+    border-radius: 8px;
+  }
+
+  .ellipsis-container {
+    display: grid;
+    opacity: 0;
+    transition: all 0.13s ease-in-out;
+  }
+
+  .ellipsis {
+    place-self: center;
+    transition: all 0.13s ease-in-out;
+    height: 24px;
+  }
+
+  .ellipsis:hover{
+       background-color: #c0c0c0;
+       border-radius: 12px;
+       cursor: pointer;
+  }
+}
