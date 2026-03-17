@@ -44,11 +44,6 @@ function HomeFilterHeader({
             <b>{loc}</b>
           </div>
         ))}
-
-        <div className="area-item all-btn">
-          <span className="all-title">Tất cả</span>
-          <CircleChevronRight size={20} className="all-icon" />
-        </div>
       </div>
 
       <div className="type-selector">

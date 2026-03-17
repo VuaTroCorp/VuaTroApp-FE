@@ -82,9 +82,11 @@ describe("Login Component", () => {
         });
       });
 
+      // Đã dismiss lỗi cũ và show success với container mới
+      expect(toast.dismiss).toHaveBeenCalledWith({ containerId: "errors" });
       expect(toast.success).toHaveBeenCalledWith("Đăng nhập thành công!", {
-        autoClose: false,
-        closeButton: true,
+        containerId: "default",
+        autoClose: 5000,
       });
       expect(mockNavigate).toHaveBeenCalledWith("/");
     });
@@ -109,11 +111,12 @@ describe("Login Component", () => {
         expect(toast.error).toHaveBeenCalledWith(
           "Email hoặc mật khẩu không đúng",
           {
+            containerId: "errors",
             autoClose: false,
-            closeButton: true,
           },
         );
       });
+      expect(toast.dismiss).toHaveBeenCalledWith({ containerId: "errors" });
 
       expect(mockNavigate).not.toHaveBeenCalled();
     });
@@ -133,11 +136,12 @@ describe("Login Component", () => {
         expect(toast.error).toHaveBeenCalledWith(
           "Đăng nhập thất bại. Vui lòng thử lại.",
           {
+            containerId: "errors",
             autoClose: false,
-            closeButton: true,
           },
         );
       });
+      expect(toast.dismiss).toHaveBeenCalledWith({ containerId: "errors" });
     });
   });
 

@@ -11,10 +11,11 @@ import RegisterPage from "pages/Auth/RegisterPage/RegisterPage";
 import ForgotPasswordPage from "pages/Auth/ForgotPasswordPage/ForgotPasswordPage";
 // import VerifyOtpPage from "pages/Auth/VerifyOtpPage/VerifyOtpPage";
 import ResetPasswordPage from "pages/Auth/ResetPasswordPage/ResetPasswordPage";
-import GoogleCallback from "pages/Auth/GoogleCallback/GoogleCallback";
 import HomePage from "pages/User/Home/HomePage";
 //FEATURES
 import PostNewsPage from "pages/User/PostNews/PostNewsPage";
+import OAuth2RedirectHandler from "pages/Auth/GoogleCallback/OAuth2RedirectHandler";
+import PostDetailPage from "pages/User/PostDetail/PostDetailPage";
 // import UpgradeAccount from "features/upgradeAccount/upgrade";
 
 export default function AppRoutes() {
@@ -30,8 +31,13 @@ export default function AppRoutes() {
         </Route>
       </Route>
 
+      <Route
+        path="login/oauth2/code/google"
+        element={<OAuth2RedirectHandler />}
+      />
       <Route element={<UserLayout />}>
         <Route index element={<HomePage />} />
+        <Route path="posts/:id" element={<PostDetailPage />} />
         <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]} />}>
           <Route path="home" element={<HomePage />} />
           <Route path="post-news" element={<PostNewsPage />} />
