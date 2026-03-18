@@ -9,10 +9,9 @@ import {
   CalendarDays,
   CircleCheck,
 } from "lucide-react";
-import { set } from "../../../../../../node_modules/yaml/dist/schema/yaml-1.1/set";
-import { NavLink } from "../../../../../../node_modules/react-router-dom/dist/index";
+import { NavLink } from "react-router-dom";
 
-const SideBar = ({ setOption }) => {
+const SideBar = ({ setOption = () => {} }) => {
   const [active, setActive] = useState("infor");
   const [open, setOpen] = useState(true);
   const [arrow, setArrow] = useState(false);
