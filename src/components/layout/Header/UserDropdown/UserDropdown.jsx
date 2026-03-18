@@ -7,6 +7,7 @@ import {
   CircleFadingArrowUp,
   LogOut,
 } from "lucide-react";
+import { useNavigate } from "../../../../../node_modules/react-router-dom/dist/index";
 
 const UserDropdown = ({
   setOption,
@@ -14,17 +15,22 @@ const UserDropdown = ({
   setOpenDrop,
   setDropArrow,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="dropdown-user-main-container">
+      
       <div
         onClick={() => {
+          setOpenDrop(false);
           setDropArrow(false);
           setOpenDrop(false);
+          navigate("/user/profile");
         }}
         className="option-dropdown-navbar"
       >
         <span>
-          <UserCog size={27}/>
+          <UserCog size={27} />
         </span>
         <span className="content-option-dropdown">Thông Tin Cá Nhân</span>
       </div>
@@ -36,7 +42,7 @@ const UserDropdown = ({
         className="option-dropdown-navbar"
       >
         <span>
-          <History size={27}/>
+          <History size={27} />
         </span>
         <span className="content-option-dropdown">Lịch Sử Tìm Kiếm</span>
       </div>
@@ -48,7 +54,7 @@ const UserDropdown = ({
         className="option-dropdown-navbar"
       >
         <span>
-          <Bookmark size={27}/>
+          <Bookmark size={27} />
         </span>
         <span className="content-option-dropdown">Bài Đăng Yêu Thích</span>
       </div>
@@ -60,7 +66,7 @@ const UserDropdown = ({
         className="option-dropdown-navbar"
       >
         <span>
-          <CircleFadingArrowUp size={27}/>
+          <CircleFadingArrowUp size={27} />
         </span>
         <span className="content-option-dropdown">Nâng Cấp Tài Khoản</span>
       </div>
@@ -74,7 +80,7 @@ const UserDropdown = ({
         className="option-dropdown-navbar"
       >
         <span>
-          <LogOut size={27}/>
+          <LogOut size={27} />
         </span>
         <span className="content-option-dropdown">Đăng xuất</span>
       </div>

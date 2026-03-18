@@ -6,9 +6,11 @@ import NewPostSection from "components/shared/User/Post/NewPostSection/NewPostSe
 import SelectionSection from "components/shared/User/common/SelectionSection/SelectionSection";
 import ServiceSection from "components/shared/User/common/ServiceSection/ServiceSection";
 import { usePostSearch } from "hooks/usePostSearch";
-
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 function HomePage() {
+  const [searchParams] = useSearchParams();
   const {
     posts,
     loading,
@@ -18,6 +20,19 @@ function HomePage() {
     updateFilters,
     setSort,
   } = usePostSearch();
+
+  // Đọc search query từ URL và cập nhật filters
+  useEffect(() => {
+    const searchQuery = searchParams.get('search');
+    // Chỉ update nếu search query khác với keyword hiện tại
+    if (searchQuery && searchQuery !== filters.keyword) {
+      updateFilters({ keyword: searchQuery });
+    } else if (!searchQuery && filters.keyword) {
+      // Clear keyword nếu không có search query trong URL
+      updateFilters({ keyword: "" });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // Handler cho province filter (với toggle)
   const handleProvinceChange = (province) => {
@@ -38,7 +53,7 @@ function HomePage() {
   // Handler cho price filter (với toggle)
   const handlePriceChange = (priceRange) => {
     const { min, max } = priceRange;
-    
+
     // Check nếu đang active thì toggle off
     if (filters.minPrice === min && filters.maxPrice === max) {
       updateFilters({ minPrice: null, maxPrice: null });
@@ -50,7 +65,7 @@ function HomePage() {
   // Handler cho area filter (với toggle)
   const handleAreaChange = (areaRange) => {
     const { min, max } = areaRange;
-    
+
     // Check nếu đang active thì toggle off
     if (filters.minArea === min && filters.maxArea === max) {
       updateFilters({ minArea: null, maxArea: null });
@@ -63,47 +78,48 @@ function HomePage() {
     <div className="home-page">
       <main className="main-content">
         <section className="left-content">
-          <HomeFilterHeader 
+          <HomeFilterHeader
             count={totalElements}
             onProvinceChange={handleProvinceChange}
             activeProvince={filters.keyword}
             onSortChange={handleSortChange}
           />
-          
+
           <div className="view-room-list">
             {loading && (
               <div className="loading-state">
                 <p>Đang tải dữ liệu...</p>
               </div>
             )}
-            
+
             {error && (
               <div className="error-state">
                 <p>❌ {error}</p>
               </div>
             )}
-            
+
             {!loading && !error && posts.length === 0 && (
               <div className="empty-state">
                 <p>Không tìm thấy bài đăng phù hợp</p>
               </div>
             )}
-            
-            {!loading && !error && posts.length > 0 && posts.map(post => (
-              <RoomCard key={post.id} data={post} />
-            ))}
+
+            {!loading &&
+              !error &&
+              posts.length > 0 &&
+              posts.map((post) => <RoomCard key={post.id} data={post} />)}
           </div>
         </section>
 
         <aside className="right-content">
-          <OptionSection 
+          <OptionSection
             onPriceChange={handlePriceChange}
             activePriceRange={{ min: filters.minPrice, max: filters.maxPrice }}
             onAreaChange={handleAreaChange}
             activeAreaRange={{ min: filters.minArea, max: filters.maxArea }}
           />
           <NewPostSection />
-          <SelectionSection /> 
+          <SelectionSection />
         </aside>
 
         <footer className="bottom-wrapper">

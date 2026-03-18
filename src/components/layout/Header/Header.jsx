@@ -68,14 +68,14 @@ const Header = ({ setShowLogout }) => {
 
         <div className="button-header-container">
           <button
-            onClick={() => navigate("/post-news")}
+            onClick={() => navigate("/user/post-news")}
             className="upload-button"
           >
             Nâng cấp
           </button>
 
           <button
-            onClick={() => navigate("/post-news")}
+            onClick={() => navigate("/user/post-news")}
             className="upload-button"
           >
             Đăng tin
