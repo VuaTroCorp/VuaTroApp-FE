@@ -55,7 +55,7 @@
         background-color: #e1a730;
         border-radius: 50%;
         width: 27px;
-        height:27px;
+        height: 27px;
         z-index: 2;
         position: absolute;
         right: 18px;
@@ -103,10 +103,13 @@
 
       /* Style cho nút Đăng nhập khi chưa login */
       &.login-btn {
-        padding: 7px 15px;
+        padding: 11px 15px;
         font-weight: 500;
         border: none;
-        .icon-login { display: flex; align-items: center; }
+        .icon-login {
+          display: flex;
+          align-items: center;
+        }
       }
 
       /* Style cho info khi đã Login */
@@ -133,7 +136,7 @@
   }
 }
 
-.button-header-container{
+.button-header-container {
   display: flex;
   gap: 8px;
 }
@@ -142,15 +145,23 @@
 @media screen and (max-width: 1454px) {
   .main-container {
     gap: 10px;
-    .header-left .logo-box { margin-left: 30px; }
-    .infor-container { margin-left: 200px; }
+    .header-left .logo-box {
+      margin-left: 30px;
+    }
+    .infor-container {
+      margin-left: 200px;
+    }
   }
 }
 
 @media screen and (max-width: 1361px) {
-  .main-container .infor-container { margin-left: 100px; }
+  .main-container .infor-container {
+    margin-left: 100px;
+  }
 }
 
 @media screen and (max-width: 1279px) {
-  .main-container .infor-container { margin-left: 20px; }
+  .main-container .infor-container {
+    margin-left: 20px;
+  }
 }

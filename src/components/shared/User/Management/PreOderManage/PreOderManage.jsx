@@ -53,11 +53,11 @@ const PreOderManage = () => {
             <div className="customer-info">
               <div className="customer-name">
                 <User size={20} color="#E6AC28" />
-                <p>Lê Hoàng Tuyển</p>
+                <span>Lê Hoàng Tuyển</span>
               </div>
               <div className="customer-contact">
                 <div className="contact-item">
-                  <Phone color="#E6AC28" size={20} />
+                  <Phone color="#E6AC28" size={19} />
                   <span>0334171139</span>
                 </div>
                 <div className="contact-item">
@@ -104,11 +104,11 @@ const PreOderManage = () => {
             <div className="customer-info">
               <div className="customer-name">
                 <User size={20} color="#E6AC28" />
-                <p>Lê Hoàng Tuyển</p>
+                <span>Lê Hoàng Tuyển</span>
               </div>
               <div className="customer-contact">
                 <div className="contact-item">
-                  <Phone color="#E6AC28" size={20} />
+                  <Phone color="#E6AC28" size={19} />
                   <span>0334171139</span>
                 </div>
                 <div className="contact-item">

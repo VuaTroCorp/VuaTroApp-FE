@@ -76,6 +76,8 @@ export const usePostSearch = () => {
       maxPrice: null,
       minArea: null,
       maxArea: null,
+      province: "",
+      commune: "",
       typeId: null,
     });
     setPage(0);

@@ -11,39 +11,42 @@ import {
   Search,
 } from "lucide-react";
 import UserDropdown from "components/layout/Header/UserDropdown/UserDropdown";
+import { decodeBase64 } from "utils/decodeBase64";
 
 const Header = ({ setShowLogout }) => {
   const [openDrop, setOpenDrop] = useState(false);
   const isLogin = localStorage.authToken ? true : false;
   const [dropArrow, setDropArrow] = useState(false);
-  const navigate = useNavigate();
   const [userName, setUserName] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-
-    if (!token) return;
-
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-
-    const name = JSON.parse(jsonPayload);
-    setUserName(name.username);
-
+    const decodeName = decodeBase64(token);
+    setUserName(decodeName.username);
   }, []);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate("/");
+    }
+  };
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch(e);
+    }
+  };
 
   return (
     <div className="main-container">
       {/* --- Cụm bên trái: Logo & Search --- */}
       <div className="header-left">
-        <div className="logo-box" onClick={() => navigate("/")}>
+        <div className="logo-box" onClick={() => navigate("/user/home ")}>
           <img className="logo-img" src={logo} alt="logo" />
         </div>
 
@@ -53,9 +56,12 @@ const Header = ({ setShowLogout }) => {
               className="search-input"
               type="text"
               placeholder="Tìm phòng trọ, căn hộ, chung cư..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleSearchKeyPress}
             />
           </div>
-          <button className="search-btn">
+          <button className="search-btn" onClick={handleSearch}>
             <Search color="white" size={16} />
           </button>
         </div>

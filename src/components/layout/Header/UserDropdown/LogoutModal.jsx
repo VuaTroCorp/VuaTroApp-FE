@@ -5,7 +5,7 @@ import { clearAuth } from "lib/auth";
 import { useNavigate } from "react-router-dom";
 
 const LogoutModal = ({ setShowLogout }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -87,7 +87,7 @@ const LogoutModal = ({ setShowLogout }) => {
 
           <div>
             <button
-              onClick={() => {clearAuth(); navigate('/login')}}
+              onClick={() => {clearAuth(); navigate('/'); setShowLogout(false)}}
               className="button-logout"
               style={{
                 color: "#FFFFFF",
