@@ -455,4 +455,25 @@ export const mockPostAPI = {
       }, 500); // Simulate network delay
     });
   },
+
+  getById: (id) => {
+    const numericId = Number(id);
+    const post = mockPosts.find((p) => p.id === numericId);
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (!post) {
+          reject({
+            response: {
+              status: 404,
+              data: { message: "Không tìm thấy bài đăng" },
+            },
+          });
+          return;
+        }
+
+        resolve({ data: post });
+      }, 300);
+    });
+  },
 };

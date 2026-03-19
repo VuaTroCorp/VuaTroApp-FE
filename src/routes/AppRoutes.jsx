@@ -17,6 +17,11 @@ import GoogleCallback from "pages/Auth/GoogleCallback/GoogleCallback";
 import HomePage from "pages/User/Home/HomePage";
 //FEATURES
 import PostNewsPage from "pages/User/PostNews/PostNewsPage";
+import ProfilePage from "pages/User/Profile/ProfilePage";
+import HistoryTransactionPage from "pages/User/HistoryTransaction/HistoryTransactionPage";
+import PreOrderPage from "pages/User/PreOrderPage/PreOrderPage";
+import ManagePostPage from "pages/User/ManagePostPage/ManagePostPage";
+import PostDetailPage from "pages/User/PostDetail/PostDetailPage";
 // import UpgradeAccount from "features/upgradeAccount/upgrade";
 
 const HomeRedirect = () => <Navigate to={getHomePath()} replace/>;
@@ -25,7 +30,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<AuthRoute />}>
-        <Route element={<AuthLayout />}>
+        <Route element={<AuthLayout />}>    
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
@@ -41,6 +46,12 @@ export default function AppRoutes() {
         <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]} />}>
           <Route path="home" element={<HomePage />} />
           <Route path="post-news" element={<PostNewsPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="history-transaction" element={<HistoryTransactionPage />} />  
+          <Route path="pre-order" element={<PreOrderPage />} /> 
+          <Route path="manage-post" element={<ManagePostPage/>} />
+          <Route path="google-callback" element={<GoogleCallback />} />
+          <Route path="posts/:id" element={<PostDetailPage/>} />          
         </Route>
         
       </Route>

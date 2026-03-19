@@ -49,5 +49,12 @@ export const postAPI = {
   },
 
   // Lấy chi tiết bài đăng
-  getById: (id) => api.get(`/api/posts/${id}`),
+  getById: (id) => {
+    if (USE_MOCK_DATA) {
+      console.log("🎭 Using MOCK detail data for ID:", id);
+      return mockPostAPI.getById(id); // Gọi sang hàm getById của bản Mock
+    }
+
+    return api.get(`/api/posts/${id}`);
+  },
 };
