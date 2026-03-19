@@ -120,3 +120,16 @@ export function canPostMoreRooms() {
   const freeLimit = 3;
   return postCount < freeLimit;
 }
+
+// ==================== HOME REDIRECT ====================
+export function getHomePath() {
+  const user = getCurrentUser();
+  if (!user) return "/login";
+
+  const role = getCurrentRole()?.toUpperCase();
+  if (role === "ADMIN") return "/admin/dashboard";
+  if (role === "USER") {
+    return "/user/home";
+  }
+  return "/";
+}

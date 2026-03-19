@@ -1,6 +1,7 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import AuthRoute from "./AuthRoute";
 import RoleBasedRoute from "./RoleBasedRoute";
+import { getHomePath } from "lib/auth";
 //LAYOUTS
 import AuthLayout from "layouts/AuthLayout";
 import UserLayout from "layouts/UserLayout";
@@ -18,6 +19,8 @@ import HomePage from "pages/User/Home/HomePage";
 import PostNewsPage from "pages/User/PostNews/PostNewsPage";
 // import UpgradeAccount from "features/upgradeAccount/upgrade";
 
+const HomeRedirect = () => <Navigate to={getHomePath()} replace/>;
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -34,7 +37,7 @@ export default function AppRoutes() {
       <Route path="login/oauth2/code/google" element={<GoogleCallback />} />
 
       <Route element={<UserLayout />}>
-        <Route index element={<HomePage />} />
+        <Route index element={<HomeRedirect />} />
         <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]} />}>
           <Route path="home" element={<HomePage />} />
           <Route path="post-news" element={<PostNewsPage />} />
@@ -43,20 +46,14 @@ export default function AppRoutes() {
       </Route>
 
       <Route element={<AdminLayout />}>
-        {/* <Route index element={<HomePage/>}/> */}
-        <Route
-          path="admin"
-          element={<RoleBasedRoute allowedRoles={["ADMIN"]} />}
-        >
+        <Route path="admin" element={<RoleBasedRoute allowedRoles={["ADMIN"]} />} >
+          <Route index element={<Navigate to="dashboard" replace />}/>
           <Route path="dashboard" element={<DashboardPage/>}/>
         </Route>
       </Route>
 
-      <Route
-          path="/forbidden"
-          element={<div>Bạn không có quyền truy cập trang này.</div>}
-        />
-        <Route path="*" element={<HomePage />} />
+      <Route path="/forbidden" element={<div>Bạn không có quyền truy cập trang này.</div>} />
+      <Route path="*" element={<HomeRedirect />} />
     </Routes>
   );
 }

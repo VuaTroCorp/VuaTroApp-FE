@@ -1,0 +1,119 @@
+$green-organic: #586b54;
+$orange-organic: #f1975a;
+$text-muted: #888888;
+$text-main: #1a1a1a;
+
+.dashboard-page {
+  .finance-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .finance-donut {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      border-radius: 20px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      border: 1px solid transparent;
+
+      &:hover {
+        transform: scale(1.03) translateX(5px);
+        background-color: #fff;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+        border-color: rgba(0, 0, 0, 0.05);
+        .chart-wrapper {
+          transform: rotate(10deg);
+        }
+      }
+
+      &.green {
+        background: rgba(88, 107, 84, 0.05);
+        .percent-text {
+          color: $green-organic;
+        }
+        &:hover {
+          border-color: rgba(88, 107, 84, 0.2);
+          box-shadow: 0 10px 30px rgba(88, 107, 84, 0.2);
+          background: linear-gradient(
+            135deg,
+            rgba(88, 107, 84, 0.08) 0%,
+            #ffffff 100%
+          );
+        }
+      }
+
+      &.orange {
+        background: rgba(241, 151, 90, 0.05);
+        .percent-text {
+          color: $orange-organic;
+        }
+        &:hover {
+          border-color: rgba(241, 151, 90, 0.2);
+          box-shadow: 0 10px 30px rgba(241, 151, 90, 0.2);
+          background: linear-gradient(
+            135deg,
+            rgba(241, 151, 90, 0.08) 0%,
+            #ffffff 100%
+          );
+        }
+      }
+
+      .chart-wrapper {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        transition: transform 0.5s ease;
+        .percent-text {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-weight: 800;
+          font-size: 16px;
+          &.pulse {
+            animation: pulse-soft 3s infinite ease-in-out;
+          }
+        }
+      }
+
+      .info {
+        p {
+          font-size: 13px;
+          color: $text-muted;
+          margin: 0;
+          font-weight: 500;
+        }
+        h3 {
+          font-size: 18px;
+          font-weight: 800;
+          margin: 4px 0 0;
+          letter-spacing: -0.5px;
+        }
+      }
+
+      .ticker {
+        font-variant-numeric: tabular-nums;
+        min-width: 120px;
+        transition: color 0.3s ease;
+      }
+    }
+  }
+}
+
+@keyframes pulse-soft {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}

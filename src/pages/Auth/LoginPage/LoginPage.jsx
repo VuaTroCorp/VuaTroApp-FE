@@ -6,6 +6,7 @@ import logo from "assets/images/logo.png";
 import googleLogo from "assets/icons/google-logo.png";
 import { useAuth } from "hooks/useAuth";
 import "./LoginPage.scss";
+import { getHomePath } from "lib/auth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const Login = () => {
           autoClose: false,
           closeButton: true,
         });
-        navigate("/");
+        navigate(getHomePath());
       } catch (error) {
         // Xử lý error từ backend
         const errorMessage =

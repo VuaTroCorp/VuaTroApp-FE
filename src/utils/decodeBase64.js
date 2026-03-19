@@ -11,7 +11,3 @@ export const decodeBase64 = (token) => {
     return null;
   }
 };
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes

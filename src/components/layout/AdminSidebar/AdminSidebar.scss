@@ -1,6 +1,7 @@
 .admin-sidebar {
   width: 280px;
-  height: 879px;
+  // height: 879px;
+  height: 100vh;
   background-color: #fff;
   border-right: 1px solid #f0f0f0;
   display: flex;
@@ -55,17 +56,17 @@
           display: flex;
           align-items: center;
 
-          .badge {
-            position: absolute;
-            top: -5px;
-            right: -25px;
-            background-color: #fee2e2;
-            color: #ef4444;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-weight: 700;
-          }
+          // .badge {
+          //   position: absolute;
+          //   top: -5px;
+          //   right: -25px;
+          //   background-color: #fee2e2;
+          //   color: #ef4444;
+          //   font-size: 10px;
+          //   padding: 2px 6px;
+          //   border-radius: 10px;
+          //   font-weight: 700;
+          // }
         }
       }
     }
@@ -79,53 +80,69 @@
 
   .sidebar-bottom {
     background-color: #2d2d2d;
-    margin: 10px 10px;
-    border-radius: 12px;
-    padding: 15px;
+    padding: 20px 25px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 15px;
     color: #fff;
-
-    .logout-btn {
-      background: none;
-      border: none;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      font-weight: 500;
-      opacity: 0.8;
-      transition: opacity 0.3s;
-
-      &:hover { opacity: 1; }
-    }
 
     .admin-profile {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
 
-      .divider-v {
-        width: 1px;
-        height: 30px;
-        background-color: #4a4a4a;
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
       }
 
       .profile-info {
-        .role {
-          font-size: 11px;
-          color: #94a3b8;
-          margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        p {
+          margin: 0; 
         }
-        .name {
-          font-size: 12px;
-          font-weight: 600;
-          color: #E1A730;
-          margin: 0;
-          white-space: nowrap;
-        }
+
+          .name {
+            color: #E1A730;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 1.2;
+          }
+          .role {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 2px;
+          }
+      }
+    }
+
+    .logout-btn {
+      background: #0f0f0f;
+      border: 2px solid #0f0f0f;
+      border-radius: 10px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 5px 0px;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: 0.3s;
+
+      &:hover {
+        opacity: 1;
+        color: #ff4d4f;
+      }
+
+      span {
+        font-size: 16px;
+        font-weight: 600;
       }
     }
   }
