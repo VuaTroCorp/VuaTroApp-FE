@@ -21,6 +21,9 @@ export const authAPI = {
 
   // Lấy thông tin profile - GET /api/auth/profile
   getProfile: () => api.get("/api/auth/profile"),
+
+  // Cập nhật thông tin profile - PUT /api/auth/profile
+  updateProfile: (userData) => api.put("/api/auth/profile", userData),
 };
 
 // ==================== POST APIs ====================

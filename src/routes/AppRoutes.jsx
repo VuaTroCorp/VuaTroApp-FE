@@ -11,6 +11,7 @@ import DashboardPage  from "pages/Admin/Dashboard/DashboardPage";
 import LoginPage from "pages/Auth/LoginPage/LoginPage";
 import RegisterPage from "pages/Auth/RegisterPage/RegisterPage";
 import ForgotPasswordPage from "pages/Auth/ForgotPasswordPage/ForgotPasswordPage";
+import ForbiddenPage from "pages/Auth/ForbiddenPage/ForbiddenPage";
 // import VerifyOtpPage from "pages/Auth/VerifyOtpPage/VerifyOtpPage";
 import ResetPasswordPage from "pages/Auth/ResetPasswordPage/ResetPasswordPage";
 import GoogleCallback from "pages/Auth/GoogleCallback/GoogleCallback";
@@ -63,7 +64,7 @@ export default function AppRoutes() {
         </Route>
       </Route>
 
-      <Route path="/forbidden" element={<div>Bạn không có quyền truy cập trang này.</div>} />
+      <Route path="/forbidden" element={<ForbiddenPage />} />
       <Route path="*" element={<HomeRedirect />} />
     </Routes>
   );

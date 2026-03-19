@@ -68,7 +68,6 @@ const ForbiddenPage = () => {
           </p>
         </div>
 
-        {/* Action Buttons - Dùng Lucide ChevronLeft và Headphones */}
         <div className="action-group">
           <button className="btn btn-primary" onClick={() => navigate('/')}>
             <ChevronLeft size={20} className="icon-btn" />
