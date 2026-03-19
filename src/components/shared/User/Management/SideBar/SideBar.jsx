@@ -1,24 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import avt from "assets/images/avt.png";
 import "./SideBar.scss";
+import { decodeBase64 } from "../../../../../utils/decodeBase64";
 import {
-  Ban,
-  ListTodo,
-  List,
   FileClock,
   Rows4,
   User,
   CalendarDays,
   CircleCheck,
-  ListX,
-  ChevronRight,
-  ChevronDown,
 } from "lucide-react";
+import { set } from "../../../../../../node_modules/yaml/dist/schema/yaml-1.1/set";
+import { NavLink } from "../../../../../../node_modules/react-router-dom/dist/index";
 
-const SideBar = ({ setOption, userName }) => {
+const SideBar = ({ setOption }) => {
   const [active, setActive] = useState("infor");
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [arrow, setArrow] = useState(false);
+  const [name, setName] = useState("");
+  const token = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    const decodeName = decodeBase64(token);
+    setName(decodeName.username);
+  }, []);
 
   return (
     <div className="admin-left-container">
@@ -33,7 +37,7 @@ const SideBar = ({ setOption, userName }) => {
         <div className="admin-inf">
           <div>
             <p>
-              <b>{userName}</b>
+              <b>{name}</b>
             </p>
           </div>
           <div className="role-container">
@@ -46,62 +50,55 @@ const SideBar = ({ setOption, userName }) => {
       {/* Khối Option Menu phía dưới */}
       <div className="option-main-container">
         {/* Thông tin cá nhân */}
-        <div
-          onClick={() => {
-            setActive("infor");
-            setOpen(false);
-            setArrow(false);
-            setOption("inf");
-          }}
-          className={`option-left ${active === "infor" ? "active-top" : ""}`}
-        >
-          <User />
-          <p>
-            <b>Thông tin cá nhân</b>
-          </p>
-        </div>
 
-        {/* Quản lý bài đăng (Có mũi tên xổ xuống) */}
-        <div
-          onClick={() => {
-            setActive("manage");
-            setOpen(!open);
-            setArrow(!arrow);
-          }}
-          className={`option-left drop ${active === "manage" ? "active" : ""}`}
-        >
-          <div className="left-drop-item">
-            <div>
-              <CalendarDays />
-            </div>
-            <p className="item-options">
-              <b>Quản lý bài đăng</b>
+        <NavLink to="/user/profile" className="navlink">
+          <div className={`option-left active-top`}>
+            <User />
+            <p>
+              <b>Thông tin cá nhân</b>
             </p>
           </div>
-          <div className="arrow-box">
-            {!arrow ? <ChevronRight /> : <ChevronDown />}
-          </div>
-        </div>
+        </NavLink>
 
-        {/* Danh sách con khi 'open' là true */}
-        {open && (
-          <div className="option-left-list-container">
-            <div
-              onClick={() => {
-                setActive("upload");
-                setOption("list-upload");
-              }}
-              className={`option-left list ${active === "upload" ? "active" : ""}`}
-            >
-              <List />
-              <p>
-                <b>Danh Sách Bài Đăng</b>
+        {/* Quản lý bài đăng (Có mũi tên xổ xuống) */}
+        <NavLink to='/user/manage-post' className='navlink'>
+          <div
+            onClick={() => {
+              setActive("manage");
+              setOpen(!open);
+              setArrow(!arrow);
+            }}
+            className={`option-left drop`}
+          >
+            <div className="left-drop-item">
+              <div>
+                <CalendarDays />
+              </div>
+              <p className="item-options">
+                <b>Quản lý bài đăng</b>
               </p>
             </div>
+          </div>
+        </NavLink>
+
+        {/* Danh sách con khi 'open' là true */}
+        {/* {open && (
+          <div className="option-left-list-container">
+            <NavLink to="/user/post-list" className="navlink">
+              {({ isActive }) => (
+                <div className={`option-left list ${isActive ? "active" : ""}`}>
+                  <List />
+                  <p>
+                    <b>Danh Sách Bài Đăng</b>
+                  </p>
+                </div>
+              )}
+            </NavLink>
+
             <div
               onClick={() => {
                 setActive("approve");
-                setOption("wait-upload");
+                // setOption("wait-upload");
               }}
               className={`option-left list ${active === "approve" ? "active" : ""}`}
             >
@@ -113,7 +110,7 @@ const SideBar = ({ setOption, userName }) => {
             <div
               onClick={() => {
                 setActive("refuse");
-                setOption("cancel-upload");
+                // setOption("cancel-upload");
               }}
               className={`option-left list ${active === "refuse" ? "active" : ""}`}
             >
@@ -125,7 +122,7 @@ const SideBar = ({ setOption, userName }) => {
             <div
               onClick={() => {
                 setActive("exp");
-                setOption("exp-upload");
+                // setOption("exp-upload");
               }}
               className={`option-left list ${active === "exp" ? "active" : ""}`}
             >
@@ -135,39 +132,27 @@ const SideBar = ({ setOption, userName }) => {
               </p>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Quản lý đặt trước */}
-        <div
-          onClick={() => {
-            setActive("order");
-            setOpen(false);
-            setArrow(false);
-            setOption("order-manage");
-          }}
-          className={`option-left ${active === "order" ? "active" : ""}`}
-        >
-          <Rows4 />
-          <p>
-            <b>Quản lý đặt trước</b>
-          </p>
-        </div>
+        <NavLink to="/user/pre-order" className="navlink">
+          <div className={`option-left`}>
+            <Rows4 />
+            <p>
+              <b>Quản lý đặt trước</b>
+            </p>
+          </div>
+        </NavLink>
 
         {/* Lịch sử giao dịch */}
-        <div
-          onClick={() => {
-            setActive("history");
-            setOpen(false);
-            setArrow(false);
-            setOption("history");
-          }}
-          className={`option-left ${active === "history" ? "active-bottom" : ""}`}
-        >
-          <FileClock />
-          <p>
-            <b>Lịch sử giao dịch</b>
-          </p>
-        </div>
+        <NavLink to="/user/history-transaction" className="navlink">
+          <div className={`option-left active-bottom`}>
+            <FileClock />
+            <p>
+              <b>Lịch sử giao dịch</b>
+            </p>
+          </div>
+        </NavLink>
       </div>
     </div>
   );

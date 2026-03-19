@@ -63,7 +63,7 @@ const LoginPage = () => {
           containerId: "default",
           autoClose: 5000,
         });
-        navigate("/");
+        navigate(`/user/home`);
       } catch (error) {
         // Xử lý error từ backend
         const errorMessage =

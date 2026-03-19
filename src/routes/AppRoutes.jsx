@@ -16,6 +16,10 @@ import HomePage from "pages/User/Home/HomePage";
 import PostNewsPage from "pages/User/PostNews/PostNewsPage";
 import OAuth2RedirectHandler from "pages/Auth/GoogleCallback/OAuth2RedirectHandler";
 import PostDetailPage from "pages/User/PostDetail/PostDetailPage";
+import ProfilePage from "pages/User/Profile/ProfilePage";
+import HistoryTransactionPage from "pages/User/HistoryTransaction/HistoryTransactionPage";
+import PreOrderPage from "pages/User/PreOrderPage/PreOrderPage";
+import ManagePostPage from "pages/User/ManagePostPage/ManagePostPage";
 // import UpgradeAccount from "features/upgradeAccount/upgrade";
 
 export default function AppRoutes() {
@@ -41,12 +45,19 @@ export default function AppRoutes() {
         <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]} />}>
           <Route path="home" element={<HomePage />} />
           <Route path="post-news" element={<PostNewsPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route
+            path="history-transaction"
+            element={<HistoryTransactionPage />}
+          />
+          <Route path="pre-order" element={<PreOrderPage />} />
+          <Route path="manage-post" element={<ManagePostPage />} />
         </Route>
         <Route
           path="/forbidden"
           element={<div>Bạn không có quyền truy cập trang này.</div>}
         />
-        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<HomePage />} />
       </Route>
 
       <Route element={<AdminLayout />}>
