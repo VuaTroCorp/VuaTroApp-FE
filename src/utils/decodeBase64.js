@@ -1,6 +1,6 @@
 export const decodeBase64 = (token) => {
   if (!token) {
-    return;
+    return {};
   }
   try {
     const base64Url = token.split(".")[1];

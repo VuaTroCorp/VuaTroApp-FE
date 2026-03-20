@@ -1,33 +1,241 @@
+// Variables for colors
+$primary-gold: #e1a730;
+$primary-blue: #0063b8;
+$primary-red: #bb2a33;
+$text-gray: #878787;
+$bg-light: #f8f8f8;
+
 .main-container-history-manage {
   background-color: #ffffff;
-  height: auto;
-  // width: 100%;
   border-radius: 15px;
   border: 1px solid hsla(0, 0%, 0%, 0.251);
   padding: 10px 60px;
-}
+  font-family: sans-serif;
 
-.report-container{
-       display: grid;
-       grid-template-columns: 1.3fr 1fr 1fr;
-       column-gap: 19px;
-}
+  .header-history {
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
+    align-items: center;
 
-.refind-container{
-       display: grid;
-       grid-template-columns: 1fr 1fr 1fr 1fr;
-       column-gap: 29px;
-       border: 2px solid #F8F8F8;
-       padding: 10px 12px;
-       border-radius: 10px;
-}
+    .title-section b {
+      font-size: 22px;
+    }
 
-.history-content-container{
-       display: flex;
-       flex-direction: column;
-       gap: 12px;
-}
+    .export-section p {
+      cursor: pointer;
+      color: #333;
+    }
+  }
 
-.item-history{
-       box-shadow: 5px 5px 10px #F8F8F8;
+  .divider {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 10px 0 25px 0;
+  }
+
+  .content-body {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  // Statistics Section
+  .report-container {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    column-gap: 19px;
+
+    .stat-card {
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      padding: 12px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      border-left-width: 5px;
+
+      .stat-label {
+        font-weight: 500;
+        margin: 0;
+      }
+
+      .stat-value-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        .stat-number {
+          font-weight: 500;
+          font-size: 25px;
+
+          .currency {
+            color: $text-gray;
+            font-size: 15px;
+            margin-left: 10px;
+          }
+        }
+      }
+
+      &.revenue {
+        border-color: $primary-gold;
+        .stat-trend { color: $primary-gold; margin: 0; }
+      }
+      &.total-tx {
+        border-color: $primary-blue;
+        .stat-update { color: $primary-blue; margin: 0; }
+      }
+      &.pending-tx {
+        border-color: $primary-red;
+        .stat-alert { color: $primary-red; margin: 0; }
+      }
+    }
+  }
+
+  // Filter Section
+  .refind-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 29px;
+    border: 2px solid $bg-light;
+    padding: 10px 12px;
+    border-radius: 10px;
+
+    .filter-input {
+      color: #a7a7a7;
+      background-color: $bg-light;
+      padding: 8px 12px 8px 70px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .filter-btn {
+      color: #ffffff;
+      text-align: center;
+      background-color: $primary-gold;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+  }
+
+  // Transaction List Section
+  .history-content-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .item-history {
+      border: 2px solid $bg-light;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 22px;
+      align-items: center;
+      box-shadow: 5px 5px 10px $bg-light;
+
+      .item-left {
+        display: flex;
+        gap: 28px;
+        align-items: center;
+
+        .icon-wrapper {
+          padding: 15px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &.deposit { background-color: #f0fdf4; }
+          &.failed { background-color: #faf1ef; }
+          &.processing { background-color: #eff6ff; }
+          &.payment { background-color: #fff7ed; }
+        }
+
+        .info-wrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+
+          .info-top {
+            display: flex;
+            gap: 21px;
+            align-items: center;
+
+            .tx-name {
+              font-size: 17px;
+              font-weight: 700;
+              margin: 0;
+            }
+
+            .user-tag {
+              font-weight: 500;
+              color: #2563eb;
+              border-radius: 15px;
+              background-color: #eff6ff;
+              padding: 3px 10px;
+              font-size: 15px;
+            }
+
+            .role-tag {
+              font-weight: 500;
+              color: #4b5563;
+              border-radius: 15px;
+              background-color: #f3f4f6;
+              padding: 3px 10px;
+              font-size: 14px;
+            }
+          }
+
+          .info-bottom {
+            display: flex;
+            gap: 30px;
+            color: #999;
+
+            p { margin: 0; }
+
+            .tx-time {
+              display: flex;
+              gap: 8px;
+              align-items: center;
+            }
+          }
+        }
+      }
+
+      .item-right {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+
+        .amount {
+          font-size: 28px;
+          font-weight: 700;
+          margin: 0;
+
+          &.positive { color: #16a34a; }
+          &.negative { color: #dc2626; }
+          &.cancelled { 
+            color: #c4c4c4; 
+            text-decoration: line-through; 
+          }
+          &.process { color: #2563eb; }
+        }
+
+        .status-tag {
+          font-weight: 600;
+          border-radius: 15px;
+          padding: 4px 15px;
+          font-size: 14px;
+          width: fit-content;
+
+          &.success { color: #16a34a; background-color: #dcfce7; }
+          &.danger { color: #e15856; background-color: #faf1ef; }
+          &.processing { color: #2563eb; background-color: #eff6ff; }
+        }
+      }
+    }
+  }
 }

@@ -35,7 +35,7 @@ export const postAPI = {
       console.log("🎭 Using MOCK data");
       return mockPostAPI.search(searchRequest, page, size, sort);
     }
-    
+
     // Nếu không, dùng API thật
     console.log("🌐 Using REAL API");
     return api.get("/api/posts/search", {
@@ -50,4 +50,17 @@ export const postAPI = {
 
   // Lấy chi tiết bài đăng
   getById: (id) => api.get(`/api/posts/${id}`),
+
+  // Lấy danh sách bài posts - GET /api/profile/my-posts?page=0&size=5
+  getPosts: (page) =>
+    api.get(`/api/profile/my-posts`, {
+      params: {
+        page,
+        size : 10,
+      },
+    }),
+
+  
 };
+
+export const getPosts = {};
