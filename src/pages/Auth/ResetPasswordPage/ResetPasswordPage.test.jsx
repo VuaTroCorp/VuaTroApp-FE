@@ -53,9 +53,11 @@ describe("ResetPassword", () => {
       </MemoryRouter>,
     );
 
-    // chờ verify token xong để render form
+    // Chờ UI thoát trạng thái verifying để render form
     await waitFor(() => {
-      expect(authAPI.verifyResetToken).toHaveBeenCalled();
+      expect(
+        screen.queryByText("Đang xác minh liên kết..."),
+      ).not.toBeInTheDocument();
     });
 
     expect(screen.getByText("Quên Mật khẩu?")).toBeInTheDocument();
@@ -72,9 +74,10 @@ describe("ResetPassword", () => {
       </MemoryRouter>,
     );
 
-    // chờ verify token xong để render form
     await waitFor(() => {
-      expect(authAPI.verifyResetToken).toHaveBeenCalled();
+      expect(
+        screen.queryByText("Đang xác minh liên kết..."),
+      ).not.toBeInTheDocument();
     });
 
     const user = userEvent.setup();
@@ -91,7 +94,9 @@ describe("ResetPassword", () => {
     );
 
     await waitFor(() => {
-      expect(authAPI.verifyResetToken).toHaveBeenCalled();
+      expect(
+        screen.queryByText("Đang xác minh liên kết..."),
+      ).not.toBeInTheDocument();
     });
 
     const user = userEvent.setup();
@@ -113,7 +118,9 @@ describe("ResetPassword", () => {
     );
 
     await waitFor(() => {
-      expect(authAPI.verifyResetToken).toHaveBeenCalled();
+      expect(
+        screen.queryByText("Đang xác minh liên kết..."),
+      ).not.toBeInTheDocument();
     });
 
     const user = userEvent.setup();
