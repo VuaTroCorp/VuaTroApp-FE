@@ -41,12 +41,22 @@ describe("ResetPassword", () => {
     authAPI.verifyResetToken.mockResolvedValue({ data: { ok: true } });
   });
 
-  test("hiển thị form reset password", () => {
+  afterEach(async () => {
+    // Đảm bảo mọi promise/microtask từ useEffect (verify token) đã resolve
+    await Promise.resolve();
+  });
+
+  test("hiển thị form reset password", async () => {
     render(
       <MemoryRouter>
         <ResetPasswordPage />
       </MemoryRouter>,
     );
+
+    // chờ verify token xong để render form
+    await waitFor(() => {
+      expect(authAPI.verifyResetToken).toHaveBeenCalled();
+    });
 
     expect(screen.getByText("Quên Mật khẩu?")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Mật khẩu mới")).toBeInTheDocument();
