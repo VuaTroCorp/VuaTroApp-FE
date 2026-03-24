@@ -14,12 +14,23 @@ function RoomCard({ data }) {
     area,
     location,
     description,
-    images,
-    rating,
-    landlord,
+    images = [],
+    rating = 0,
+    landlord = {},
     postDate,
     imageCount,
   } = data;
+
+  const safeImages = (
+    images && images.length
+      ? images
+      : ["https://via.placeholder.com/400x260?text=No+Image"]
+  ).slice(0, 3);
+
+  // Bảo đảm đủ 3 hình để layout cố định
+  while (safeImages.length < 3) safeImages.push(safeImages[0]);
+
+  const mainImg = safeImages[0];
 
   return (
     <div className="view-room-card">
@@ -27,29 +38,24 @@ function RoomCard({ data }) {
         className="room-card"
         role="button"
         tabIndex={0}
-        onClick={() => navigate(`/posts/${id}`)}
+        onClick={() => navigate(`/user/posts/${id}`)}
         onKeyDown={(e) => {
-          if (e.key === "Enter") navigate(`/posts/${id}`);
+          if (e.key === "Enter") navigate(`/user/posts/${id}`);
         }}
       >
         <div className="room-image-container">
           <div className="main-image">
-            <img src={images[0]} alt={title} />
+            <img src={mainImg} alt={title} />
             <div className="image-count">
-              <Camera size={14} /> {imageCount || images.length}
+              <Camera size={14} /> {imageCount || images.length || 0}
             </div>
           </div>
           <div className="sub-images">
             <div className="sub-image-item">
-              <img src={images[1]} alt={title} />
+              <img src={safeImages[1] || mainImg} alt={title} />
             </div>
-            <div className="sub-image-group-bottom">
-              <div className="sub-image-item">
-                <img src={images[2]} alt={title} />
-              </div>
-              <div className="sub-image-item">
-                <img src={images[3]} alt={title} />
-              </div>
+            <div className="sub-image-item">
+              <img src={safeImages[2] || mainImg} alt={title} />
             </div>
           </div>
         </div>
@@ -69,7 +75,9 @@ function RoomCard({ data }) {
           </div>
 
           <div className="details-group">
-            <div className="room-price">{price.toLocaleString()}đ/tháng</div>
+            <div className="room-price">
+              {Number(price || 0).toLocaleString()}đ/tháng
+            </div>
             <span className="divider-dot">&bull;</span>
             <div className="room-area">
               {area}m<sup>2</sup>
@@ -84,12 +92,16 @@ function RoomCard({ data }) {
         <div className="landlord-info">
           <div className="landlord-profile">
             <img
-              src={landlord.avatar}
-              alt={landlord.name}
+              src={
+                landlord.avatar || "https://via.placeholder.com/80x80?text=User"
+              }
+              alt={landlord.name || "Chủ phòng"}
               className="landlord-avatar"
             />
             <div className="landlord-name-group">
-              <div className="landlord-name">{landlord.name}</div>
+              <div className="landlord-name">
+                {landlord.name || "Chủ phòng"}
+              </div>
               <div className="post-day">{postDate}</div>
             </div>
           </div>

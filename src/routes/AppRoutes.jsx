@@ -11,6 +11,7 @@ import RegisterPage from "pages/Auth/RegisterPage/RegisterPage";
 import ForgotPasswordPage from "pages/Auth/ForgotPasswordPage/ForgotPasswordPage";
 // import VerifyOtpPage from "pages/Auth/VerifyOtpPage/VerifyOtpPage";
 import ResetPasswordPage from "pages/Auth/ResetPasswordPage/ResetPasswordPage";
+import VerifyResetTokenPage from "pages/Auth/ResetPasswordPage/VerifyResetTokenPage";
 import HomePage from "pages/User/Home/HomePage";
 //FEATURES
 import PostNewsPage from "pages/User/PostNews/PostNewsPage";
@@ -31,6 +32,10 @@ export default function AppRoutes() {
           <Route path="register" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           {/* <Route path="verify-otp" element={<VerifyOtp />} /> */}
+          <Route
+            path="reset-password/verify"
+            element={<VerifyResetTokenPage />}
+          />
           <Route path="reset-password" element={<ResetPasswordPage />} />
         </Route>
       </Route>
@@ -41,8 +46,9 @@ export default function AppRoutes() {
       />
       <Route element={<UserLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="posts/:id" element={<PostDetailPage />} />
+
         <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]} />}>
+          <Route path="posts/:id" element={<PostDetailPage />} />
           <Route path="home" element={<HomePage />} />
           <Route path="post-news" element={<PostNewsPage />} />
           <Route path="profile" element={<ProfilePage />} />

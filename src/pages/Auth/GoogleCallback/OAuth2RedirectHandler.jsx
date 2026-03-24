@@ -31,9 +31,10 @@ const OAuth2RedirectHandler = () => {
     const token = params.get("token");
 
     if (token) {
-      // 1. Lưu token (Lưu cả 2 tên cho chắc ăn giống y hệt F12 của team bạn)
+      // 1. Lưu token theo chuẩn của project: authToken
+      // (Dọn legacy key accessToken để tránh hiểu nhầm và tránh lệch interceptor)
+      localStorage.removeItem("accessToken");
       localStorage.setItem("authToken", token);
-      localStorage.setItem("accessToken", token);
 
       // 2. Giải mã token để lấy thông tin user
       const decodedToken = parseJwt(token);

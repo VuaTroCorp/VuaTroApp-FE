@@ -28,25 +28,73 @@ export const usePostSearch = () => {
     setError(null);
 
     try {
-      const cleanFilters = Object.fromEntries(
-        Object.entries(filters).filter(
-          ([_, value]) => value !== null && value !== undefined && value !== "",
-        ),
+      const numericFields = [
+        "minPrice",
+        "maxPrice",
+        "minArea",
+        "maxArea",
+        "typeId",
+      ];
+      const cleanFilters = Object.entries(filters).reduce(
+        (acc, [key, value]) => {
+          if (value === null || value === undefined || value === "") return acc;
+
+          if (numericFields.includes(key)) {
+            const numVal = Number(value);
+            if (!Number.isNaN(numVal)) acc[key] = numVal;
+            return acc;
+          }
+
+          acc[key] = value;
+          return acc;
+        },
+        {},
       );
 
       console.log("Calling API with:", { cleanFilters, page, size, sort });
 
       const response = await postAPI.search(cleanFilters, page, size, sort);
-      const data = response.data;
+      const data = response.data || {};
 
-      console.log("API Response:", {
-        totalElements: data.totalElements,
-        contentLength: data.content?.length,
+      const mapped = (data.content || []).map((item) => {
+        const imgUrls = (item.images || [])
+          .map((img) => (typeof img === "string" ? img : img?.url))
+          .filter(Boolean);
+
+        const safeImages = imgUrls.length
+          ? imgUrls
+          : ["https://via.placeholder.com/400x260?text=No+Image"];
+
+        const thumbImages = [
+          safeImages[0],
+          safeImages[1] || safeImages[0],
+          safeImages[2] || safeImages[0],
+        ];
+
+        return {
+          id: item.id,
+          title: item.title,
+          price: item.price || 0,
+          area: item.area || 0,
+          location: item.address,
+          description: item.description,
+          images: thumbImages,
+          imageCount: safeImages.length,
+          rating: 5,
+          landlord: {
+            name: item.user?.username || "Chủ phòng",
+            contact: item.user?.phone || item.user?.email || "Liên hệ",
+            avatar: "https://via.placeholder.com/80x80?text=User",
+          },
+          postDate: item.createdAt,
+        };
       });
 
-      setPosts(data.content || []);
-      setTotalPages(data.totalPages || 0);
-      setTotalElements(data.totalElements || 0);
+      setPosts(mapped);
+      setTotalPages(data.totalPages || data.totalPage || 0);
+      setTotalElements(
+        data.totalItems || data.totalElements || mapped.length || 0,
+      );
     } catch (err) {
       const errorMsg =
         err.response?.data?.message || "Có lỗi xảy ra khi tìm kiếm";
