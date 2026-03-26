@@ -3,7 +3,7 @@ import InforBase from "components/shared/User/Post/InforBase/InforBase";
 
 
 function PostNewsPage() {
-    return (
+    return ( 
         <div className="post-news-page-wrapper">
             <main className="post-news-content">
                 <InforBase />

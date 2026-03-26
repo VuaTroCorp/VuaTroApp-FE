@@ -19,6 +19,7 @@ import ProfilePage from "pages/User/Profile/ProfilePage";
 import HistoryTransactionPage from "pages/User/HistoryTransaction/HistoryTransactionPage";
 import PreOrderPage from "pages/User/PreOrderPage/PreOrderPage";
 import ManagePostPage from "pages/User/ManagePostPage/ManagePostPage";
+import PostDetailPage from "pages/User/PostDetail/PostDetailPage";
 // import UpgradeAccount from "features/upgradeAccount/upgrade";
 
 export default function AppRoutes() {
@@ -42,7 +43,9 @@ export default function AppRoutes() {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="history-transaction" element={<HistoryTransactionPage />} />  
           <Route path="pre-order" element={<PreOrderPage />} /> 
-          <Route path="manage-post" element={<ManagePostPage/>} />          
+          <Route path="manage-post" element={<ManagePostPage/>} />
+          <Route path="google-callback" element={<GoogleCallback />} />
+          <Route path="posts/:id" element={<PostDetailPage/>} />          
         </Route>
         <Route
           path="/forbidden"

@@ -200,3 +200,78 @@ $error-red: #d32f2f;
     background: darken($brand-gold, 5%);
   }
 }
+.terms-link {
+  color: #4a90e2;
+  cursor: pointer;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.terms-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.terms-modal {
+  width: 600px;
+  max-height: 70vh;
+  background: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.terms-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 20px;
+  border-bottom: 2px solid #cdcccc;
+}
+
+.close-btn {
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.terms-content {
+  padding: 0px 20px;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.terms-footer {
+  padding: 15px;
+  border-top: 1px solid #eee;
+  text-align: right;
+}
+
+.accept-btn {
+  background: $brand-gold;
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.terms-content h4 {
+  margin-top: 16px;
+  font-weight: 600;
+}
+
+.terms-content p {
+  margin-top: 6px;
+  color: #444;
+}
