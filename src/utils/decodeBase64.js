@@ -1,6 +1,6 @@
 export const decodeBase64 = (token) => {
   if (!token) {
-    return {};
+    return;
   }
   try {
     const base64Url = token.split(".")[1];
@@ -15,6 +15,6 @@ export const decodeBase64 = (token) => {
     return name;
   } catch (error) {
     // console.log("Token không hợp lệ để giải mã");
-    return;
+    return ;
   }
 };

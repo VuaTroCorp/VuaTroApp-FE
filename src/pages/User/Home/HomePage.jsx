@@ -5,7 +5,6 @@ import OptionSection from "components/shared/User/common/OptionSection/OptionSec
 import NewPostSection from "components/shared/User/Post/NewPostSection/NewPostSection";
 import SelectionSection from "components/shared/User/common/SelectionSection/SelectionSection";
 import ServiceSection from "components/shared/User/common/ServiceSection/ServiceSection";
-import SkeletonCard from "components/shared/User/Home/SkeletonCard/SkeletonCard";
 import { usePostSearch } from "hooks/usePostSearch";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -17,9 +16,6 @@ function HomePage() {
     loading,
     error,
     totalElements,
-    totalPages,
-    page,
-    setPage,
     filters,
     updateFilters,
     setSort,
@@ -27,7 +23,7 @@ function HomePage() {
 
   // Đọc search query từ URL và cập nhật filters
   useEffect(() => {
-    const searchQuery = searchParams.get("search");
+    const searchQuery = searchParams.get('search');
     // Chỉ update nếu search query khác với keyword hiện tại
     if (searchQuery && searchQuery !== filters.keyword) {
       updateFilters({ keyword: searchQuery });
@@ -91,11 +87,9 @@ function HomePage() {
 
           <div className="view-room-list">
             {loading && (
-              <>
-                {Array.from({ length: 6 }).map((_, index) => (
-                  <SkeletonCard key={index} />
-                ))}
-              </>
+              <div className="loading-state">
+                <p>Đang tải dữ liệu...</p>
+              </div>
             )}
 
             {error && (
@@ -114,36 +108,6 @@ function HomePage() {
               !error &&
               posts.length > 0 &&
               posts.map((post) => <RoomCard key={post.id} data={post} />)}
-
-            {!loading && !error && totalPages > 1 && (
-              <div className="pagination-container">
-                <button
-                  className="btn-page"
-                  disabled={page === 0}
-                  onClick={() => {
-                    setPage(page - 1);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                >
-                  Trước
-                </button>
-
-                <span className="page-info">
-                  Trang {page + 1} / {totalPages}
-                </span>
-
-                <button
-                  className="btn-page"
-                  disabled={page >= totalPages - 1}
-                  onClick={() => {
-                    setPage(page + 1);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                >
-                  Sau
-                </button>
-              </div>
-            )}
           </div>
         </section>
 

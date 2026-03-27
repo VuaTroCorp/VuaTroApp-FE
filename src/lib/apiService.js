@@ -2,7 +2,7 @@ import { api } from "./api";
 import { mockPostAPI } from "mocks/mockPosts";
 
 // Toggle này để bật/tắt mock mode
-const USE_MOCK_DATA = false; // Đổi thành false để dùng API thật
+const USE_MOCK_DATA = true; // Đổi thành false để dùng API thật
 
 // ==================== AUTHENTICATION APIs ====================
 export const authAPI = {
@@ -20,57 +20,41 @@ export const authAPI = {
   logout: () => api.post("/api/auth/logout"),
 
   // Lấy thông tin profile - GET /api/auth/profile
-  getProfile: (token) => api.get("/api/auth/profile", {
-    headers: {Authorization: `Bearer ${token}`}
-  }),
-
-  // Gửi mã Otp - POST /api/user/sendOtp
-  sendOtp: (userData) => api.post("/api/user/sendOtp", userData),
-
-  // Xác thực mã Otp - GET /api/user/verify-otp
-  verifyOtp: (email, otp) => api.get("/api/user/verify-otp", { params: { email, otp } }),
-
-  // Quên mật khẩu - POST /api/auth/forgot-password
-  forgotPassword: (email) =>
-    api.post("/api/auth/forgot-password", { email }),
-  
-  // Xác minh reset token trong email - GET /api/auth/verify-resettoken-mail?resetToken=...
-  verifyResetToken: (resetToken) =>
-    api.get("/api/auth/verify-resettoken-mail", { params: { resetToken } }),
-  
-  // Đổi mật khẩu bằng resetToken - POST /api/auth/change-password
-  changePassword: (data) => api.post("/api/auth/change-password", data),
-
+  getProfile: () => api.get("/api/auth/profile"),
 };
 
 // ==================== POST APIs ====================
 export const postAPI = {
   /**
-   * Tìm kiếm bài đăng với bộ lọc
-   * Backend spec: GET /api/posts/search
-   * Thực tế BE thường expect filter được "flatten" thành query params
-   * (keyword, minPrice, maxPrice, ...) thay vì searchRequest=<json>
+   * Tìm kiếm bài đăng với bộ lọc động
+   * GET /api/posts/search
    */
-  search: (searchRequest = {}, page = 0, size = 10, sort = "id, desc") =>
-    api.get("/api/posts/search", {
+  search: (searchRequest = {}, page = 0, size = 10, sort = "id,desc") => {
+    // Nếu bật mock mode, dùng mock data
+    if (USE_MOCK_DATA) {
+      console.log("🎭 Using MOCK data");
+      return mockPostAPI.search(searchRequest, page, size, sort);
+    }
+    
+    // Nếu không, dùng API thật
+    console.log("🌐 Using REAL API");
+    return api.get("/api/posts/search", {
       params: {
         ...searchRequest,
         page,
         size,
         sort,
-      }
-    }),
-  getById: (id) => api.get(`/api/posts/${id}`),
-};
-
-// ==================== HOME APIs ====================
-export const homeAPI = {
-  getHomeRooms: (page = 0, size = 10) => {
-    return api.get("/api/home", {
-      params: {
-        page,
-        size,
       },
     });
-  }
-}
+  },
+
+  // Lấy chi tiết bài đăng
+  getById: (id) => {
+    if (USE_MOCK_DATA) {
+      console.log("🎭 Using MOCK detail data for ID:", id);
+      return mockPostAPI.getById(id); // Gọi sang hàm getById của bản Mock
+    }
+
+    return api.get(`/api/posts/${id}`);
+  },
+};

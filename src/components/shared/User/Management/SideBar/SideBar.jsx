@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import avt from "assets/images/avt.png";
+import "./SideBar.scss";
+import { decodeBase64 } from "../../../../../utils/decodeBase64";
 import {
   FileClock,
   Rows4,
@@ -7,15 +10,18 @@ import {
   CircleCheck,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "hooks/useAuth";
-import Avatar from "components/shared/common/Avatar";
-import "./SideBar.scss";
 
 const SideBar = ({ setOption = () => {} }) => {
-  const { user } = useAuth();
   const [active, setActive] = useState("infor");
   const [open, setOpen] = useState(true);
   const [arrow, setArrow] = useState(false);
+  const [name, setName] = useState("");
+  const token = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    const decodeName = decodeBase64(token);
+    setName(decodeName.username);
+  }, []);
 
   return (
     <div className="admin-left-container">
@@ -23,21 +29,19 @@ const SideBar = ({ setOption = () => {} }) => {
       <div className="drop-main-container">
         <div className="avt-wrapper">
           <div className="avt-container">
-            <Avatar className="avt" src={user?.avatar} alt="avatar" />
+            <img className="avt" src={avt} alt="" />
           </div>
         </div>
 
         <div className="admin-inf">
           <div>
             <p>
-              <b>{user?.username || "Đang tải..."}</b>
+              <b>{name}</b>
             </p>
           </div>
           <div className="role-container">
             <CircleCheck size={18} color="#21A3FF" />
-            <p className="role">
-              {user?.role === "ADMIN" ? "Quản trị viên" : "Người dùng"}
-            </p>
+            <p className="role">Chủ căn hộ</p>
           </div>
         </div>
       </div>
@@ -56,7 +60,7 @@ const SideBar = ({ setOption = () => {} }) => {
         </NavLink>
 
         {/* Quản lý bài đăng (Có mũi tên xổ xuống) */}
-        <NavLink to="/user/manage-post" className="navlink">
+        <NavLink to='/user/manage-post' className='navlink'>
           <div
             onClick={() => {
               setActive("manage");

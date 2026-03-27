@@ -13,12 +13,6 @@ $shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
         font-size: 16px;
         font-weight: 400;
         margin: 0 0 8px 0;
-
-        .highlight-number {
-            font-weight: 700;
-            color: $brand-gold;
-            font-size: 18px;
-        }
     }
 
     .section-label {
@@ -60,6 +54,7 @@ $shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
                 font-weight: 700;
             }
 
+            // Style riêng cho nút "Tất cả"
             &.all-btn {
                 display: flex;
                 justify-content: center;

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "hooks/useAuth";
+import "./Header.scss";
 import {
   Heart,
   LogIn,
@@ -11,14 +11,21 @@ import {
   Search,
 } from "lucide-react";
 import UserDropdown from "components/layout/Header/UserDropdown/UserDropdown";
-import "./Header.scss";
+import { decodeBase64 } from "utils/decodeBase64";
 
 const Header = ({ setShowLogout }) => {
   const [openDrop, setOpenDrop] = useState(false);
+  const isLogin = localStorage.authToken ? true : false;
   const [dropArrow, setDropArrow] = useState(false);
+  const [userName, setUserName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    const decodeName = decodeBase64(token);
+    setUserName(decodeName.username);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -81,7 +88,7 @@ const Header = ({ setShowLogout }) => {
           </button>
         </div>
 
-        {isAuthenticated ? (
+        {isLogin ? (
           <div className="user-wrapper">
             <span
               onClick={() => {
@@ -90,7 +97,7 @@ const Header = ({ setShowLogout }) => {
               }}
               className="user-infor logged-in"
             >
-              <span className="user-name-text">{user?.username || "Khách"}</span>
+              <span className="user-name-text">{userName}</span>
               <span className="arrow-icon">
                 {dropArrow ? (
                   <ChevronDown size={28} />

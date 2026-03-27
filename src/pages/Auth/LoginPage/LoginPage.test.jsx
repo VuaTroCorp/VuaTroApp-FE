@@ -4,14 +4,12 @@ import { toast } from "react-toastify";
 import LoginPage from "./LoginPage";
 import { useAuth } from "hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { getHomePath } from "lib/auth";
 
 // Mock dependencies
 jest.mock("assets/images/logo.png", () => "test-logo.png");
 jest.mock("assets/icons/google-logo.png", () => "test-google.png");
 jest.mock("react-toastify");
 jest.mock("hooks/useAuth");
-jest.mock("lib/auth");
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: jest.fn(),
@@ -44,7 +42,6 @@ describe("Login Component", () => {
       isLoading: false,
     });
     useNavigate.mockReturnValue(mockNavigate);
-    getHomePath.mockReturnValue("/user/home");
     jest.clearAllMocks();
   });
 
@@ -52,7 +49,7 @@ describe("Login Component", () => {
     return render(
       <BrowserRouter>
         <LoginPage />
-      </BrowserRouter>,
+      </BrowserRouter>
     );
   };
 
@@ -85,11 +82,8 @@ describe("Login Component", () => {
         });
       });
 
-      expect(toast.success).toHaveBeenCalledWith(
-        "Đăng nhập thành công!",
-        expect.any(Object),
-      );
-
+      expect(toast.success).toHaveBeenCalledWith("Đăng nhập thành công!", expect.any(Object));
+      
       // SỬA TẠI ĐÂY: Trong LoginPage bạn navigate đến /user/home chứ không phải /
       expect(mockNavigate).toHaveBeenCalledWith("/user/home");
     });

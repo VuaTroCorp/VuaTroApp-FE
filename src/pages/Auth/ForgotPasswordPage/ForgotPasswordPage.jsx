@@ -1,9 +1,12 @@
+import background from "assets/images/Background.png";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { authAPI } from "lib/apiService";
 import { Key, ArrowLeft, Loader } from "lucide-react";
 import "./ForgotPasswordPage.scss";
+
+// Tải trước ảnh (vẫn giữ nguyên để tối ưu)
+const preloadImage = new Image();
+preloadImage.src = background;
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();
@@ -11,44 +14,22 @@ const ForgotPasswordPage = () => {
   const [error, setError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [countdown, setCountdown] = useState(60);
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setIdentifier(e.target.value);
     if (error) setError("");
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!identifier.trim()) {
-      setError("Vui lòng nhập email");
+      setError("Vui lòng nhập Email hoặc Số Điện Thoại");
       return;
     }
 
-    // Validate email đơn giản
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(identifier.trim())) {
-      setError("Email không hợp lệ");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      toast.dismiss({ containerId: "errors" });
-      await authAPI.forgotPassword(identifier.trim());
-      toast.success("Đã gửi link đặt lại mật khẩu. Vui lòng kiểm tra email.", {
-        containerId: "default",
-        autoClose: 5000,
-      });
-      setIsSubmitted(true);
-      setCountdown(60);
-    } catch (err) {
-      const message =
-        err?.response?.data?.message || "Gửi email đặt lại mật khẩu thất bại";
-      toast.error(message, { containerId: "errors", autoClose: false });
-    } finally {
-      setLoading(false);
-    }
+    console.log("Request reset password for:", identifier);
+    setIsSubmitted(true);
+    setCountdown(60);
   };
 
   useEffect(() => {
@@ -69,7 +50,11 @@ const ForgotPasswordPage = () => {
   };
 
   return (
+    // Đã xóa style={{ backgroundImage: ... }}
     <div className="forgot-page">
+      {/* Thẻ img đóng vai trò làm background */}
+      <img src={background} alt="Background" className="bg-image" />
+
       <div className="forgot-card">
         <div className="icon-badge">
           <Key size={32} color="#000" strokeWidth={2.5} />
@@ -105,8 +90,8 @@ const ForgotPasswordPage = () => {
               </div>
             </div>
 
-            <button type="submit" className="submit-btn" disabled={loading}>
-              {loading ? "Đang gửi..." : "Gửi Mã Xác Nhận"}
+            <button type="submit" className="submit-btn">
+              Gửi Mã Xác Nhận
               <span className="btn-icon">&#9658;</span>
             </button>
 

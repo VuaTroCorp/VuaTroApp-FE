@@ -27,16 +27,22 @@ export function getCurrentUser() {
 // ==================== ROLE MANAGEMENT ====================
 export function getCurrentRole() {
   const user = getCurrentUser();
-  const role = user?.role || user?.Role;
-  return role ? role.toUpperCase() : null;
+  return user?.role || user?.Role || null;
 }
 
 export function isAdmin() {
-  return getCurrentRole() === "ADMIN";
+  const role = getCurrentRole();
+  return role === "ADMIN" || role === "admin";
 }
 
-export function isUser() {
-  return getCurrentRole() === "USER";
+export function isLandlord() {
+  const role = getCurrentRole();
+  return role === "LANDLORD" || role === "landlord" || role === "CHU_TRO";
+}
+
+export function isTenant() {
+  const role = getCurrentRole();
+  return role === "TENANT" || role === "tenant" || role === "NGUOI_THUE";
 }
 
 // ==================== TOKEN MANAGEMENT ====================
@@ -113,15 +119,4 @@ export function canPostMoreRooms() {
   // Free chỉ được đăng 2-3 tin
   const freeLimit = 3;
   return postCount < freeLimit;
-}
-
-// ==================== HOME REDIRECT ====================
-export function getHomePath(userParam = null) {
-  const user = userParam || getCurrentUser();
-  if (!user) return "/login";
-
-  const role = (user?.role || user?.Role)?.toUpperCase();
-  if (role === "ADMIN") return "/admin/dashboard";
-  if (role === "USER") return "/user/home";
-  return "/";
 }
