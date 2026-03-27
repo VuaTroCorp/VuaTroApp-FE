@@ -12,9 +12,10 @@ import LoginPage from "pages/Auth/LoginPage/LoginPage";
 import RegisterPage from "pages/Auth/RegisterPage/RegisterPage";
 import ForgotPasswordPage from "pages/Auth/ForgotPasswordPage/ForgotPasswordPage";
 import ForbiddenPage from "pages/Auth/ForbiddenPage/ForbiddenPage";
-// import VerifyOtpPage from "pages/Auth/VerifyOtpPage/VerifyOtpPage";
+import VerifyResetTokenPage from "pages/Auth/ResetPasswordPage/VerifyResetTokenPage";
+import OAuth2RedirectHandler from "pages/Auth/GoogleCallback/OAuth2RedirectHandler";
 import ResetPasswordPage from "pages/Auth/ResetPasswordPage/ResetPasswordPage";
-import GoogleCallback from "pages/Auth/GoogleCallback/GoogleCallback";
+// import GoogleCallback from "pages/Auth/GoogleCallback/GoogleCallback";
 import HomePage from "pages/User/Home/HomePage";
 //FEATURES
 import PostNewsPage from "pages/User/PostNews/PostNewsPage";
@@ -31,16 +32,21 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<AuthRoute />}>
-        <Route element={<AuthLayout />}>    
+        <Route element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           {/* <Route path="verify-otp" element={<VerifyOtp />} /> */}
           <Route path="reset-password" element={<ResetPasswordPage />} />
+          <Route path="reset-password/verify" element={<VerifyResetTokenPage />} />
         </Route>
       </Route>
 
-      <Route path="login/oauth2/code/google" element={<GoogleCallback />} />
+      {/* <Route path="login/oauth2/code/google" element={<GoogleCallback />} /> */}
+      <Route
+        path="login/oauth2/code/google"
+        element={<OAuth2RedirectHandler />}
+      />
 
       <Route element={<UserLayout />}>
         <Route index element={<HomeRedirect />} />
@@ -49,10 +55,10 @@ export default function AppRoutes() {
           <Route path="post-news" element={<PostNewsPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="history-transaction" element={<HistoryTransactionPage />} />  
-          <Route path="pre-order" element={<PreOrderPage />} /> 
+          <Route path="pre-order" element={<PreOrderPage />} />
           <Route path="manage-post" element={<ManagePostPage/>} />
-          <Route path="google-callback" element={<GoogleCallback />} />
-          <Route path="posts/:id" element={<PostDetailPage/>} />          
+          {/* <Route path="google-callback" element={<GoogleCallback />} /> */}
+          <Route path="posts/:id" element={<PostDetailPage/>} />
         </Route>
         
       </Route>

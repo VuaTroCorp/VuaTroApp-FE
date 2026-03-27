@@ -27,22 +27,16 @@ export function getCurrentUser() {
 // ==================== ROLE MANAGEMENT ====================
 export function getCurrentRole() {
   const user = getCurrentUser();
-  return user?.role || user?.Role || null;
+  const role = user?.role || user?.Role;
+  return role ? role.toUpperCase() : null;
 }
 
 export function isAdmin() {
-  const role = getCurrentRole();
-  return role === "ADMIN" || role === "admin";
+  return getCurrentRole() === "ADMIN";
 }
 
-export function isLandlord() {
-  const role = getCurrentRole();
-  return role === "LANDLORD" || role === "landlord" || role === "CHU_TRO";
-}
-
-export function isTenant() {
-  const role = getCurrentRole();
-  return role === "TENANT" || role === "tenant" || role === "NGUOI_THUE";
+export function isUser() {
+  return getCurrentRole() === "USER";
 }
 
 // ==================== TOKEN MANAGEMENT ====================
@@ -122,14 +116,12 @@ export function canPostMoreRooms() {
 }
 
 // ==================== HOME REDIRECT ====================
-export function getHomePath() {
-  const user = getCurrentUser();
+export function getHomePath(userParam = null) {
+  const user = userParam || getCurrentUser();
   if (!user) return "/login";
 
-  const role = getCurrentRole()?.toUpperCase();
+  const role = (user?.role || user?.Role)?.toUpperCase();
   if (role === "ADMIN") return "/admin/dashboard";
-  if (role === "USER") {
-    return "/user/home";
-  }
+  if (role === "USER") return "/user/home";
   return "/";
 }

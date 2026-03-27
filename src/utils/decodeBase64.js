@@ -15,6 +15,6 @@ export const decodeBase64 = (token) => {
     return name;
   } catch (error) {
     // console.log("Token không hợp lệ để giải mã");
-    return ;
+    return;
   }
 };

@@ -22,14 +22,29 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [hasReadTerms, setHasReadTerms] = useState(false);
+
+  const handleScrollTerms = (e) => {
+    const {scrollTop, scrollHeight, clientHeight} = e.target;
+    // Nếu khoảng cách cuộn từ trên xuống + chiều cao khung nhìn = tổng chiều cao nội dung (cho phép sai số 2px)
+    if (Math.ceil(scrollTop + clientHeight) >= scrollHeight - 2) {
+      setHasReadTerms(true);
+    }
+  }
 
   const handleAcceptTerms = () => {
-  setFormData((prev) => ({
-    ...prev,
-    acceptTerms: true,
-  }));
-  setShowTerms(false);
-};
+    setFormData((prev) => ({
+      ...prev,
+      acceptTerms: true,
+    }));
+    setShowTerms(false);
+  };
+
+  const handleCloseTerms = () => {
+    setShowTerms(false);
+    setHasReadTerms(false);
+  }
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -108,7 +123,7 @@ const Register = () => {
   return (
     <div className="auth-page">
       <div className="auth-container">
-        <div className="auth-sidebar">
+        <div className="auth-sidebar"> 
           <img src={logo} alt="Vuatrovn" className="logo-img" />
         </div>
         <div className="auth-content">
@@ -219,24 +234,20 @@ const Register = () => {
             </div>
 
             <div className="terms-row">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="acceptTerms"
-                  checked={formData.acceptTerms}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                />
-                <span>
-                Chấp Nhận Điều Khoản
+              <div className="terms-status">
+                {formData.acceptTerms ? (
+                  <span className="status-accepted">Đã Đồng Ý Điều Khoản</span>
+                ) : (
+                  <span className="status-pending">Chưa Đồng Ý Điều Khoản</span>
+                )}
+
                 <span
-                className="terms-link"
-                onClick={() => setShowTerms(true)}
+                  className="terms-link"
+                  onClick={() => setShowTerms(true)}
                 >
-                (Xem Điều Khoản)
+                  (Xem Điều Khoản)
                 </span>
-                </span>
-              </label>
+              </div>
               <span className="blue-link" onClick={() => navigate("/login")}>
                 Tiếp Tục Đăng Nhập
               </span>
@@ -266,44 +277,45 @@ const Register = () => {
         </button>
       </div>
 
-      <div className="terms-content">
-  <h4>1. Thông tin tài khoản</h4>
-  <p>
-    Người dùng phải cung cấp thông tin chính xác khi đăng ký tài khoản.
-    Không được sử dụng thông tin giả mạo hoặc của người khác.
-    Mọi thông tin đăng ký cần được cập nhật khi có thay đổi.
-    Hệ thống có quyền từ chối tài khoản có thông tin không hợp lệ.
-  </p>
+      <div className="terms-content" onScroll={handleScrollTerms}>
+        <h4>1. Thông tin tài khoản</h4>
+        <p>
+          Người dùng phải cung cấp thông tin chính xác khi đăng ký tài khoản.
+          Không được sử dụng thông tin giả mạo hoặc của người khác.
+          Mọi thông tin đăng ký cần được cập nhật khi có thay đổi.
+          Hệ thống có quyền từ chối tài khoản có thông tin không hợp lệ.
+        </p>
 
-  <h4>2. Bảo mật tài khoản</h4>
-  <p>
-    Người dùng có trách nhiệm bảo mật mật khẩu và thông tin đăng nhập.
-    Không chia sẻ tài khoản với người khác dưới bất kỳ hình thức nào.
-    Nếu phát hiện truy cập trái phép, người dùng cần thông báo ngay cho hệ thống.
-    Hệ thống không chịu trách nhiệm cho các thiệt hại do lộ thông tin đăng nhập.
-  </p>
+        <h4>2. Bảo mật tài khoản</h4>
+        <p>
+          Người dùng có trách nhiệm bảo mật mật khẩu và thông tin đăng nhập.
+          Không chia sẻ tài khoản với người khác dưới bất kỳ hình thức nào.
+          Nếu phát hiện truy cập trái phép, người dùng cần thông báo ngay cho hệ thống.
+          Hệ thống không chịu trách nhiệm cho các thiệt hại do lộ thông tin đăng nhập.
+        </p>
 
-  <h4>3. Nội dung sử dụng</h4>
-  <p>
-    Người dùng không được đăng tải nội dung vi phạm pháp luật hoặc thuần phong mỹ tục.
-    Không đăng nội dung xúc phạm, gây hiểu lầm hoặc lừa đảo người khác.
-    Nội dung phải tuân thủ quy định của hệ thống và pháp luật hiện hành.
-    Các nội dung vi phạm có thể bị xóa mà không cần thông báo trước.
-  </p>
+        <h4>3. Nội dung sử dụng</h4>
+        <p>
+          Người dùng không được đăng tải nội dung vi phạm pháp luật hoặc thuần phong mỹ tục.
+          Không đăng nội dung xúc phạm, gây hiểu lầm hoặc lừa đảo người khác.
+          Nội dung phải tuân thủ quy định của hệ thống và pháp luật hiện hành.
+          Các nội dung vi phạm có thể bị xóa mà không cần thông báo trước.
+        </p>
 
-  <h4>4. Quyền của hệ thống</h4>
-  <p>
-    Hệ thống có quyền chỉnh sửa hoặc cập nhật điều khoản khi cần thiết.
-    Các tài khoản vi phạm quy định có thể bị cảnh cáo hoặc khóa.
-    Hệ thống có thể tạm ngưng dịch vụ để bảo trì hoặc nâng cấp.
-    Việc tiếp tục sử dụng dịch vụ đồng nghĩa với việc chấp nhận các điều khoản này.
-  </p>
-</div>
+        <h4>4. Quyền của hệ thống</h4>
+        <p>
+          Hệ thống có quyền chỉnh sửa hoặc cập nhật điều khoản khi cần thiết.
+          Các tài khoản vi phạm quy định có thể bị cảnh cáo hoặc khóa.
+          Hệ thống có thể tạm ngưng dịch vụ để bảo trì hoặc nâng cấp.
+          Việc tiếp tục sử dụng dịch vụ đồng nghĩa với việc chấp nhận các điều khoản này.
+        </p>
+      </div>
 
       <div className="terms-footer">
         <button
-          className="accept-btn"
+          className={`accept-btn ${hasReadTerms ? "active" : "disabled"}`}
           onClick={handleAcceptTerms}
+          disabled={!hasReadTerms}
         >
           Đồng ý điều khoản
         </button>

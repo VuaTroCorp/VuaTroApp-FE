@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CircleChevronRight } from "lucide-react";
+// import { CircleChevronRight } from "lucide-react";
 import "./HomeFilterHeader.scss";
 
 function HomeFilterHeader({
@@ -29,7 +29,8 @@ function HomeFilterHeader({
     <div className="home-filter-header">
       <h1 className="main-title">Kênh Thông Tin Phòng Trọ Số 1 Việt Nam</h1>
       <h4 className="sub-title">
-        Có {count.toLocaleString()} Tin Đăng Cho Thuê
+        Có <span className="highlight-number">{count.toLocaleString()}</span>{" "}
+        Tin Đăng Cho Thuê
       </h4>
 
       <h3 className="section-label">TỈNH THÀNH</h3>
@@ -44,11 +45,6 @@ function HomeFilterHeader({
             <b>{loc}</b>
           </div>
         ))}
-
-        {/* <div className="area-item all-btn">
-          <span className="all-title">Tất cả</span>
-          <CircleChevronRight size={20} className="all-icon" />
-        </div> */}
       </div>
 
       <div className="type-selector">
