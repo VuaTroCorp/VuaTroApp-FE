@@ -58,10 +58,10 @@ describe("ForgotPassword", () => {
       </MemoryRouter>,
     );
 
-    await user.click(screen.getByRole("button", { name: "/gửi mã xác nhận/i" }));
+    await user.click(screen.getByRole("button", { name: /gửi mã xác nhận/i }));
 
     expect(
-      screen.getByText("Vui lòng nhập Email"),
+      screen.getByText("Vui lòng nhập email"),
     ).toBeInTheDocument();
   });
 

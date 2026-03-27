@@ -277,7 +277,10 @@ const Register = () => {
         </button>
       </div>
 
-      <div className="terms-content" onScroll={handleScrollTerms}>
+      <div className="terms-content" 
+        onScroll={handleScrollTerms}
+        data-testid="terms-scroll-container"
+      >
         <h4>1. Thông tin tài khoản</h4>
         <p>
           Người dùng phải cung cấp thông tin chính xác khi đăng ký tài khoản.
