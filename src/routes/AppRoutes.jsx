@@ -1,17 +1,21 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import AuthRoute from "./AuthRoute";
 import RoleBasedRoute from "./RoleBasedRoute";
+import { getHomePath } from "lib/auth";
 //LAYOUTS
 import AuthLayout from "layouts/AuthLayout";
 import UserLayout from "layouts/UserLayout";
 import AdminLayout from "layouts/AdminLayout";
 //AUTH PAGES
+import DashboardPage  from "pages/Admin/Dashboard/DashboardPage";
 import LoginPage from "pages/Auth/LoginPage/LoginPage";
 import RegisterPage from "pages/Auth/RegisterPage/RegisterPage";
 import ForgotPasswordPage from "pages/Auth/ForgotPasswordPage/ForgotPasswordPage";
-// import VerifyOtpPage from "pages/Auth/VerifyOtpPage/VerifyOtpPage";
+import ForbiddenPage from "pages/Auth/ForbiddenPage/ForbiddenPage";
+import VerifyResetTokenPage from "pages/Auth/ResetPasswordPage/VerifyResetTokenPage";
+import OAuth2RedirectHandler from "pages/Auth/GoogleCallback/OAuth2RedirectHandler";
 import ResetPasswordPage from "pages/Auth/ResetPasswordPage/ResetPasswordPage";
-import GoogleCallback from "pages/Auth/GoogleCallback/GoogleCallback";
+// import GoogleCallback from "pages/Auth/GoogleCallback/GoogleCallback";
 import HomePage from "pages/User/Home/HomePage";
 //FEATURES
 import PostNewsPage from "pages/User/PostNews/PostNewsPage";
@@ -22,47 +26,52 @@ import ManagePostPage from "pages/User/ManagePostPage/ManagePostPage";
 import PostDetailPage from "pages/User/PostDetail/PostDetailPage";
 // import UpgradeAccount from "features/upgradeAccount/upgrade";
 
+const HomeRedirect = () => <Navigate to={getHomePath()} replace/>;
+
 export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<AuthRoute />}>
-        <Route element={<AuthLayout />}>    
+        <Route element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           {/* <Route path="verify-otp" element={<VerifyOtp />} /> */}
           <Route path="reset-password" element={<ResetPasswordPage />} />
+          <Route path="reset-password/verify" element={<VerifyResetTokenPage />} />
         </Route>
       </Route>
 
+      {/* <Route path="login/oauth2/code/google" element={<GoogleCallback />} /> */}
+      <Route
+        path="login/oauth2/code/google"
+        element={<OAuth2RedirectHandler />}
+      />
+
       <Route element={<UserLayout />}>
-        <Route index element={<HomePage />} />
+        <Route index element={<HomeRedirect />} />
         <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]} />}>
           <Route path="home" element={<HomePage />} />
           <Route path="post-news" element={<PostNewsPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="history-transaction" element={<HistoryTransactionPage />} />  
-          <Route path="pre-order" element={<PreOrderPage />} /> 
+          <Route path="pre-order" element={<PreOrderPage />} />
           <Route path="manage-post" element={<ManagePostPage/>} />
-          <Route path="google-callback" element={<GoogleCallback />} />
-          <Route path="posts/:id" element={<PostDetailPage/>} />          
+          {/* <Route path="google-callback" element={<GoogleCallback />} /> */}
+          <Route path="posts/:id" element={<PostDetailPage/>} />
         </Route>
-        <Route
-          path="/forbidden"
-          element={<div>Bạn không có quyền truy cập trang này.</div>}
-        />
-        <Route path="*" element={<HomePage />} />
+        
       </Route>
 
       <Route element={<AdminLayout />}>
-        {/* <Route index element={<HomePage/>}/> */}
-        <Route
-          path="admin"
-          element={<RoleBasedRoute allowedRoles={["ADMIN"]} />}
-        >
-          {/* <Route path="dashboard" element={<DashboardPage/>}/> */}
+        <Route path="admin" element={<RoleBasedRoute allowedRoles={["ADMIN"]} />} >
+          <Route index element={<Navigate to="dashboard" replace />}/>
+          <Route path="dashboard" element={<DashboardPage/>}/>
         </Route>
       </Route>
+
+      <Route path="/forbidden" element={<ForbiddenPage />} />
+      <Route path="*" element={<HomeRedirect />} />
     </Routes>
   );
 }

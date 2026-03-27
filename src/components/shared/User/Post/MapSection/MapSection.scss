@@ -1,15 +1,54 @@
+.map-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* wrapper chỉ để bao ngoài */
+.map-wrapper {
+  width: 100%;
+}
+
+/* KHUNG chứa map */
+.map-placeholder {
+  width: 100%;
+  height: 300px; // khớp với iframe
+  border-radius: 12px;
+  overflow: hidden; // QUAN TRỌNG
+  position: relative;
+  background: #f5f5f5;
+}
+
+/* iframe fill full */
+.map-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* khi chưa có địa chỉ */
+.no-map {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #888;
+}
+
+/* PANEL nằm TRONG map */
 .panel {
   position: absolute;
   top: 16px;
   right: 16px;
-  width: 280px;
+  width: 260px;
 
   background: #ffffff;
   padding: 14px;
   border-radius: 12px;
 
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
-  z-index: 3;
+  z-index: 10;
 
   h3 {
     margin: 0 0 10px;
@@ -47,21 +86,21 @@
   }
 }
 
-
+/* BUTTON nằm trong map */
 .btn-get-coord {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
 
-    padding: 8px 14px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+  padding: 8px 14px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .btn-get-coord:hover {
-    background: #1d4ed8;
+  background: #1d4ed8;
 }

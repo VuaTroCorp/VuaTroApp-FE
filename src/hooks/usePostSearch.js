@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { postAPI } from "lib/apiService";
+import { useSearchParams} from "react-router-dom";
 
 export const usePostSearch = () => {
   const [filters, setFilters] = useState({
@@ -13,7 +14,30 @@ export const usePostSearch = () => {
     typeId: null,
   });
 
-  const [page, setPage] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [page, setPage] = useState(() => {
+    const pageParam = searchParams.get("page");
+    if (pageParam) {
+      const parsedPage = parseInt(pageParam, 10) - 1;
+      return parsedPage >= 0 ? parsedPage : 0;
+    }
+    return 0;
+  });
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    if (page === 0) {
+      params.delete("page");
+    } else {
+      params.set("page", (page + 1).toString());
+    }
+    if (params.toString() !== searchParams.toString()) {
+      setSearchParams(params, { replace: true });
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
   const [size] = useState(10);
   const [sort, setSort] = useState("id,desc");
 
@@ -28,25 +52,27 @@ export const usePostSearch = () => {
     setError(null);
 
     try {
-      const cleanFilters = Object.fromEntries(
-        Object.entries(filters).filter(
-          ([_, value]) => value !== null && value !== undefined && value !== "",
-        ),
-      );
-
-      console.log("Calling API with:", { cleanFilters, page, size, sort });
+      const numericFields = ["minPrice", "maxPrice", "minArea", "maxArea", "typeId"];
+      const cleanFilters = Object.entries(filters).reduce((acc, [key, value]) => {
+        if (value === null || value === undefined || value === "") return acc;
+        if (numericFields.includes(key)) {
+          const numVal = Number(value);
+          if (!Number.isNaN(numVal)) acc[key] = numVal;
+          return acc;
+        }
+        acc[key] = value;
+        return acc;
+      }, {});
 
       const response = await postAPI.search(cleanFilters, page, size, sort);
-      const data = response.data;
-
-      console.log("API Response:", {
-        totalElements: data.totalElements,
-        contentLength: data.content?.length,
-      });
+      const data = response.data || {};
 
       setPosts(data.content || []);
-      setTotalPages(data.totalPages || 0);
-      setTotalElements(data.totalElements || 0);
+      setTotalPages(data.totalPages || data.totalPage || 0);
+      setTotalElements(
+        data.totalItems || data.totalElements || (data.content ? data.content.length : 0)
+      );
+      
     } catch (err) {
       const errorMsg =
         err.response?.data?.message || "Có lỗi xảy ra khi tìm kiếm";

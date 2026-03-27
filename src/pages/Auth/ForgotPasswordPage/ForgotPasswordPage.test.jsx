@@ -1,6 +1,23 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
+import { authAPI } from "lib/apiService";
+import {toast} from "react-toastify";
 import ForgotPasswordPage from "./ForgotPasswordPage";
+
+jest.mock("react-toastify", () => ({
+  toast: {
+    dismiss: jest.fn(),
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
+jest.mock("lib/apiService", () => ({
+  authAPI: {
+    forgotPassword: jest.fn(),
+  },
+}));
 
 jest.mock("assets/images/background.png", () => "test-background.png", {
   virtual: true,
@@ -16,6 +33,7 @@ jest.mock("react-router-dom", () => ({
 describe("ForgotPassword", () => {
   beforeEach(() => {
     mockNavigate.mockClear();
+    jest.restoreAllMocks();
     jest.spyOn(console, "log").mockImplementation(() => {});
   });
 
@@ -32,37 +50,66 @@ describe("ForgotPassword", () => {
     ).toBeInTheDocument();
   });
 
-  test("hiển thị lỗi khi submit rỗng", () => {
+  test("hiển thị lỗi khi submit rỗng", async () => {
+    const user = userEvent.setup();
     render(
       <MemoryRouter>
         <ForgotPasswordPage />
       </MemoryRouter>,
     );
 
-    fireEvent.click(screen.getByText("Gửi Mã Xác Nhận"));
+    await user.click(screen.getByRole("button", { name: /gửi mã xác nhận/i }));
 
     expect(
-      screen.getByText("Vui lòng nhập Email hoặc Số Điện Thoại"),
+      screen.getByText("Vui lòng nhập email"),
     ).toBeInTheDocument();
   });
 
-  test("gọi console.log khi nhập email hợp lệ", () => {
+  test("gọi API khi nhập email hợp lệ", async () => {
+    const user = userEvent.setup();
+    authAPI.forgotPassword.mockResolvedValueOnce({ data: { ok: true } });
     render(
       <MemoryRouter>
         <ForgotPasswordPage />
       </MemoryRouter>,
     );
 
-    fireEvent.change(
-      screen.getByPlaceholderText("Vui Lòng Nhập Email Hoặc Số Điện Thoại"),
-      { target: { value: "test@gmail.com" } },
+    const input = screen.getByPlaceholderText(
+      "Vui Lòng Nhập Email Hoặc Số Điện Thoại",
     );
 
-    fireEvent.click(screen.getByText("Gửi Mã Xác Nhận"));
+    await user.type(input, "test@gmail.com");
 
-    expect(console.log).toHaveBeenCalledWith(
-      "Request reset password for:",
-      "test@gmail.com",
+    await user.click(screen.getByRole("button", { name: /gửi mã xác nhận/i }));
+
+    await waitFor(() => {
+      expect(authAPI.forgotPassword).toHaveBeenCalledTimes(1);
+    });
+
+    expect(authAPI.forgotPassword).toHaveBeenCalledWith("test@gmail.com");
+    expect(toast.success).toHaveBeenCalled();
+  });
+
+  test("hiển thị toast error khi API thất bại", async () => {
+    const user = userEvent.setup();
+    authAPI.forgotPassword.mockRejectedValueOnce({
+      response: { data: { message: "Gửi email đặt lại mật khẩu thất bại" } },
+    });
+
+    render(
+      <MemoryRouter>
+        <ForgotPasswordPage />
+      </MemoryRouter>,
     );
+
+    const input = screen.getByPlaceholderText(
+      "Vui Lòng Nhập Email Hoặc Số Điện Thoại",
+    );
+    await user.type(input, "test@gmail.com");
+    await user.click(screen.getByRole("button", { name: /gửi mã xác nhận/i }));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
   });
 });

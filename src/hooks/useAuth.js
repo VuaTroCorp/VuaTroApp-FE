@@ -4,11 +4,9 @@ import {
   setAuthToken,
   getAuthToken,
   setCurrentUser,
-  getCurrentUser,
   clearAuth,
   isAdmin,
-  isLandlord,
-  isTenant,
+  isUser,
 } from "../lib/auth";
 
 const AuthContext = createContext();
@@ -21,32 +19,23 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = getAuthToken();
     if (token) {
-      // Kiểm tra user từ localStorage trước
-      const savedUser = getCurrentUser();
-      if (savedUser) {
-        setUser(savedUser);
-        setIsAuthenticated(true);
-        setLoading(false);
-      } else {
-        // Verify token với backend
-        authAPI
-          .getProfile()
-          .then((response) => {
-            const userData = response.data?.user || response.data;
-            setCurrentUser(userData);
-            setUser(userData);
-            setIsAuthenticated(true);
-          })
-          .catch(() => {
-            // Token không hợp lệ, xóa auth
-            clearAuth();
-            setUser(null);
-            setIsAuthenticated(false);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }
+      authAPI
+        .getProfile()
+        .then((response) => {
+          const userData = response.data;
+          setCurrentUser(userData);
+          setUser(userData);
+          setIsAuthenticated(true);
+        })
+        .catch(() => {
+          // Token không hợp lệ, xóa auth
+          clearAuth();
+          setUser(null);
+          setIsAuthenticated(false);
+        })
+        .finally(() => {
+          setLoading(false);
+      });
     } else {
       setLoading(false);
     }
@@ -71,26 +60,21 @@ export const AuthProvider = ({ children }) => {
 
       // Response format: { status, token, role, message }
       const token = response.data?.token;
-      const role = response.data?.role;
 
       if (!token) {
         throw new Error("Không nhận được token từ server");
       }
 
-      // Tạo userData object từ response
-      const userData = {
-        email: credentials.email,
-        role: role,
-      };
-
-      // Lưu token và user info
+      // Lưu token vào localStorage
       setAuthToken(token);
-      setCurrentUser(userData);
 
-      setUser(userData);
+      const profileResponse = await authAPI.getProfile(token);
+      const fullUserData = profileResponse.data;
+
+      setCurrentUser(fullUserData);
+      setUser(fullUserData);
       setIsAuthenticated(true);
-
-      return userData;
+      return fullUserData;
     } finally {
       setLoading(false);
     }
@@ -167,7 +151,7 @@ export const AuthProvider = ({ children }) => {
   // Làm mới thông tin user từ server
   const refreshUser = async () => {
     const response = await authAPI.getProfile();
-    const userData = response.data?.user || response.data;
+    const userData = response.data;
     setCurrentUser(userData);
     setUser(userData);
     return userData;
@@ -207,8 +191,7 @@ export const useRole = () => {
   return {
     userRole: user?.role,
     isAdmin: isAdmin(),
-    isLandlord: isLandlord(),
-    isTenant: isTenant(),
+    isUser: isUser(),
     hasRole: (role) => user?.role === role,
   };
 };

@@ -1,6 +1,8 @@
 import background from "assets/images/Background.png";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { authAPI } from "lib/apiService";
 import { Key, Eye, EyeOff } from "lucide-react";
 import "./ResetPasswordPage.scss";
 
@@ -10,6 +12,8 @@ preloadImage.src = background;
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const resetToken = searchParams.get("resetToken");
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
@@ -17,6 +21,38 @@ const ResetPasswordPage = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [verifying, setVerifying] = useState(true);
+
+  useEffect(() => {
+    if (!resetToken) {
+      toast.error("Thiếu reset token", {
+        containerId: "errors",
+        autoClose: false,
+      });
+      setVerifying(false);
+      return;
+    }
+
+    let cancelled = false;
+    setVerifying(true);
+
+    authAPI
+      .verifyResetToken(resetToken)
+      .catch((err) => {
+        if (cancelled) return;
+        const message =
+          err?.response?.data?.message || "Token không hợp lệ hoặc đã hết hạn";
+        toast.error(message, { containerId: "errors", autoClose: false });
+      })
+      .finally(() => {
+        if (!cancelled) setVerifying(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [resetToken]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +61,7 @@ const ResetPasswordPage = () => {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
@@ -41,20 +77,39 @@ const ResetPasswordPage = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      console.log("Password reset successfully with:", formData.password);
-      // Gọi API đổi mật khẩu ở đây...
+      if (!resetToken) {
+        toast.error("Thiếu reset token", {
+          containerId: "errors",
+          autoClose: false,
+        });
+        return;
+      }
 
-      // Chuyển hướng về trang đăng nhập sau khi thành công
-      alert("Đổi mật khẩu thành công!");
-      navigate("/login");
+      try {
+        setLoading(true);
+        toast.dismiss({ containerId: "errors" });
+        await authAPI.changePassword({
+          resetToken,
+          newPassword: formData.password,
+          comfirmPassword: formData.confirmPassword,
+        });
+
+        toast.success("Đổi mật khẩu thành công!", {
+          containerId: "default",
+          autoClose: 5000,
+        });
+        navigate("/login");
+      } catch (err) {
+        const message = err?.response?.data?.message || "Đổi mật khẩu thất bại";
+        toast.error(message, { containerId: "errors", autoClose: false });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   return (
-    <div
-      className="reset-page"
-      style={{ backgroundImage: `url(${background})` }}
-    >
+    <div className="reset-page">
       <div className="reset-card">
         {/* Vòng tròn khóa */}
         <div className="icon-badge">
@@ -63,65 +118,76 @@ const ResetPasswordPage = () => {
 
         <h2 className="reset-title">Quên Mật khẩu?</h2>
 
-        <form className="reset-form" onSubmit={handleSubmit}>
-          {/* Mật khẩu mới */}
-          <div className="form-group">
-            <label>Nhập mật khẩu mới</label>
-            <div className="password-input-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Mật khẩu mới"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? "input-error" : ""}
-              />
-              <button
-                type="button"
-                className="eye-btn"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-            <div className="error-message-container">
-              {errors.password && (
-                <span className="error-text">{errors.password}</span>
-              )}
-            </div>
+        {verifying ? (
+          <div className="verifying-box">
+            <div className="verifying-spinner" />
+            <p className="verifying-text">Đang xác minh liên kết...</p>
           </div>
-
-          {/* Nhập lại mật khẩu */}
-          <div className="form-group">
-            <label>Nhập lại mật khẩu</label>
-            <div className="password-input-wrapper">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                placeholder="Nhập lại mật khẩu"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={errors.confirmPassword ? "input-error" : ""}
-              />
-              <button
-                type="button"
-                className="eye-btn"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
+        ) : (
+          <form className="reset-form" onSubmit={handleSubmit}>
+            {/* Mật khẩu mới */}
+            <div className="form-group">
+              <label>Nhập mật khẩu mới</label>
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Mật khẩu mới"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={errors.password ? "input-error" : ""}
+                />
+                <button
+                  type="button"
+                  className="eye-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              <div className="error-message-container">
+                {errors.password && (
+                  <span className="error-text">{errors.password}</span>
+                )}
+              </div>
             </div>
-            <div className="error-message-container">
+
+            {/* Nhập lại mật khẩu */}
+            <div className="form-group">
+              <label>Nhập lại mật khẩu</label>
+              <div className="password-input-wrapper">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="Nhập lại mật khẩu"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={errors.confirmPassword ? "input-error" : ""}
+                />
+                <button
+                  type="button"
+                  className="eye-btn"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
+                </button>
+              </div>
+              <div className="error-message-container">
               {errors.confirmPassword && (
-                <span className="error-text">{errors.confirmPassword}</span>
-              )}
+                  <span className="error-text">{errors.confirmPassword}</span>
+                )}
+              </div>
             </div>
-          </div>
 
-          <button type="submit" className="submit-btn">
-            Xác Nhận
-          </button>
-        </form>
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? "Đang đổi mật khẩu..." : "Xác Nhận"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

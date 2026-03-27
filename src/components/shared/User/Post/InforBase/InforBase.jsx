@@ -6,9 +6,8 @@ import notice from "assets/icons/notice.png";
 import contact from "assets/icons/contact.png";
 import picture from "assets/icons/picture.png";
 import upload from "assets/icons/upload.png";
-import GOOGLE from "../MapSection/MapSection";
 import map from "assets/icons/map.png";
-
+import GoogleMap1 from "../MapSection/MapSection";
 const InforBase = () => {
     const [typeId, setTypeId] = useState("");
 
@@ -361,12 +360,9 @@ const InforBase = () => {
                                 Vị trí trên bản đồ
                             </h3>
                             <div className="map-placeholder">
-                                <GOOGLE
-                                    onChange={handleMapChange}
-                                    province={provinceName}
-                                    district={districtName}
-                                    ward={wardName}
-                                />
+                                <div className="map-box">
+                                    <GoogleMap1 address={addressDetail} />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,137 +1,43 @@
-import { useEffect, useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMapEvents,
-  useMap,
-} from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import "./MapSection.scss"; // thêm dòng này
 
-const userIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
+import { useMemo } from "react";
 
-// ===== MAP BAY TỚI TỈNH quận huyện (KHÔNG HARDCODE) =====
-function MapFly({ province, district, ward }) {
-  const map = useMap();
+const GoogleMap1 = ({ address }) => {
 
-  useEffect(() => {
-    const location = ward || district || province;
+  const googleEmbedUrl = useMemo(() => {
+    if (!address) return null;
+    return `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
+  }, [address]);
 
-    if (!location) return;
-
-    fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`,
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.length > 0) {
-          const lat = parseFloat(data[0].lat);
-          const lon = parseFloat(data[0].lon);
-
-          map.flyTo([lat, lon], 15);
-        }
-      });
-  }, [province, district, ward, map]);
-
-  return null;
-}
-
-// ===== CLICK MAP =====
-function MapClickHandler({ onSelect }) {
-  useMapEvents({
-    click(e) {
-      onSelect(e.latlng);
-    },
-  });
-  return null;
-}
-
-function GOOGLE({ onChange, province, district, ward }) {
-  const [userPos, setUserPos] = useState(null);
-  const [selectedPos, setSelectedPos] = useState(null);
-
-  // ===== LẤY GPS =====
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserPos({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      },
-      () => {
-        // fallback Nha Trang
-        setUserPos({
-          lat: 12.2585,
-          lng: 109.0526,
-        });
-      },
-    );
-  }, []);
-
-  // ===== CLICK MAP =====
-  const handleSelect = async (latlng) => {
-    setSelectedPos(latlng);
-
-    console.log("Lat:", latlng.lat);
-    console.log("Lng:", latlng.lng);
-
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}`,
-      );
-
-      const data = await res.json();
-      const address = data.address || {};
-
-      if (onChange) {
-        onChange({
-          lat: latlng.lat,
-          lng: latlng.lng,
-          province: address.state || "",
-          district: address.city || address.town || "",
-          ward: address.suburb || address.village || "",
-          street: address.road || "",
-          fullAddress: data.display_name
-            .replace(/\b\d{5}\b,?\s*/g, "")
-            .replace(", Việt Nam", ""),
-        });
-      }
-    } catch (err) {
-      console.error("Lỗi reverse geocode:", err);
-    }
-  };
-
-  if (!userPos) {
-    return <div>Đang lấy vị trí...</div>;
-  }
+  const googleMapsUrl = useMemo(() => {
+    if (!address) return null;
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  }, [address]);
 
   return (
-    <MapContainer
-      center={[userPos.lat, userPos.lng]}
-      zoom={16}
-      style={{ height: "100%", width: "100%" }}
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    <div className="map-wrapper">
 
-      {/* bay tới tỉnh */}
-      <MapFly province={province} district={district} ward={ward} />
+      <div className="map-placeholder">
+        {googleEmbedUrl ? (
+          <iframe
+            title="Google Maps"
+            src={googleEmbedUrl}
+            className="map-iframe"
+            loading="lazy"
+          />
+        ) : (
+          <div className="no-map">Chưa có địa chỉ</div>
+        )}
+      </div>
 
-      {selectedPos && (
-        <Marker position={[selectedPos.lat, selectedPos.lng]} icon={userIcon}>
-          <Popup>Vị trí bạn chọn</Popup>
-        </Marker>
+      {googleMapsUrl && (
+        <a href={googleMapsUrl} target="_blank" rel="noreferrer">
+          Mở trên Google Maps
+        </a>
       )}
 
-      <MapClickHandler onSelect={handleSelect} />
-    </MapContainer>
+    </div>
   );
-}
+};
 
-export default GOOGLE;
+export default GoogleMap1;

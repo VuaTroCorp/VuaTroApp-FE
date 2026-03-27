@@ -1,5 +1,5 @@
 import axios from "axios";
-import { clearAuth } from "./auth";
+import { clearAuth, getAuthToken } from "./auth";
 
 // Lấy baseURL từ env - Vite sẽ replace process.env trong build time
 const baseURL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
@@ -14,7 +14,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("authToken");
+  const token = getAuthToken();
   if (token) {
     config.headers = config.headers || {};
     config.headers["Authorization"] = `Bearer ${token}`;
