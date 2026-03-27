@@ -9,12 +9,22 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <ToastContainer
+          enableMultiContainer
+          containerId="default"
           position="top-right"
-          autoClose={3000}
+          autoClose={5000}
           hideProgressBar={false}
           closeOnClick
           pauseOnHover
           draggable
+        />
+        <ToastContainer
+          containerId="errors"
+          position="top-center"
+          autoClose={false}
+          hideProgressBar
+          closeOnClick={false}
+          draggable={false}
         />
         <AppRoutes />
       </BrowserRouter>

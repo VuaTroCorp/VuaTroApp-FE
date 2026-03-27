@@ -1,8 +1,4 @@
 import { api } from "./api";
-import { mockPostAPI } from "mocks/mockPosts";
-
-// Toggle này để bật/tắt mock mode
-const USE_MOCK_DATA = true; // Đổi thành false để dùng API thật
 
 // ==================== AUTHENTICATION APIs ====================
 export const authAPI = {
@@ -21,40 +17,34 @@ export const authAPI = {
 
   // Lấy thông tin profile - GET /api/auth/profile
   getProfile: () => api.get("/api/auth/profile"),
+
+  // Quên mật khẩu - POST /api/auth/forgot-password
+  forgotPassword: (email) => api.post("/api/auth/forgot-password", { email }),
+
+  // Xác minh reset token trong email - GET /api/auth/verify-resettoken-mail?resetToken=...
+  verifyResetToken: (resetToken) =>
+    api.get("/api/auth/verify-resettoken-mail", { params: { resetToken } }),
+
+  // Đổi mật khẩu bằng resetToken - POST /api/auth/change-password
+  changePassword: (data) => api.post("/api/auth/change-password", data),
 };
 
 // ==================== POST APIs ====================
 export const postAPI = {
-  /**
-   * Tìm kiếm bài đăng với bộ lọc động
-   * GET /api/posts/search
-   */
-  search: (searchRequest = {}, page = 0, size = 10, sort = "id,desc") => {
-    // Nếu bật mock mode, dùng mock data
-    if (USE_MOCK_DATA) {
-      console.log("🎭 Using MOCK data");
-      return mockPostAPI.search(searchRequest, page, size, sort);
-    }
-    
-    // Nếu không, dùng API thật
-    console.log("🌐 Using REAL API");
-    return api.get("/api/posts/search", {
+  // Tìm kiếm bài đăng với bộ lọc
+  // Backend spec: GET /api/posts/search
+  // Thực tế backend thường expect filter được "flatten" thành query params
+  // (keyword, minPrice, maxPrice, ...) thay vì searchRequest=<json>.
+  search: (searchRequest = {}, page = 0, size = 10, sort = "id,desc") =>
+    api.get("/api/posts/search", {
       params: {
         ...searchRequest,
         page,
         size,
         sort,
       },
-    });
-  },
+    }),
 
   // Lấy chi tiết bài đăng
-  getById: (id) => {
-    if (USE_MOCK_DATA) {
-      console.log("🎭 Using MOCK detail data for ID:", id);
-      return mockPostAPI.getById(id); // Gọi sang hàm getById của bản Mock
-    }
-
-    return api.get(`/api/posts/${id}`);
-  },
+  getById: (id) => api.get(`/api/posts/${id}`),
 };

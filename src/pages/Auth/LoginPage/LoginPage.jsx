@@ -33,6 +33,10 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Xóa các thông báo lỗi cũ trước khi thử đăng nhập lại
+    toast.dismiss({ containerId: "errors" });
+
     const newErrors = {};
 
     if (!formData.email) {
@@ -56,8 +60,8 @@ const LoginPage = () => {
 
         // Đăng nhập thành công
         toast.success("Đăng nhập thành công!", {
-          autoClose: false,
-          closeButton: true,
+          containerId: "default",
+          autoClose: 5000,
         });
         navigate(`/user/home`);
       } catch (error) {
@@ -66,8 +70,8 @@ const LoginPage = () => {
           error.response?.data?.message ||
           "Đăng nhập thất bại. Vui lòng thử lại.";
         toast.error(errorMessage, {
+          containerId: "errors",
           autoClose: false,
-          closeButton: true,
         });
       }
     }

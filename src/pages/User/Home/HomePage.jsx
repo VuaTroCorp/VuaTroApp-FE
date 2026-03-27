@@ -23,7 +23,7 @@ function HomePage() {
 
   // Đọc search query từ URL và cập nhật filters
   useEffect(() => {
-    const searchQuery = searchParams.get('search');
+    const searchQuery = searchParams.get("search");
     // Chỉ update nếu search query khác với keyword hiện tại
     if (searchQuery && searchQuery !== filters.keyword) {
       updateFilters({ keyword: searchQuery });

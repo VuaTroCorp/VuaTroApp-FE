@@ -99,8 +99,8 @@
     opacity: 1;
   }
 
-  .render-inf-post:hover{
-       background-color: #e0e0e066;
+  .render-inf-post:hover {
+    background-color: #e0e0e066;
   }
 
   .img-post-container {
@@ -148,7 +148,7 @@
     align-items: center;
   }
 
-//-------Wait Status-------
+  //-------Wait Status-------
   .wait-status-post {
     color: #e1a730;
     font-weight: 500;
@@ -166,7 +166,7 @@
     border-radius: 8px;
   }
 
-//-------Approve Status-------
+  //-------Approve Status-------
   .approve-status-post {
     color: #477023;
     font-weight: 500;
@@ -184,7 +184,7 @@
     border-radius: 8px;
   }
 
-//-------Cancel Status-------
+  //-------Cancel Status-------
   .cancel-status-post {
     color: #890202;
     font-weight: 500;
@@ -202,7 +202,7 @@
     border-radius: 8px;
   }
 
-//-------Expired Status-------
+  //-------Expired Status-------
   .expired-status-post {
     color: #242424;
     font-weight: 500;
@@ -232,16 +232,15 @@
     height: 24px;
   }
 
-  .ellipsis:hover{
-       background-color: #c0c0c0;
-       border-radius: 12px;
-       cursor: pointer;
+  .ellipsis:hover {
+    background-color: #c0c0c0;
+    border-radius: 12px;
+    cursor: pointer;
   }
 }
 .popup-body input,
 .popup-body textarea,
 .popup-body select {
-
   width: 100%;
   padding: 10px 12px;
 
@@ -256,22 +255,20 @@
 .popup-body input:focus,
 .popup-body textarea:focus,
 .popup-body select:focus {
-
   border-color: #e1a730;
   box-shadow: 0 0 0 2px #e1a73020;
-
 }
 
-.popup-body textarea{
-    min-height: 80px;
+.popup-body textarea {
+  min-height: 80px;
   max-height: 200px;
   resize: none;
   overflow: hidden;
 }
-.edit-popup-overlay{
+.edit-popup-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.45);
 
   display: flex;
   justify-content: center;
@@ -280,8 +277,7 @@
   z-index: 999;
 }
 
-.edit-popup{
-
+.edit-popup {
   width: 720px;
   height: 80vh;
 
@@ -291,12 +287,12 @@
   display: flex;
   flex-direction: column;
 
-  box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
 
   overflow: hidden;
 }
 
-.popup-header{
+.popup-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -309,25 +305,25 @@
   border-bottom: 1px solid #eee;
 }
 
-.popup-header button{
+.popup-header button {
   border: none;
   background: none;
   font-size: 18px;
   cursor: pointer;
 }
-.popup-body{
+.popup-body {
   flex: 1;
   overflow-y: auto;
 
   padding: 0px 22px;
 }
-.form-group{
+.form-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
 }
 
-.form-group label{
+.form-group label {
   font-weight: 500;
   margin-bottom: 6px;
 }
@@ -339,7 +335,7 @@
   border: 1px solid #ccc;
 }
 
-.popup-footer{
+.popup-footer {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
@@ -349,7 +345,7 @@
   border-top: 1px solid #eee;
 }
 
-.update-btn{
+.update-btn {
   background: #e1a730;
   border: none;
   padding: 10px 20px;
@@ -361,7 +357,7 @@
   cursor: pointer;
 }
 
-.cancel-btn{
+.cancel-btn {
   background: #e0e0e0;
   border: none;
 
@@ -370,25 +366,25 @@
   border-radius: 6px;
   cursor: pointer;
 }
-.address-row{
+.address-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-bottom: 10px;
 }
-.popup-body::-webkit-scrollbar{
-  width:6px;
+.popup-body::-webkit-scrollbar {
+  width: 6px;
 }
 
-.popup-body::-webkit-scrollbar-thumb{
-  background:#d1d1d1;
-  border-radius:10px;
+.popup-body::-webkit-scrollbar-thumb {
+  background: #d1d1d1;
+  border-radius: 10px;
 }
 
-.upload-section{
+.upload-section {
   margin-top: 15px;
 }
-.upload-box{
+.upload-box {
   border: 2px dashed #ddd;
   border-radius: 10px;
 
@@ -400,21 +396,18 @@
   position: relative;
 }
 
-.upload-box input{
+.upload-box input {
   position: absolute;
   inset: 0;
   opacity: 0;
   cursor: pointer;
 }
-.preview-images{
-
+.preview-images {
   display: grid;
   grid-template-columns: repeat(auto-fill, 90px);
   gap: 12px;
-
 }
-.image-item{
-
+.image-item {
   width: 90px;
   height: 90px;
 
@@ -424,13 +417,12 @@
   overflow: hidden;
 }
 
-.image-item img{
+.image-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.remove-btn{
-
+.remove-btn {
   position: absolute;
   top: 5px;
   right: 5px;
@@ -446,8 +438,7 @@
 
   cursor: pointer;
 }
-.cover-label{
-
+.cover-label {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -483,7 +474,7 @@
 
   color: #333;
 }
-.post-info-section{
+.post-info-section {
   display: flex;
   flex-direction: column;
   gap: 12px;

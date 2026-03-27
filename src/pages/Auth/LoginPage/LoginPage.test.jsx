@@ -49,7 +49,7 @@ describe("Login Component", () => {
     return render(
       <BrowserRouter>
         <LoginPage />
-      </BrowserRouter>
+      </BrowserRouter>,
     );
   };
 
@@ -82,8 +82,11 @@ describe("Login Component", () => {
         });
       });
 
-      expect(toast.success).toHaveBeenCalledWith("Đăng nhập thành công!", expect.any(Object));
-      
+      expect(toast.success).toHaveBeenCalledWith(
+        "Đăng nhập thành công!",
+        expect.any(Object),
+      );
+
       // SỬA TẠI ĐÂY: Trong LoginPage bạn navigate đến /user/home chứ không phải /
       expect(mockNavigate).toHaveBeenCalledWith("/user/home");
     });

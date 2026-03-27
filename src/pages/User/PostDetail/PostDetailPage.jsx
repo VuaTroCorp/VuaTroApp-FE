@@ -60,7 +60,16 @@ export default function PostDetailPage() {
     };
   }, [id]);
 
-  const images = useMemo(() => post?.images || [], [post]);
+  const images = useMemo(() => {
+    if (!post?.images?.length) {
+      return ["https://via.placeholder.com/600x360?text=No+Image"];
+    }
+    // Nếu backend trả về mảng object {url}, convert về string
+    return post.images
+      .map((img) => (typeof img === "string" ? img : img?.url))
+      .filter(Boolean);
+  }, [post]);
+
   const activeImage = images[activeImageIndex] || images[0];
 
   const handlePrev = () => {

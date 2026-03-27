@@ -11,41 +11,53 @@ import RegisterPage from "pages/Auth/RegisterPage/RegisterPage";
 import ForgotPasswordPage from "pages/Auth/ForgotPasswordPage/ForgotPasswordPage";
 // import VerifyOtpPage from "pages/Auth/VerifyOtpPage/VerifyOtpPage";
 import ResetPasswordPage from "pages/Auth/ResetPasswordPage/ResetPasswordPage";
-import GoogleCallback from "pages/Auth/GoogleCallback/GoogleCallback";
+import VerifyResetTokenPage from "pages/Auth/ResetPasswordPage/VerifyResetTokenPage";
 import HomePage from "pages/User/Home/HomePage";
 //FEATURES
 import PostNewsPage from "pages/User/PostNews/PostNewsPage";
+import OAuth2RedirectHandler from "pages/Auth/GoogleCallback/OAuth2RedirectHandler";
+import PostDetailPage from "pages/User/PostDetail/PostDetailPage";
 import ProfilePage from "pages/User/Profile/ProfilePage";
 import HistoryTransactionPage from "pages/User/HistoryTransaction/HistoryTransactionPage";
 import PreOrderPage from "pages/User/PreOrderPage/PreOrderPage";
 import ManagePostPage from "pages/User/ManagePostPage/ManagePostPage";
-import PostDetailPage from "pages/User/PostDetail/PostDetailPage";
 // import UpgradeAccount from "features/upgradeAccount/upgrade";
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<AuthRoute />}>
-        <Route element={<AuthLayout />}>    
+        <Route element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           {/* <Route path="verify-otp" element={<VerifyOtp />} /> */}
+          <Route
+            path="reset-password/verify"
+            element={<VerifyResetTokenPage />}
+          />
           <Route path="reset-password" element={<ResetPasswordPage />} />
         </Route>
       </Route>
 
+      <Route
+        path="login/oauth2/code/google"
+        element={<OAuth2RedirectHandler />}
+      />
       <Route element={<UserLayout />}>
         <Route index element={<HomePage />} />
+
         <Route path="user" element={<RoleBasedRoute allowedRoles={["USER"]} />}>
+          <Route path="posts/:id" element={<PostDetailPage />} />
           <Route path="home" element={<HomePage />} />
           <Route path="post-news" element={<PostNewsPage />} />
           <Route path="profile" element={<ProfilePage />} />
-          <Route path="history-transaction" element={<HistoryTransactionPage />} />  
-          <Route path="pre-order" element={<PreOrderPage />} /> 
-          <Route path="manage-post" element={<ManagePostPage/>} />
-          <Route path="google-callback" element={<GoogleCallback />} />
-          <Route path="posts/:id" element={<PostDetailPage/>} />          
+          <Route
+            path="history-transaction"
+            element={<HistoryTransactionPage />}
+          />
+          <Route path="pre-order" element={<PreOrderPage />} />
+          <Route path="manage-post" element={<ManagePostPage />} />
         </Route>
         <Route
           path="/forbidden"

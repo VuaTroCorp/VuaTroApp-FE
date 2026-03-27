@@ -37,7 +37,7 @@ $gray-text: #979797;
 
     .room-image-container {
       display: grid;
-      grid-template-columns: 2.2fr 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 4px;
       height: 350px;
       border-radius: 10px;
@@ -70,12 +70,6 @@ $gray-text: #979797;
         display: grid;
         grid-template-rows: 1fr 1fr;
         gap: 4px;
-
-        .sub-image-group-bottom {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 4px;
-        }
 
         .sub-image-item img {
           width: 100%;

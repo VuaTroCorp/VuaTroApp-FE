@@ -60,7 +60,7 @@ const SideBar = ({ setOption = () => {} }) => {
         </NavLink>
 
         {/* Quản lý bài đăng (Có mũi tên xổ xuống) */}
-        <NavLink to='/user/manage-post' className='navlink'>
+        <NavLink to="/user/manage-post" className="navlink">
           <div
             onClick={() => {
               setActive("manage");
