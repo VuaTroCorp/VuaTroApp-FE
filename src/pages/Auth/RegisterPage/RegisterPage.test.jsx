@@ -64,7 +64,7 @@ describe("Register Component", () => {
       expect(
         screen.getByPlaceholderText("Nhập lại mật khẩu"),
       ).toBeInTheDocument();
-      expect(screen.getByText("Chưa Đồng Ý Điều Khoản")).toBeInTheDocument();
+      expect(screen.getByText("Chấp Nhận Điều Khoản")).toBeInTheDocument();
       expect(screen.getByText("Tiếp Tục Đăng Nhập")).toBeInTheDocument();
       expect(
         screen.getByRole("button", { name: "Đăng Ký" }),
@@ -250,21 +250,7 @@ describe("Register Component", () => {
       fireEvent.change(screen.getByPlaceholderText("Nhập lại mật khẩu"), {
         target: { value: "password123" },
       });
-      // 1. Mở Modal
-      fireEvent.click(screen.getByText("(Xem Điều Khoản)"));
-
-      // 2. Ép JSDOM nhận giá trị cuộn bằng Object.defineProperty
-      const scrollContainer = screen.getByTestId("terms-scroll-container");
-      Object.defineProperty(scrollContainer, 'scrollTop', { configurable: true, value: 500 });
-      Object.defineProperty(scrollContainer, 'scrollHeight', { configurable: true, value: 1000 });
-      Object.defineProperty(scrollContainer, 'clientHeight', { configurable: true, value: 500 });
-
-      // Gửi event cuộn sau khi đã gán giá trị
-      fireEvent.scroll(scrollContainer);
-
-      // 3. Nút Đồng ý giờ đã được kích hoạt, tiến hành click
-      const acceptBtn = screen.getByRole("button", { name: /Đồng ý điều khoản/i });
-      fireEvent.click(acceptBtn);
+      fireEvent.click(screen.getByRole("checkbox"));
     };
 
     test("đăng ký thành công", async () => {
@@ -353,7 +339,7 @@ describe("Register Component", () => {
         screen.getByPlaceholderText("Nhập mật khẩu (tối thiểu 6 ký tự)"),
       ).toBeDisabled();
       expect(screen.getByPlaceholderText("Nhập lại mật khẩu")).toBeDisabled();
-      expect(screen.getByRole("button", { name: "Đang xử lý..." })).toBeDisabled();
+      expect(screen.getByRole("checkbox")).toBeDisabled();
       expect(
         screen.getByRole("button", { name: "Đang xử lý..." }),
       ).toBeDisabled();

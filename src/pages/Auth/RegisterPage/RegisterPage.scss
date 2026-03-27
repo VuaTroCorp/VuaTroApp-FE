@@ -14,14 +14,14 @@ $error-red: #d32f2f;
   height: 100vh;
   width: 100vw;
   background-color: #666;
-  overflow: hidden;
+  overflow: hidden; // Tránh scroll
   padding: 0;
 }
 
 .auth-container {
   display: flex;
   width: 900px;
-  height: 520px;
+  height: 520px; // Cố định chiều cao
   background: white;
   border-radius: 12px;
   overflow: hidden;
@@ -44,12 +44,13 @@ $error-red: #d32f2f;
 .auth-content {
   flex: 1;
   background-color: $content-bg;
-  padding: 25px 50px;
+  padding: 25px 50px; // Giảm padding top/bottom một chút để vừa 4 input
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
 
+  // Tiêu đề căn trái theo Figma
   .register-title {
     font-size: 1.15rem;
     font-weight: 700;
@@ -61,12 +62,12 @@ $error-red: #d32f2f;
 
 .auth-form {
   .form-group {
-    margin-bottom: 0px;
+    margin-bottom: 0px; // Triệt tiêu margin-bottom, dùng khoảng trống của error-container thay thế
 
     label {
       display: block;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 4px; // Giảm khoảng cách label và input
       font-size: 12px;
 
       .required {
@@ -78,7 +79,7 @@ $error-red: #d32f2f;
 
     input {
       width: 100%;
-      height: 36px;
+      height: 36px; // Fix cứng chiều cao input để bảo toàn layout
       padding: 0 12px;
       border: 1px solid #ddd;
       border-radius: 6px;
@@ -95,6 +96,7 @@ $error-red: #d32f2f;
       }
     }
 
+    // Khoảng trống 14px được "đặt chỗ" sẵn giữa các ô input
     .error-message-container {
       min-height: 14px;
       margin-top: 2px;
@@ -141,32 +143,25 @@ $error-red: #d32f2f;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 5px;
+  margin-top: 0px;
 
-  .terms-status {
-    font-size: 13px;
+  .checkbox-label {
     display: flex;
     align-items: center;
-
-    .status-accepted {
-      color: #18a957;
-      font-weight: 700;
-    }
-
-    .status-pending {
-      color: #444;
-    }
-
-    .terms-link {
-      margin-left: 8px;
-      color: #4a90e2;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #444;
+    input {
+      width: 14px;
+      height: 14px;
+      margin: 0;
       cursor: pointer;
-      font-weight: 600;
-      text-decoration: underline;
-
-      &:hover {
-        color: darken(#4a90e2, 15%);
-      }
+    }
+    .required {
+      color: $error-red;
+      margin-left: 2px;
+      font-weight: 700;
     }
   }
 
@@ -174,7 +169,6 @@ $error-red: #d32f2f;
     font-size: 12px;
     color: #4a90e2;
     cursor: pointer;
-    font-weight: 600;
     &:hover {
       text-decoration: underline;
     }
@@ -192,7 +186,7 @@ $error-red: #d32f2f;
 
 .submit-btn {
   width: 100%;
-  height: 40px;
+  height: 40px; // Fix cứng chiều cao nút
   background: $brand-gold;
   color: white;
   border: none;
@@ -252,20 +246,10 @@ $error-red: #d32f2f;
 }
 
 .terms-content {
-  padding: 0px 20px 20px;
+  padding: 0px 20px;
   overflow-y: auto;
-  flex: 1;
-  font-size: 15px;
-  line-height: 1.6;
-  max-height: 350px;
-  
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
-  }
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .terms-footer {
@@ -275,28 +259,12 @@ $error-red: #d32f2f;
 }
 
 .accept-btn {
+  background: $brand-gold;
   border: none;
-  padding: 10px 24px;
+  color: white;
+  padding: 8px 20px;
   border-radius: 6px;
-  font-weight: 700;
-  font-size: 14px;
-  transition: all 0.3s ease;
-
-  &.disabled {
-    background: #e0e0e0;
-    color: #999;
-    cursor: not-allowed;
-  }
-
-  &.active {
-    background: $brand-gold;
-    color: white;
-    cursor: pointer;
-
-    &:hover {
-      background: darken($brand-gold, 8%);
-    }
-  }
+  cursor: pointer;
 }
 .terms-content h4 {
   margin-top: 16px;

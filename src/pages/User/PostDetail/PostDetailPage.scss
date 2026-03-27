@@ -4,34 +4,18 @@
 
 .post-detail-breadcrumb {
   max-width: 1200px;
-  margin: 0 auto 20px;
+  margin: 0 auto 12px;
   padding: 0 16px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #555;
-  display: flex;
-  align-items: center;
+  font-size: 14px;
+  color: #666;
 
   .crumb {
     cursor: pointer;
-    transition: color 0.2s ease;
-
-    &:not(:last-child):hover {
-      color: #bb2a33;
-      text-decoration: underline;
-    }
-
-    &:last-child {
-      color: #111; 
-      font-weight: 600; 
-      cursor: default;
-    }
   }
 
   .sep {
-    margin: 0 12px;
-    color: #ccc;
-    font-weight: 400;
+    margin: 0 8px;
+    color: #aaa;
   }
 }
 

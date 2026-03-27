@@ -51,63 +51,6 @@
                 .empty-state p {
                     color: #6c757d;
                 }
-
-                .pagination-container {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 20px;
-                    margin-top: 30px;
-                    padding-bottom: 20px;
-
-                    .btn-page {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        min-width: 100px;
-                        padding: 10px 20px;
-                        font-size: 15px;
-                        font-weight: 600;
-                        color: #555;
-                        background-color: #fff;
-                        border: 1px solid #e0e0e0;
-                        border-radius: 8px;
-                        cursor: pointer;
-                        transition: all 0.25s ease-in-out;
-                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-
-                        &:disabled {
-                            opacity: 0.6;
-                            cursor: not-allowed;
-                            background-color: #fafafa;
-                            color: #aaa;
-                            box-shadow: none;
-                        }
-
-                        &:hover:not(:disabled) {
-                            background-color: #e1a730;
-                            color: #fff;
-                            border-color: #e1a730;
-                            transform: translateY(-2px);
-                            box-shadow: 0 6px 12px rgba(225, 167, 48, 0.25);
-                        }
-
-                        &:active:not(:disabled) {
-                            transform: translateY(0);
-                        }
-                    }
-
-                    .page-info {
-                        font-size: 16px;
-                        font-weight: 700;
-                        color: #333;
-                        background-color: #f8f8f8;
-                        padding: 8px 16px;
-                        border-radius: 6px;
-                        letter-spacing: 0.5px;
-                        border: 1px solid #eee;
-                    }
-                }
             }
         }
 

@@ -3,9 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { postAPI } from "lib/apiService";
 import { Camera, ChevronLeft, ChevronRight, MapPin, Phone } from "lucide-react";
-import Avatar from "components/shared/common/Avatar";
-import RoomImage from "components/shared/common/RoomImg";
-import Skeleton from "components/shared/common/Skeleton";
 import "./PostDetailPage.scss";
 
 const formatVnd = (value) => {
@@ -63,11 +60,7 @@ export default function PostDetailPage() {
     };
   }, [id]);
 
-  const images = useMemo(() => {
-    if (!post?.images) return [];
-    return post.images.map(img => img.url);
-  }, [post]);
-
+  const images = useMemo(() => post?.images || [], [post]);
   const activeImage = images[activeImageIndex] || images[0];
 
   const handlePrev = () => {
@@ -83,85 +76,7 @@ export default function PostDetailPage() {
   if (loading) {
     return (
       <div className="post-detail-page">
-        {/* Breadcrumb Skeleton */}
-        <div className="post-detail-breadcrumb">
-          <Skeleton width="150px" height="16px" />
-        </div>
-
-        <div className="post-detail-grid">
-          {/* Main Skeleton */}
-          <section className="post-detail-main">
-            {/* Gallery Skeleton */}
-            <div className="gallery">
-              <div className="gallery-main">
-                <Skeleton width="100%" height="440px" className="main-img" />
-              </div>
-              <div className="gallery-thumbs">
-                {Array.from({ length: 8 }).map((_, idx) => (
-                  <div key={idx} className="thumb">
-                    <Skeleton width="100%" height="54px" />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Post Meta Skeleton */}
-            <div className="post-meta">
-              <Skeleton width="120px" height="26px" style={{ borderRadius: "10px", marginBottom: "10px" }} />
-              <Skeleton width="80%" height="28px" className="title" />
-              
-              <div className="meta-row">
-                <Skeleton width="150px" height="24px" className="price" />
-                <div className="dot">•</div>
-                <Skeleton width="80px" height="20px" className="area" />
-              </div>
-
-              <div className="address">
-                <Skeleton width="20px" height="20px" style={{ borderRadius: "50%" }} />
-                <Skeleton width="60%" height="20px" />
-              </div>
-
-              <div className="desc">
-                <Skeleton width="30%" height="20px" style={{ marginBottom: "12px" }} />
-                <Skeleton width="100%" height="16px" style={{ marginBottom: "8px" }} />
-                <Skeleton width="100%" height="16px" style={{ marginBottom: "8px" }} />
-                <Skeleton width="80%" height="16px" />
-              </div>
-
-              <div className="map-card">
-                <div className="map-header">
-                  <Skeleton width="40%" height="20px" />
-                  <Skeleton width="70%" height="16px" />
-                </div>
-                <div className="map-wrapper">
-                  <Skeleton width="100%" height="100%" />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* SIDEBAR */}
-          <aside className="post-detail-side">
-            <div className="contact-card">
-              <div className="profile">
-                <Skeleton width="64px" height="64px" className="avatar" />
-                <div style={{ flex: 1 }}>
-                  <Skeleton width="70%" height="18px" className="name" style={{ marginBottom: "6px" }} />
-                  <Skeleton width="40%" height="14px" className="sub" />
-                </div>
-              </div>
-              
-              <Skeleton width="100%" height="44px" style={{ borderRadius: "12px", marginBottom: "12px" }} />
-              <Skeleton width="100%" height="60px" style={{ borderRadius: "12px" }} />
-            </div>
-
-            <div className="related-card">
-              <Skeleton width="50%" height="20px" className="related-title" />
-              <Skeleton width="100%" height="100px" style={{ borderRadius: "10px", marginBottom: "12px" }} />
-              <Skeleton width="100%" height="100px" style={{ borderRadius: "10px" }} />
-            </div>
-          </aside>
-        </div>
+        <div className="post-detail-loading">Đang tải chi tiết bài đăng...</div>
       </div>
     );
   }
@@ -182,7 +97,7 @@ export default function PostDetailPage() {
   return (
     <div className="post-detail-page">
       <div className="post-detail-breadcrumb">
-        <span className="crumb" onClick={() => navigate(-1)}>
+        <span className="crumb" onClick={() => navigate("/")}>
           Trang chủ
         </span>
         <span className="sep">/</span>
@@ -193,11 +108,9 @@ export default function PostDetailPage() {
         <section className="post-detail-main">
           <div className="gallery">
             <div className="gallery-main">
-              <RoomImage
-                src={activeImage}
-                alt={post.title}
-                className="main-img"
-              />
+              {!!activeImage && (
+                <img src={activeImage} alt={post.title} className="main-img" />
+              )}
 
               <button className="nav-btn left" onClick={handlePrev}>
                 <ChevronLeft size={28} />
@@ -222,7 +135,7 @@ export default function PostDetailPage() {
                     onClick={() => setActiveImageIndex(idx)}
                     type="button"
                   >
-                    <RoomImage src={url} alt={`${post.title}-${idx}`} />
+                    <img src={url} alt={post.title + "-" + idx} />
                   </button>
                 ))}
               </div>
@@ -296,20 +209,20 @@ export default function PostDetailPage() {
         <aside className="post-detail-side">
           <div className="contact-card">
             <div className="profile">
-              <Avatar
+              <img
                 className="avatar"
-                src={post.user?.avatar}
-                alt={post.user?.username}
+                src={post.landlord?.avatar}
+                alt={post.landlord?.name}
               />
               <div className="profile-info">
-                <div className="name">{post.user?.username || "Chủ trọ"}</div>
-                <div className="sub">{new Date(post.createdAt).toLocaleDateString('vi-VN')}</div>
+                <div className="name">{post.landlord?.name}</div>
+                <div className="sub">{post.postDate || ""}</div>
               </div>
             </div>
 
-            <a className="phone" href={`tel:${post.user?.phone || ""}`}>
+            <a className="phone" href={`tel:${post.landlord?.contact || ""}`}>
               <Phone size={16} />
-              {post.user?.phone || "Đang cập nhật"}
+              {post.landlord?.contact}
             </a>
 
             <div className="hint">

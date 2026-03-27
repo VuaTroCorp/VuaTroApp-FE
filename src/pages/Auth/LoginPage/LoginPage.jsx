@@ -6,9 +6,8 @@ import logo from "assets/images/logo.png";
 import googleLogo from "assets/icons/google-logo.png";
 import { useAuth } from "hooks/useAuth";
 import "./LoginPage.scss";
-import { getHomePath } from "lib/auth";
 
-const Login = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
   const { login, isLoading } = useAuth();
   const [formData, setFormData] = useState({
@@ -34,8 +33,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Xóa các thông báo lỗi cũ trước khi thử đăng nhập lại
-    toast.dismiss({ containerId: "errors" });
     const newErrors = {};
 
     if (!formData.email) {
@@ -52,27 +49,25 @@ const Login = () => {
 
     if (Object.keys(newErrors).length === 0) {
       try {
-        const loggedInUser =await login({
+        await login({
           email: formData.email,
           password: formData.password,
         });
 
         // Đăng nhập thành công
         toast.success("Đăng nhập thành công!", {
-          containerId: "default",
-          autoClose: 5000,
+          autoClose: false,
+          closeButton: true,
         });
-
-        const path = getHomePath(loggedInUser);
-        navigate(path);
+        navigate(`/user/home`);
       } catch (error) {
         // Xử lý error từ backend
         const errorMessage =
           error.response?.data?.message ||
           "Đăng nhập thất bại. Vui lòng thử lại.";
         toast.error(errorMessage, {
-          containerId: "errors",
           autoClose: false,
+          closeButton: true,
         });
       }
     }
@@ -173,4 +168,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
