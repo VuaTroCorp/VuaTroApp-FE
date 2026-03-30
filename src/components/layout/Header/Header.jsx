@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "assets/images/logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "hooks/useAuth";
 import {
   Heart,
@@ -18,18 +18,26 @@ const Header = ({ setShowLogout }) => {
   const [dropArrow, setDropArrow] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, isAuthenticated } = useAuth();
+
+  // Sync search input with URL ?search= param
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const urlSearch = params.get("search") || "";
+    setSearchQuery(urlSearch);
+  }, [location.search]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`/user/home?search=${encodeURIComponent(searchQuery.trim())}`);
     } else {
-      navigate("/");
+      navigate("/user/home");
     }
   };
 
-  const handleSearchKeyPress = (e) => {
+  const handleSearchKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSearch(e);
     }
@@ -39,7 +47,7 @@ const Header = ({ setShowLogout }) => {
     <div className="main-container">
       {/* --- Cụm bên trái: Logo & Search --- */}
       <div className="header-left">
-        <div className="logo-box" onClick={() => navigate("/user/home ")}>
+        <div className="logo-box" onClick={() => navigate("/user/home")}>
           <img className="logo-img" src={logo} alt="logo" />
         </div>
 
@@ -51,7 +59,7 @@ const Header = ({ setShowLogout }) => {
               placeholder="Tìm phòng trọ, căn hộ, chung cư..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleSearchKeyPress}
+              onKeyDown={handleSearchKeyDown}
             />
           </div>
           <button className="search-btn" onClick={handleSearch}>
