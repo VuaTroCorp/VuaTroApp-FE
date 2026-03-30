@@ -95,28 +95,51 @@ const Profile = () => {
   };
 
   const handleSave = async () => {
+    // Guard: nothing actually changed
+    const hasChanged =
+      tempInfor.username !== userInfor.username ||
+      tempInfor.email !== userInfor.email ||
+      tempInfor.phone !== userInfor.phone;
+
+    if (!hasChanged) {
+      toast.warning("Không có thay đổi nào để lưu");
+      return;
+    }
+
     try {
       setUpdating(true);
-      const payload = {
-        username: tempInfor.username,
-        email: tempInfor.email,
-        phone: tempInfor.phone,
-      };
+      const emailChanged = tempInfor.email !== userInfor.email;
 
-      const res = await authAPI.sendOtp(payload);
-
-      // Context take latest data
-      await refreshUser();
-
-      const message = res.data?.message || res.data || "Cập nhật thành công";
-
-      if (typeof message === 'string' && message.includes("OTP")) {
-        toast.warning(message);
+      if (emailChanged) {
+        // Email changed → OTP verification required
+        const payload = {
+          username: tempInfor.username,
+          email: tempInfor.email,
+          phone: tempInfor.phone,
+        };
+        const res = await authAPI.sendOtp(payload);
+        const message = res.data?.message || res.data || "Cập nhật thành công";
+        if (typeof message === "string" && message.includes("OTP")) {
+          toast.warning(message);
+        } else {
+          toast.success(message);
+        }
       } else {
+        // Only username/phone changed → direct update, no OTP needed
+        const payload = {
+          username: tempInfor.username,
+          phone: tempInfor.phone,
+        };
+        const res = await authAPI.updateProfile(payload);
+        const message = res.data?.message || res.data || "Cập nhật thành công";
         toast.success(message);
+        await refreshUser();
+        // Update local reference state to match what was just saved
+        const updated = { ...userInfor, username: tempInfor.username, phone: tempInfor.phone };
+        setUserInfor(updated);
+        setTempInfor(updated);
+        setEdit(false);
       }
-      setEdit(false);
-      fetchProfile();
     } catch (err) {
       const errorData = err.response?.data;
       toast.error(errorData?.message || errorData || "Không thể cập nhật thông tin");

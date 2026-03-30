@@ -24,11 +24,14 @@ export const authAPI = {
     headers: {Authorization: `Bearer ${token}`}
   }),
 
-  // Gửi mã Otp - POST /api/user/sendOtp
+  // Gửi mã Otp (dùng khi thay đổi email) - POST /api/user/sendOtp
   sendOtp: (userData) => api.post("/api/user/sendOtp", userData),
 
   // Xác thực mã Otp - GET /api/user/verify-otp
   verifyOtp: (email, otp) => api.get("/api/user/verify-otp", { params: { email, otp } }),
+
+  // Cập nhật thông tin cá nhân không cần OTP (username, phone) - PUT /api/user/update-profile
+  updateProfile: (userData) => api.put("/api/user/update-profile", userData),
 
   // Quên mật khẩu - POST /api/auth/forgot-password
   forgotPassword: (email) =>
