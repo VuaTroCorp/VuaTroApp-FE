@@ -1,13 +1,20 @@
 import React from "react";
 import "./ConfirmDelete.scss";
+import { toast } from "react-toastify";
 import { postAPI } from "lib/apiService";
 
 const ConfirmDelete = ({ setShowDeleteConfirm, IDPost, setShowEditPopup }) => {
   const handleDeletePost = async () => {
     try {
       await postAPI.deletePost(IDPost);
+      toast.success("🗑 Xóa bài đăng thành công!");
+      setShowDeleteConfirm(false);
+      if (setShowEditPopup) {
+        setShowEditPopup(); 
+      }
     } catch (error) {
-      console.log("lỗi r bạn ơi");
+      console.error("Lỗi xóa bài:", error);
+      toast.error(error.response?.data?.message || "Xóa bài thất bại, vui lòng thử lại!");
     }
   };
 
@@ -27,11 +34,7 @@ const ConfirmDelete = ({ setShowDeleteConfirm, IDPost, setShowEditPopup }) => {
             Hủy
           </button>
           <button
-            onClick={() => {
-              handleDeletePost();
-              setShowDeleteConfirm(false);
-              setShowEditPopup(false);
-            }}
+            onClick={handleDeletePost}
             className="button-confirm-delete"
           >
             Xóa

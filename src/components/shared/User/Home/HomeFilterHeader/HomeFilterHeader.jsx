@@ -48,7 +48,7 @@ function HomeFilterHeader({
       </div>
 
       <div className="type-selector">
-        {["Đề xuất", "Mới đăng"].map((type) => (
+        {["Mới đăng", "Được đánh giá cao nhất"].map((type) => (
           <div
             key={type}
             className={`type-item ${activeType === type ? "active" : ""}`}

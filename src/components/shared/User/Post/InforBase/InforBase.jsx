@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { postAPI } from "lib/apiService";
+import {toast} from "react-toastify";
 import "./InforBase.scss";
 import locationPost from "assets/icons/locationPost.png";
 import document from "assets/icons/document.png";
@@ -10,197 +12,14 @@ import map from "assets/icons/map.png";
 import GoogleMap1 from "../MapSection/MapSection";
 const InforBase = () => {
     const [typeId, setTypeId] = useState("");
-
-    const [provinceName, setProvinceName] = useState("");
-    const [districtName, setDistrictName] = useState("");
-    const [wardName, setWardName] = useState("");
-
     const [addressDetail, setAddressDetail] = useState("");
-
-
-
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [area, setArea] = useState("");
+    const [roomQuantity, setRoomQuantity] = useState(0);
 
-    const [roomQuantity, _setRoomQuantity] = useState(0);
-    const [latitude, setLatitude] = useState(0);
-    const [longitude, setLongitude] = useState(0);
-
-    const handleMapChange = (data) => {
-
-        setAddressDetail(data.fullAddress);
-
-        setLatitude(data.lat);
-        setLongitude(data.lng);
-    };
-
-
-    const handleSubmit = async () => {
-
-        const token = localStorage.getItem("authToken");
-
-        if (!token) {
-            alert("Bạn chưa đăng nhập");
-            return;
-        }
-
-        const formData = new FormData();
-
-        formData.append("title", title);
-        formData.append("price", price);
-        formData.append("area", area);
-        formData.append("roomQuantity", roomQuantity);
-        formData.append("typeId", Number(typeId));
-        formData.append("latitude", latitude);
-        formData.append("longitude", longitude);
-        formData.append("address", addressDetail);
-        formData.append("description", description);
-
-        // nếu có ảnh
-        images.forEach((img) => {
-            formData.append("images", img);
-        });
-
-        try {
-
-            const res = await fetch("http://localhost:8080/api/posts/create", {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-                body: formData
-            });
-
-            const data = await res.json().catch(() => null);
-
-            console.log("STATUS:", res.status);
-            console.log("RESPONSE:", data);
-
-            if (res.ok) {
-
-                alert("Đăng bài thành công");
-
-                setTitle("");
-                setDescription("");
-                setPrice("");
-                setArea("");
-                _setRoomQuantity(0);
-
-                setAddressDetail("");
-                setLatitude(0);
-                setLongitude(0);
-
-                setProvince("");
-                setDistrict("");
-                setWard("");
-
-                setProvinceName("");
-                setDistrictName("");
-                setWardName("");
-
-                setImages([]);
-
-            } else {
-                alert(data?.message || "Đăng bài thất bại");
-            }
-
-        } catch (error) {
-            console.log(error);
-            alert("Không thể kết nối server");
-        }
-    };
-
-    //Up images
-    const [images, setImages] = useState([]);
-    const maxImages = 6; // bạn chỉnh số lượng tối đa ở đây 
-
-    // ===== ADD IMAGE =====
-    const handleAddImage = (e) => {
-        const files = Array.from(e.target.files);
-        if (!files.length) return;
-
-        const MAX_SIZE = 1 * 1024 * 1024; // 1MB
-
-        // lọc file hợp lệ
-        const validFiles = files.filter(file => {
-
-            // chỉ cho upload ảnh
-            if (!file.type.startsWith("image/")) {
-                alert(`${file.name} không phải file ảnh`);
-                return false;
-            }
-
-            // kiểm tra kích thước
-            if (file.size > MAX_SIZE) {
-                alert(`Ảnh ${file.name} vượt quá 1MB`);
-                return false;
-            }
-
-            return true;
-        });
-
-        const remaining = maxImages - images.length;
-        if (remaining <= 0) return;
-
-        setImages((prev) => [
-            ...prev,
-            ...validFiles.slice(0, remaining),
-        ]);
-
-        e.target.value = null;
-    };
-    // ===== REMOVE IMAGE =====
-    const handleRemoveImage = (index) => {
-        setImages((prev) => prev.filter((_, i) => i !== index));
-    };
-
-
-    //Drag and drop images
-
-    const [isDragging, setIsDragging] = useState(false);
-
-    // ===== HANDLE DRAG =====
-    const handleDragOver = (e) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const handleDragLeave = () => {
-        setIsDragging(false);
-    };
-
-    const handleDrop = (e) => {
-        e.preventDefault();
-        setIsDragging(false);
-
-        const files = Array.from(e.dataTransfer.files);
-        if (!files.length) return;
-
-        const MAX_SIZE = 1 * 1024 * 1024; // 1MB
-
-        // lọc file hợp lệ
-        const validFiles = files.filter(file => {
-            if (file.size > MAX_SIZE) {
-                alert(`Ảnh ${file.name} vượt quá 1MB`);
-                return false;
-            }
-            return true;
-        });
-
-        const remaining = maxImages - images.length;
-        if (remaining <= 0) return;
-
-        setImages((prev) => [
-            ...prev,
-            ...validFiles.slice(0, remaining),
-        ]);
-    };
-
-
-
-    // ================= STATE =================
+    // Address-map state
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
@@ -209,62 +28,191 @@ const InforBase = () => {
     const [district, setDistrict] = useState("");
     const [ward, setWard] = useState("");
 
-    // ================= LOAD TỈNH =================
+    // Images state
+    const [images, setImages] = useState([]);
+    const [isDragging, setIsDragging] = useState(false);
+    const maxImages = 10;
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
+    // note
+    const [provinceName, setProvinceName] = useState("");
+    const [districtName, setDistrictName] = useState("");
+    const [wardName, setWardName] = useState("");
+    const [latitude, setLatitude] = useState(0);
+    const [longitude, setLongitude] = useState(0);
+
+    const currentMapAddress = addressDetail || 
+        [wardName, districtName, provinceName].filter(Boolean).join(", ") || 
+        "Việt Nam";
+
+    // Load province
     useEffect(() => {
         fetch("https://provinces.open-api.vn/api/p/")
             .then(res => res.json())
             .then(data => setProvinces(data))
-            .catch(err => console.error("Lỗi load tỉnh:", err));
-    }, []);
+            .catch(err => console.error("Không thể tải danh sách Tỉnh/Thành phố:", err));
+    }, [])
 
-    // ================= LOAD QUẬN =================
     const handleProvinceChange = async (e) => {
         const code = e.target.value;
-
         const selectedProvince = provinces.find(p => p.code == code);
 
         setProvince(code);
         setProvinceName(selectedProvince?.name || "");
-
         setDistrict("");
         setWard("");
         setDistricts([]);
         setWards([]);
 
         if (!code) return;
-
         try {
             const res = await fetch(
                 `https://provinces.open-api.vn/api/p/${code}?depth=2`
             );
             const data = await res.json();
             setDistricts(data.districts || []);
-        } catch (error) {
-            console.error("Lỗi load quận:", error);
+        } catch (err) {
+            toast.err("Không thể tải danh sách Quận/Huyện");
         }
     };
 
-    // ================= LOAD PHƯỜNG =================
     const handleDistrictChange = async (e) => {
-
         const code = e.target.value;
-
         const selectedDistrict = districts.find(d => d.code == code);
 
         setDistrict(code);
         setDistrictName(selectedDistrict?.name || "");
-
         setWard("");
         setWards([]);
 
         if (!code) return;
+        try {
+            const res = await fetch(
+                `https://provinces.open-api.vn/api/d/${code}?depth=2`
+            );
+            const data = await res.json();
+            setWards(data.wards || []);
+        } catch (error) {
+            toast.err("Không thể tải danh sách Xã/Phường");
+        }
+    };
 
-        const res = await fetch(
-            `https://provinces.open-api.vn/api/d/${code}?depth=2`
-        );
+    const handleMapChange = (data) => {
+        setAddressDetail(data.fullAddress);
+        setLatitude(data.lat);
+        setLongitude(data.lng);
+    };
 
-        const data = await res.json();
-        setWards(data.wards || []);
+    // Handle images - dry code (Don't repeat yourself)
+    const processImages = (filesArray) => {
+        if (!filesArray.length) return;
+
+        const validFiles = filesArray.filter(file => {
+            if (!file.type.startsWith("image/")) {
+                toast.err(`"${file.name}" không phải là định dạng ảnh!`);
+                return false;
+            }
+            if (file.size > MAX_SIZE) {
+                toast.warning(`Ảnh "${file.name}" vượt quá giới hạn 5MB!`);
+                return false;
+            }
+            return true;
+        });
+
+        const remaining = maxImages - images.length;
+        if (remaining <= 0) {
+            toast.warning(`Bạn chỉ được tải lên tối đa ${maxImages} ảnh!`);
+            return;
+        }
+
+        setImages((prev) => [
+            ...prev,
+            ...validFiles.slice(0, remaining),
+        ]);
+    }
+
+    const handleAddImage = (e) => {
+        processImages(Array.from(e.target.files));
+        e.target.value = null;
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        processImages(Array.from(e.dataTransfer.files));
+    }
+
+    const handleRemoveImage = (index) => {
+        setImages(prev => prev.filter((_, i) => i !== index));
+    };
+
+    // Submit form
+    const handleSubmit = async () => {
+        // Filter out empty values ​​and combine them into a complete address (Full Address).
+        const fullAddress = [addressDetail, wardName, districtName, provinceName]
+            .filter(Boolean) // Keep the ones with text, ignore the blank ones
+            .join(", ");
+
+        // Validation
+        if (!title || !price || !area || !typeId || !fullAddress) {
+            toast.warning("Vui lòng điền đầy đủ các thông tin bắt buộc!");
+            return;
+        }
+        if (images.length === 0) {
+            toast.warning("Vui lòng tải lên ít nhất 1 ảnh!");
+            return;
+        }
+
+        const id = toast.loading("Đang đăng bài viết...");
+
+        try {
+            const formData = new FormData();
+            formData.append("title", title);
+            // Remove . , whitespace before sendData
+            const cleanPrice = price.toString().replace(/[\.,\s]/g, "");
+            formData.append("price", Number(cleanPrice));
+            formData.append("area", area);
+            formData.append("roomQuantity", roomQuantity);
+            formData.append("typeId", Number(typeId));
+            formData.append("latitude", latitude);
+            formData.append("longitude", longitude);
+            formData.append("address", fullAddress);
+            formData.append("description", description);
+
+            images.forEach((img) => {
+                formData.append("images", img);
+            });
+
+            await postAPI.createPost(formData);
+
+            toast.success("Đăng tin thành công!", {
+                containerId: "default",
+                autoClose: 3000,
+            });
+
+            // Reset form
+            setTitle("");
+            setDescription("");
+            setPrice("");
+            setArea("");
+            setRoomQuantity(0);
+            setTypeId("");
+            setAddressDetail("");
+            setLatitude(0);
+            setLongitude(0);
+            setProvince("");
+            setDistrict("");
+            setWard("");
+            setImages([]);
+
+        } catch (error) {
+            console.error("Lỗi đăng bài:", error);
+            const errMsg = error.response?.data?.message || error.response?.data || "Đăng tin thất bại, vui lòng thử lại!";
+            toast.error(errMsg, {
+                containerId: "errors", // Hoặc đổi thành "default" tùy cấu hình App của bạn
+                autoClose: 3000,
+            });
+        }
     };
 
     return (
@@ -299,13 +247,13 @@ const InforBase = () => {
                         <div className="row">
                             {/* QUẬN */}
                             <div className="form-group">
-                                <label>Quận/Huyện</label>
+                                <label>Quận / Huyện</label>
                                 <select
                                     value={district}
                                     onChange={handleDistrictChange}
                                     disabled={!districts.length}
                                 >
-                                    <option value="">Chọn Quận/Huyện</option>
+                                    <option value="">Chọn Quận / Huyện</option>
                                     {districts.map(d => (
                                         <option key={d.code} value={d.code}>
                                             {d.name}
@@ -316,22 +264,17 @@ const InforBase = () => {
 
                             {/* PHƯỜNG */}
                             <div className="form-group">
-                                <label>Xã/Phường</label>
+                                <label>Xã / Phường</label>
                                 <select
                                     value={ward}
                                     onChange={(e) => {
-
                                         const code = e.target.value;
-
-                                        const selectedWard = wards.find(w => w.code == code);
-
                                         setWard(code);
-                                        setWardName(selectedWard?.name || "");
-
+                                        setWardName(wards.find(w => w.code == code)?.name || "");
                                     }}
                                     disabled={!wards.length}
                                 >
-                                    <option value="">Chọn Xã/Phường</option>
+                                    <option value="">Chọn Xã / Phường</option>
                                     {wards.map(w => (
                                         <option key={w.code} value={w.code}>
                                             {w.name}
@@ -361,12 +304,14 @@ const InforBase = () => {
                             </h3>
                             <div className="map-placeholder">
                                 <div className="map-box">
-                                    <GoogleMap1 address={addressDetail} />
+                                    <GoogleMap1
+                                        address={currentMapAddress}
+                                        onChange={handleMapChange}
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 {/* POST INFO */}
@@ -418,23 +363,16 @@ const InforBase = () => {
 
                             <div className="form-group label-sophong">
                                 <label>Số phòng trống</label>
-                                <select>
-                                    <option>0</option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
+                                <select value={roomQuantity} onChange={(e) => setRoomQuantity(Number(e.target.value))}>
+                                    {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                                        <option key={num} value={num}>{num}</option>
+                                    ))}
                                 </select>
                             </div>
                         </div>
 
                         <div className="form-group short-input">
                             <label>Loại hình</label>
-
                             <select value={typeId} onChange={(e) => setTypeId(Number(e.target.value))}>
                                 <option value="">Chọn loại hình</option>
                                 <option value={1}>Phòng Trọ</option>
@@ -473,18 +411,16 @@ const InforBase = () => {
                     {/* Upload Box */}
                     <div
                         className={`upload-box ${isDragging ? "dragging" : ""}`}
-                        onDragOver={handleDragOver}
-                        onDragLeave={handleDragLeave}
+                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                        onDragLeave={() => setIsDragging(false)}
                         onDrop={handleDrop}
                     >
                         <label className="upload-area">
                             <div className="upload-icon">
                                 <img src={upload} alt="upload" className="title-icon" />
                             </div>
-
                             <h3>Kéo và thả ảnh hoặc video tại đây</h3>
                             <span>Hoặc click để chọn từ thiết bị của bạn</span>
-
                             <input
                                 type="file"
                                 multiple
@@ -504,7 +440,6 @@ const InforBase = () => {
                                         src={URL.createObjectURL(file)}
                                         alt={`upload-${index}`}
                                     />
-
                                     <button
                                         type="button"
                                         className="remove-btn"
@@ -516,7 +451,6 @@ const InforBase = () => {
                             ))}
                         </div>
                     )}
-
                     <p className="upload-note">
                         Bạn đã chọn {images.length}/{maxImages} ảnh
                     </p>
@@ -524,7 +458,7 @@ const InforBase = () => {
 
                 {/* BUTTON */}
                 <button className="submit-btn" onClick={handleSubmit}>
-                    ➤ ĐĂNG TIN NGAY
+                    ĐĂNG TIN NGAY
                 </button>
             </div>
         </div>

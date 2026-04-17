@@ -1,14 +1,15 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "routes/AppRoutes";
 import { ToastContainer } from "react-toastify";
-import { AuthProvider } from "hooks/useAuth";
+import { AppProvider } from "contexts/Provider/AppProvider";
+import ScrollToTop from "components/shared/common/ScrollToTop";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <AuthProvider>
-    
+    <AppProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <ToastContainer
           enableMultiContainer
           containerId="default"
@@ -29,7 +30,7 @@ function App() {
         />
         <AppRoutes />
       </BrowserRouter>
-    </AuthProvider>
+    </AppProvider>
   );
 }
 

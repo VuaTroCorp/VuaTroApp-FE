@@ -2,10 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { postAPI } from "lib/apiService";
-import { Camera, ChevronLeft, ChevronRight, MapPin, Phone } from "lucide-react";
+import { Camera, ChevronLeft, ChevronRight, MapPin, Phone, CalendarDays } from "lucide-react";
 import Avatar from "components/shared/common/Avatar";
 import RoomImage from "components/shared/common/RoomImg";
 import Skeleton from "components/shared/common/Skeleton";
+import ReviewSection from "components/shared/User/Post/ReviewSection/ReviewSection";
 import "./PostDetailPage.scss";
 
 const formatVnd = (value) => {
@@ -240,7 +241,7 @@ export default function PostDetailPage() {
             </div>
 
             <div className="address">
-              <MapPin size={16} />
+              <div className="icon-box"><MapPin size={18} color="#d6002b" /></div>
               <span>{post.address || post.location}</span>
             </div>
 
@@ -291,6 +292,9 @@ export default function PostDetailPage() {
               )}
             </div>
           </div>
+
+          <ReviewSection postId={post.id} />
+
         </section>
 
         <aside className="post-detail-side">
@@ -314,6 +318,16 @@ export default function PostDetailPage() {
 
             <div className="hint">
               Lưu ý: Hãy kiểm tra kỹ thông tin trước khi đặt cọc.
+            </div>
+
+            <div style={{ marginTop: "20px" }}>
+              <button 
+                className="btn-pre-order"
+                onClick={() => navigate(`/pre-order/${post.id}`)}
+              >
+                <CalendarDays size={18} />
+                ĐẶT LỊCH XEM PHÒNG NGAY
+              </button>
             </div>
           </div>
 

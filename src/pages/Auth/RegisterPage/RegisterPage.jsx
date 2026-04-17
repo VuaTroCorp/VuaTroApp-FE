@@ -102,20 +102,19 @@ const Register = () => {
           confirmPassword: formData.confirmPassword,
         });
 
-        // Xử lý response thành công
+        toast.dismiss();
+
         toast.success(
-          response?.message ||
-            "Đăng ký thành công. Vui lòng kiểm tra email để xác thực.",
+          response?.message || "Đăng ký thành công. Vui lòng kiểm tra email để xác thực.",
+          { containerId: "default" }
         );
+
         setTimeout(() => navigate("/login"), 2000);
       } catch (error) {
-        // Xử lý error từ backend
         const errorMessage =
           error.response?.data?.message ||
           "Đăng ký thất bại. Vui lòng thử lại.";
-
-        // Hiển thị toast error
-        toast.error(errorMessage);
+        toast.error(errorMessage, { containerId: "errors" });
       }
     }
   };

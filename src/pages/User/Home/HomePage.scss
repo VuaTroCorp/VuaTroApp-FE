@@ -1,7 +1,7 @@
 .home-page {
     min-height: 100vh;
     background-color: #f1eeee; 
-    padding: 20px 100px; // Padding cho màn hình lớn
+    padding: 20px 100px;
     display: flex;
     justify-content: center;
 
@@ -14,7 +14,7 @@
         max-width: 1440px;
 
         .left-content {
-            flex: 4; // Tỉ lệ cột trái
+            flex: 4;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -112,7 +112,7 @@
         }
 
         .right-content {
-            flex: 1; // Tỉ lệ cột phải
+            flex: 1;
             max-width: 400px;
             display: flex;
             flex-direction: column;
@@ -120,24 +120,51 @@
         }
 
         .bottom-wrapper {
-            flex-basis: 100%; // Ép phần dịch vụ xuống dưới cùng
+            flex-basis: 100%;
             margin-top: 30px;
         }
     }
 }
 
+/* =========================================
+    RESPONSIVE CHO HOME PAGE
+   ========================================= */
+
 @media screen and (max-width: 1200px) {
-    .home-page { padding: 20px 40px; }
+    .home-page { 
+        padding: 20px 40px; 
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .home-page {
+        .main-content {
+            gap: 16px;
+            .right-content {
+                max-width: 320px;
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 768px) {
     .home-page {
-        padding: 15px;
-        .newshow-demo-main {
-            flex-direction: column; // Chuyển thành 1 cột trên mobile
+        padding: 16px 12px;
+        
+        .main-content {
+            flex-direction: column;
+            gap: 20px;
+
             .left-content, .right-content {
                 width: 100%;
-                max-width: none;
+                max-width: 100%;
+                flex: none;
+            }
+
+            /* UX Trick: Đẩy cột phải (Chứa bộ lọc) lên đầu tiên trên Mobile */
+            .right-content {
+                order: -1; 
+                flex-direction: column;
             }
         }
     }

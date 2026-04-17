@@ -118,10 +118,11 @@ export function canPostMoreRooms() {
 // ==================== HOME REDIRECT ====================
 export function getHomePath(userParam = null) {
   const user = userParam || getCurrentUser();
-  if (!user) return "/login";
+
+  if (!user) return "/";
 
   const role = (user?.role || user?.Role)?.toUpperCase();
   if (role === "ADMIN") return "/admin/dashboard";
-  if (role === "USER") return "/user/home";
+  if (role === "USER") return "/";
   return "/";
 }

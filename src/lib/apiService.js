@@ -60,7 +60,34 @@ export const postAPI = {
         sort,
       }
     }),
+
+  // Get details from one post
   getById: (id) => api.get(`/api/posts/${id}`),
+
+  // Create a new post (For sending files, use multipart/form-data)
+  createPost: (formData) => api.post("/api/posts/create", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }),
+
+  // Get my posts (with pagination)
+  getMyPosts: (page = 0, size = 10) => api.get("/api/profile/my-posts", {
+    params: {
+      page,
+      size,
+    },
+  }),
+
+  // Update my post (id + formData)
+  editPost: (id, formData) => api.post(`/api/posts/edit/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }),
+
+  // Delete my post
+  deletePost: (id) => api.delete(`/api/posts/delete/${id}`),
 };
 
 // ==================== HOME APIs ====================
@@ -74,3 +101,37 @@ export const homeAPI = {
     });
   }
 }
+
+// ==================== RENTAL PROCEDURES APIs ====================
+export const rentalAPI = {
+  // Schedule a room viewing
+  registerView: (postId, data) => api.post(`/api/rental-procedures/register-view/${postId}`, data),
+};
+
+// ==================== REVIEW APIs ====================
+export const reviewAPI = {
+  // Get a list of reviews for a post
+  getReviewsByPost: (postId) => api.get(`/api/reviews/post/${postId}`),
+
+  // Write a new review
+  createReview: (reviewData) => api.post("/api/reviews/create", reviewData),
+
+  // Edit review
+  editReview: (reviewId, reviewData) => api.put(`/api/reviews/edit/${reviewId}`, reviewData),
+
+  // Delete review
+  deleteReview: (reviewId) => api.delete(`/api/reviews/delete/${reviewId}`),
+};
+
+// ==================== FAVORITE APIs ====================
+export const favoriteAPI = {
+  // Get my favorite posts
+  getMyFavorites: (params) => api.get("/api/favorites/my-favorites", { params }),
+  
+  // Like a post
+  likePost: (postId) => api.post(`/api/favorites/like/${postId}`),
+
+  // Unlike a post
+  unlikePost: (postId) => api.post(`/api/favorites/unlike/${postId}`),
+
+};

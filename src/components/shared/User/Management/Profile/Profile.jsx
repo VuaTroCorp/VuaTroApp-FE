@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Pen, CheckCircle } from "lucide-react";
 import { authAPI } from "lib/apiService";
@@ -13,6 +13,7 @@ const Profile = () => {
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [userInfor, setUserInfor] = useState({
     avatar: "",
@@ -156,7 +157,25 @@ const Profile = () => {
               />
           </div>
           <div>
-            <button className="btn-change-avatar">Đổi ảnh đại diện</button>
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              ref={fileInputRef}
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  setTempInfor(prev => ({ ...prev, avatar: URL.createObjectURL(file) }));
+                  setEdit(true);
+                }
+              }}
+            />
+            <button 
+              className="btn-change-avatar"
+              onClick={() => fileInputRef.current.click()}
+            >
+              Đổi ảnh đại diện
+            </button>
           </div>
         </div>
 
@@ -189,19 +208,22 @@ const Profile = () => {
 
             <div className="form-group email-group">
               <label>Email</label>
-              <input
-                name="email"
-                onChange={handleChange}
-                className={`input-field ${!edit ? "readonly" : ""}`}
-                type="email"
-                value={tempInfor.email || ""}
-                readOnly={!edit}
-              />
-              {!edit && userInfor.email && (
-                <span className="verified-badge">
-                  <CheckCircle size={14} /> Đã xác thực
-                </span>
-              )}
+              <div className="input-wrapper" style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                <input
+                  name="email"
+                  onChange={handleChange}
+                  className={`input-field ${!edit ? "readonly" : ""}`}
+                  type="email"
+                  value={tempInfor.email || ""}
+                  readOnly={!edit}
+                  style={{ paddingRight: !edit && userInfor.email ? "110px" : "15px" }} // Chừa chỗ trống bên phải để text không đè lên badge
+                />
+                {!edit && userInfor.email && (
+                  <span className="verified-badge">
+                    <CheckCircle size={14} /> Đã xác thực
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 

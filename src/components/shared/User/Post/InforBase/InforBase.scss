@@ -6,11 +6,11 @@ $dark-blue: #0d1b2a;
 
 .post-page {
   background: $bg;
-  // padding: 40px 0;
   font-family: "Segoe UI", sans-serif;
 
   .container {
-    width: 1100px;
+    max-width: 1100px;
+    width: 100%;
     margin: auto;
   }
 
@@ -32,233 +32,287 @@ $dark-blue: #0d1b2a;
 
   .two-cols > * {
     flex: 1;
+    min-width: 0;
   }
 
   .card {
     background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
   }
 
   .card-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+
+    .title-icon {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
   }
 
+  /* --- FORM INPUTS --- */
   .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
+    width: 100%;
 
     label {
       font-size: 14px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #444;
     }
 
     input,
     select,
     textarea {
-      padding: 10px;
+      width: 100%;
+      padding: 12px 14px;
       border: 1px solid $border;
-      border-radius: 6px;
-      font-size: 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+      font-family: inherit;
 
       &:focus {
         outline: none;
         border-color: $primary;
+        box-shadow: 0 0 0 3px rgba($primary, 0.15);
+      }
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+  }
+
+  /* --- CÁC KHỐI ĐẶC BIỆT --- */
+  .support-box {
+    background: $dark-blue;
+    color: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .title-icon {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      margin: 0 auto 10px auto;
+      display: block;
+    }
+
+    h2 { margin: 15px 0 5px; font-size: 22px; }
+    p { color: #aaa; font-size: 14px; }
+
+    .hotline {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      margin-top: 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 20px;
+      color: $primary;
+    }
+  }
+
+  .info-base__map {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .map-placeholder {
+      width: 100%;
+      flex: 1; 
+      min-height: 250px; 
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+
+      .map-box { 
+        height: 100%; 
+        width: 100%; 
+        display: block;
+
+        > div, > iframe {
+          width: 100% !important;
+          height: 100% !important;
+          border: none;
+        }
       }
     }
   }
 
-  .note-box {
-    background: #fff7e6;
-    border: 1px solid $primary;
-    padding: 20px;
-    border-radius: 10px;
-    height: fit-content;
-
-    h3 {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    ul {
-      padding-left: 18px;
-      color: #555;
-    }
-  }
-
-  .support-box {
-    background: $dark-blue;
-    color: #fff;
-    border-radius: 15px;
-    padding: 30px;
-    text-align: center;
-    height: fit-content;
-
-    .phone-icon {
-      font-size: 28px;
-      margin-bottom: 10px;
-      color: $primary;
-    }
-
-    .hotline {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      margin-top: 15px;
-      border-radius: 8px;
-      font-weight: bold;
-      color: $primary;
-    }
-  }
-
+  /* --- KHU VỰC UPLOAD ẢNH --- */
   .upload-box {
-    border: 2px dashed $border;
-    border-radius: 12px;
-    padding: 60px;
+    border: 2px dashed #ccc;
+    padding: 40px 20px;
     text-align: center;
+    border-radius: 12px;
+    transition: all 0.3s ease;
     cursor: pointer;
-    transition: 0.3s;
+    background: #fafafa;
 
-    &:hover {
+    &:hover, &.dragging {
       border-color: $primary;
+      background: #fff9f0;
     }
 
     .upload-icon {
-      font-size: 30px;
-      color: $primary;
-      margin-bottom: auto;
+      margin-bottom: 12px;
+      .title-icon { width: 40px; height: 40px; }
     }
 
-    span {
-      color: #888;
-      font-size: 13px;
+    h3 { margin-bottom: 8px; color: #333; }
+    span { color: #888; font-size: 14px; }
+  }
+
+  .image-preview {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+
+    .preview-item {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+
+      img { width: 100%; height: 100%; object-fit: cover; }
+
+      .remove-btn {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        background: rgba(220, 53, 69, 0.9);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        transition: 0.2s;
+
+        &:hover { background: #c82333; transform: scale(1.1); }
+      }
     }
   }
 
   .upload-note {
-    margin-top: 10px;
-    font-size: 13px;
-    color: #777;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
   }
 
+  /* --- BUTTON SUBMIT --- */
   .submit-btn {
     width: 100%;
-    padding: 14px;
+    box-sizing: border-box;
+    padding: 16px;
     background: $primary;
+    color: #fff;
     border: none;
     border-radius: 10px;
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 18px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 10px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(243, 166, 56, 0.3);
 
     &:hover {
-      opacity: 0.9;
+      background: darken($primary, 8%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(243, 166, 56, 0.4);
     }
   }
 }
 
-.short-input input {
-  max-width: 475px;
-}
+/* =========================================
+    RESPONSIVE CHO TRANG ĐĂNG TIN
+   ========================================= */
 
+@media screen and (max-width: 1024px) {
+  .post-page {
+    padding: 30px 20px;
+    
+    .row.two-cols {
+      flex-direction: column;
+      gap: 0;
+    }
 
-.address-detail {
-  textarea {
-    width: 95%;
-  padding: 10px;
-  resize: none;
+    .support-box {
+      margin-top: 20px;
+    }
+
+    .info-base__map .map-placeholder {
+      min-height: 300px;
+    }
   }
+}
 
-  label {
-    display: block;
-    margin-bottom: 8px;
+@media screen and (max-width: 768px) {
+  .post-page {
+    padding: 20px 16px;
+
+    .page-title { font-size: 24px; }
+    
+    .row {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .card {
+      padding: 16px;
+    }
+
+    .image-preview .preview-item {
+      width: 100px;
+      height: 100px;
+    }
   }
 }
 
-.short-input1 input {
-  max-width: 1023px;
-}
+@media screen and (max-width: 480px) {
+  .post-page {
+    padding: 16px 12px;
 
-.short-input2 textarea {
-  max-width: 1023px;
-}
+    .upload-box {
+      padding: 30px 16px;
+      h3 { font-size: 16px; }
+    }
 
-.form-group.label-sophong {
-  margin-left: 10px;
-  width: fit-content;
-}
+    .image-preview {
+      gap: 10px;
+      .preview-item { width: 85px; height: 85px; }
+    }
 
-.image-preview {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 16px;
+    .submit-btn {
+      font-size: 16px;
+      padding: 14px;
+    }
+  }
 }
-
-.preview-item {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.preview-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.remove-btn {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  background: red;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.upload-box {
-  border: 2px dashed #ccc;
-  padding: 30px;
-  text-align: center;
-  border-radius: 12px;
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-.upload-box.dragging {
-  border-color: #f3a638;
-  background: #fff6e9;
-  transform: scale(1.02);
-}
-.info-base__map {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-.map-placeholder {
-  width: 100%;
-  height: 400px;
-  background: #e0e0e0;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #777;
-} 

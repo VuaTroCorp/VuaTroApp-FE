@@ -6,15 +6,27 @@ import "rc-slider/assets/index.css";
 import { Ellipsis } from "lucide-react";
 import { postAPI } from "lib/apiService";
 import PopUpDetail from "../PopUpDetail/PopUpDetail";
+import { toast } from "react-toastify";
 
 const ManagePost = () => {
-  const openEditPopup = (id) => {
+  const [selectedPost, setSelectedPost] = useState(null); // Save all the data of the article
+  const [showEditPopup, setShowEditPopup] = useState(false);
+
+  const [openStatus, setOpenStatus] = useState(false);
+  const [range, setRange] = useState([0, 100]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [posts, setPosts] = useState([]);
+  const [status, setStatus] = useState("ALL");
+  const [selectedDate, setSelectedDate] = useState("");
+
+  const openEditPopup = (post) => {
+    setSelectedPost(post);
     setShowEditPopup(true);
   };
   const closePopup = () => {
     setShowEditPopup(false);
-    setImages([]);
-    setAddress("");
+    setSelectedPost(null);
+    getPostList(currentPage);
   };
 
   const autoResize = (e) => {
@@ -22,38 +34,15 @@ const ManagePost = () => {
     e.target.style.height = e.target.scrollHeight + "px";
   };
 
-  const [address, setAddress] = useState("");
-  const [showEditPopup, setShowEditPopup] = useState(false);
-  const [images, setImages] = useState([]);
-  const [openStatus, setOpenStatus] = useState(false);
-  const [range, setRange] = useState([0, 100]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [posts, setPosts] = useState([]);
-  const [status, setStatus] = useState("ALL");
-  const [IDPost, setIDPost] = useState();
-
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-
-    const newImages = files.map((file) => ({
-      file: file,
-      preview: URL.createObjectURL(file),
-    }));
-
-    setImages((prev) => [...prev, ...newImages]);
-  };
-
-  const removeImage = (index) => {
-    const updated = images.filter((_, i) => i !== index);
-    setImages(updated);
-  };
-
   const getPostList = async (page) => {
     try {
-      const postsInf = await postAPI.getPosts(page);
+      const postsInf = await postAPI.getMyPosts(page);
       setPosts(postsInf.data.content);
     } catch (error) {
-      console.log("Lỗi rồi bạn ơi");
+      console.log("Lỗi tải danh sách bài đăng:", error);
+      toast.error(
+        error.response?.data?.message || "Không thể tải danh sách bài đăng. Vui lòng thử lại!"
+      );
     }
   };
 
@@ -66,7 +55,7 @@ const ManagePost = () => {
       {/* --- Header --- */}
       <div className="order-header">
         <div className="header-left">
-          <b className="title">Quản Lý Đặt Trước</b>
+          <b className="title">Quản Lý Bài Đăng</b>
         </div>
         <div className="header-right">
           <div className="search-box">
@@ -87,7 +76,12 @@ const ManagePost = () => {
           </div>
 
           <div className="date-box">
-            <input className="date" type="date" />
+            <input 
+              className="date" 
+              type="date" 
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
           </div>
           <div
             onClick={() => setOpenStatus(!openStatus)}
@@ -96,37 +90,19 @@ const ManagePost = () => {
             <div className="status-container">
               {status === "APPROVED" && <span>ĐÃ DUYỆT</span>}
               {status === "CANCELED" && <span>ĐÃ TỪ CHỐI</span>}
-              {status === "WAITING" && <span>CHỜ DUYỆT</span>}
+              {status === "PENDING" && <span>CHỜ DUYỆT</span>}
               {status === "EXPIRED" && <span>HẾT HẠN</span>}
               {status === "DELETED" && <span>ĐÃ XÓA</span>}
               {status === "ALL" && <span>TẤT CẢ</span>}
             </div>
             {openStatus && (
               <div className="drop-status">
-                <div onClick={() => setStatus("ALL")} className="status-top">
-                  TẤT CẢ
-                </div>
-                <div
-                  onClick={() => setStatus("WAITING")}
-                  className="status-top"
-                >
-                  CHỜ DUYỆT
-                </div>
-                <div onClick={() => setStatus("APPROVED")} className="status">
-                  ĐÃ DUYỆT
-                </div>
-                <div onClick={() => setStatus("CANCELED")} className="status">
-                  ĐÃ TỪ CHỐI
-                </div>
-                <div onClick={() => setStatus("EXPIRED")} className="status">
-                  HẾT HẠN
-                </div>
-                <div
-                  onClick={() => setStatus("DELETED")}
-                  className="status-bottom"
-                >
-                  ĐÃ XÓA
-                </div>
+                <div onClick={() => { setStatus("ALL"); setOpenStatus(false); }} className="status-top">TẤT CẢ</div>
+                <div onClick={() => { setStatus("PENDING"); setOpenStatus(false); }} className="status-top">CHỜ DUYỆT</div>
+                <div onClick={() => { setStatus("APPROVED"); setOpenStatus(false); }} className="status">ĐÃ DUYỆT</div>
+                <div onClick={() => { setStatus("CANCELED"); setOpenStatus(false); }} className="status">ĐÃ TỪ CHỐI</div>
+                <div onClick={() => { setStatus("EXPIRED"); setOpenStatus(false); }} className="status">HẾT HẠN</div>
+                <div onClick={() => { setStatus("DELETED"); setOpenStatus(false); }} className="status-bottom">ĐÃ XÓA</div>
               </div>
             )}
           </div>
@@ -148,11 +124,38 @@ const ManagePost = () => {
           </div>
 
           {posts.map((post, index) => {
-            if (post.status === status || status === "ALL") {
+            // 1. Lọc theo Trạng Thái
+            const isStatusMatch = post.status === status || status === "ALL";
+            
+            // 2. Lọc theo Giá Tiền
+            const minPrice = range[0] * 1000000;
+            const maxPrice = range[1] * 1000000;
+            const isPriceMatch = post.price >= minPrice && post.price <= maxPrice;
+
+            // 3. 🚨 Lọc theo Ngày Gửi (Date Box)
+            let isDateMatch = true; 
+            if (selectedDate) {
+              // Convert ngày tạo của bài viết (post.createdAt) ra chuẩn YYYY-MM-DD để so sánh
+              const postDateObj = new Date(post.createdAt);
+              const year = postDateObj.getFullYear();
+              const month = String(postDateObj.getMonth() + 1).padStart(2, '0');
+              const day = String(postDateObj.getDate()).padStart(2, '0');
+              const formattedPostDate = `${year}-${month}-${day}`;
+
+              // Kiểm tra xem ngày của bài viết có khớp với ngày chọn trên thanh filter không
+              isDateMatch = formattedPostDate === selectedDate;
+            }
+
+            // 4. Tổng hợp: Khớp CẢ 3 điều kiện (Trạng thái + Giá + Ngày) thì mới cho lên hình
+            if (isStatusMatch && isPriceMatch && isDateMatch) {
               return (
                 <div key={index} className="render-inf-post">
                   <div className="img-post-container">
-                    <img className="img-room" src={demo} alt="" />
+                    <img 
+                      className="img-room" 
+                      src={post.images && post.images.length > 0 ? post.images[0].url : demo} 
+                      alt={post.title} 
+                    />
                   </div>
                   <div className="inf-room">{post.title}</div>
                   <div className="price">{post.price} vnd</div>
@@ -161,37 +164,26 @@ const ManagePost = () => {
                   </div>
                   <div className="status-post">
                     {post.status === "APPROVED" && (
-                      <div className="approve-status-background">
-                        {(post.status === "APPROVED" && "ĐÃ DUYỆT") || ""}
-                      </div>
+                      <div className="approve-status-background">ĐÃ DUYỆT</div>
                     )}
                     {post.status === "CANCELED" && (
-                      <div className="cancel-status-background">
-                        {(post.status === "CANCELED" && "ĐÃ HỦY") || ""}
-                      </div>
+                      <div className="cancel-status-background">ĐÃ TỪ CHỐI</div>
                     )}
-                    {post.status === "WAITING" && (
-                      <div className="wait-status-background">
-                        {(post.status === "WAITING" && "CHỜ DUYỆT") || ""}
-                      </div>
+                    {post.status === "PENDING" && (
+                      <div className="wait-status-background">CHỜ DUYỆT</div>
                     )}
                     {post.status === "EXPIRED" && (
-                      <div className="expired-status-background">
-                        {(post.status === "EXPIRED" && "HẾT HẠN") || ""}
-                      </div>
+                      <div className="expired-status-background">HẾT HẠN</div>
                     )}
                     {post.status === "DELETED" && (
-                      <div className="deleted-status-background">
-                        {(post.status === "DELETED" && "ĐÃ XÓA") || ""}
-                      </div>
+                      <div className="deleted-status-background">ĐÃ XÓA</div>
                     )}
                   </div>
                   <div className="ellipsis-container">
                     <div
                       className="ellipsis"
                       onClick={() => {
-                        openEditPopup(1);
-                        setIDPost(post.id);
+                        openEditPopup(post);
                       }}
                     >
                       <Ellipsis />
@@ -206,14 +198,8 @@ const ManagePost = () => {
         {showEditPopup && (
           <PopUpDetail
             closePopup={closePopup}
-            address={address}
-            setAddress={setAddress}
-            images={images}
-            handleImageUpload={handleImageUpload}
-            removeImage={removeImage}
             autoResize={autoResize}
-            IDPost={IDPost}
-            setShowEditPopup={setShowEditPopup}
+            postData={selectedPost}
           />
         )}
       </div>

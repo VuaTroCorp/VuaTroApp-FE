@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "assets/images/logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "hooks/useAuth";
 import {
   Heart,
@@ -10,22 +10,38 @@ import {
   Bell,
   Search,
 } from "lucide-react";
+import { useFavorite } from "contexts/FavoriteContext";
 import UserDropdown from "components/layout/Header/UserDropdown/UserDropdown";
 import "./Header.scss";
 
 const Header = ({ setShowLogout }) => {
   const [openDrop, setOpenDrop] = useState(false);
   const [dropArrow, setDropArrow] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { favoriteCount } = useFavorite();
+  const [isAnimating, setIsAnimating] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
+
+  useEffect(() => {
+    if (favoriteCount > 0) {
+      setIsAnimating(true);
+      const timer = setTimeout(() => setIsAnimating(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [favoriteCount]);
+
+  useEffect(() => {
+    setSearchQuery(searchParams.get("search") || "");
+  }, [searchParams]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`/user/home?search=${encodeURIComponent(searchQuery.trim())}`);
     } else {
-      navigate("/");
+      navigate("/user/home");
     }
   };
 
@@ -37,9 +53,9 @@ const Header = ({ setShowLogout }) => {
 
   return (
     <div className="main-container">
-      {/* --- Cụm bên trái: Logo & Search --- */}
+      {/* --- Logo & Search --- */}
       <div className="header-left">
-        <div className="logo-box" onClick={() => navigate("/user/home ")}>
+        <div className="logo-box" onClick={() => navigate("/user/home")}>
           <img className="logo-img" src={logo} alt="logo" />
         </div>
 
@@ -51,18 +67,27 @@ const Header = ({ setShowLogout }) => {
               placeholder="Tìm phòng trọ, căn hộ, chung cư..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleSearchKeyPress}
+              onKeyDown={handleSearchKeyPress}
             />
           </div>
-          <button className="search-btn" onClick={handleSearch}>
+          <button className="search-btn" onClick={handleSearch} type="button">
             <Search color="white" size={16} />
           </button>
         </div>
       </div>
 
-      {/* --- Cụm bên phải: Icons & Auth --- */}
+      {/* --- Icons & Auth --- */}
       <div className="infor-container">
-        <Heart color="#E1A730" />
+        <div 
+          className={`icon-badge-wrapper ${isAnimating ? "heart-beat" : ""}`} 
+          onClick={() => navigate("user/favorites")}
+        >
+          <Heart color="#E1A730" fill={favoriteCount > 0 ? "#E1A730" : "none"} />
+          {favoriteCount > 0 && (
+            <span className="badge-count">{favoriteCount}</span>
+          )}
+        </div>
+
         <Bell color="#E1A730" />
 
         <div className="button-header-container">

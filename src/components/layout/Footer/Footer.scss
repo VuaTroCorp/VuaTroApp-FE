@@ -1,113 +1,187 @@
 .footer-container {
   background-color: #4f5153;
   width: 100%;
-  height: 606px;
+  min-height: 400px;
   display: flex;
   flex-direction: column;
+  font-family: inherit;
 }
+
 .top-container {
   display: grid;
-  grid-template-columns: 3fr 1fr 2fr 2fr;
-  padding: 0 56px;
-  margin: 50px 0;
+  grid-template-columns: 3fr 1.5fr 1.5fr 2fr;
+  padding: 50px 56px;
+  gap: 30px;
 }
 
 hr {
   width: 100%;
-  border: 2px solid white;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 0;
 }
 
+/* --- LEFT --- */
 .left-container {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
+  
+  .logo-footer {
+    width: 220px;
+    height: auto;
+  }
+
+  .address-container,
+  .hotline-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: white;
+    
+    p {
+      margin: 0;
+      line-height: 1.5;
+    }
+    
+    svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  }
 }
 
-.logo-footer {
-  width: 279px;
-  height: auto;
-  margin-left: 20px;
-}
-
-.hotline {
-  color: white;
-}
-.address {
-  color: white;
-}
-.address-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.hotline-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+/* --- MIDDLE --- */
 .middle-main-container {
   display: flex;
   flex-direction: column;
   color: white;
-  justify-content: end;
-  gap: 50px;
+  gap: 30px;
+
+  .middle-container-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .middle-container p {
+      margin: 0 0 4px 0;
+      font-size: 14px;
+      
+      b {
+        font-size: 16px;
+        color: #E1A730;
+      }
+    }
+  }
+
+  .middle-container-bottom {
+    p > b {
+      font-size: 16px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .content-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .p {
+        font-size: 14px;
+        margin: 0;
+        cursor: pointer;
+        transition: color 0.2s;
+        
+        &:hover {
+          color: #E1A730;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }
 
-.middle-container {
-  color: white;
-}
-
-.middle-container p {
-  margin: 0;
-}
-
-.middle-container-top {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.p {
-  font-size: 15px;
-  margin: 0;
-}
-
-.guide {
-  font-weight: 500;
-}
-
-.middle-logo {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  width: 293px;
-  height: auto;
-}
+/* --- DOWNLOAD --- */
 .download-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 100px;
-}
-.content-container {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+  gap: 16px;
+  
+  .logo {
+    width: 180px;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.2s;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
 }
 
+/* --- BOTTOM --- */
 .bottom-footer-container {
-  color: white;
-  padding: 0 52px;
+  color: #bbb;
+  padding: 24px 56px;
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  justify-content: center;
-  flex: 1;
+  gap: 8px;
+  text-align: left;
+  
+  .bottom-footer {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+  }
 }
-.bottom-footer {
-  margin: 0;
+
+/* =========================================
+    RESPONSIVE: DESKTOP, TABLET, MOBILE
+   ========================================= */
+
+@media screen and (max-width: 1200px) {
+  .top-container {
+    padding: 40px 30px;
+    grid-template-columns: 2.5fr 1.5fr 1.5fr 1.5fr; 
+  }
+  .bottom-footer-container {
+    padding: 24px 30px;
+  }
+  .download-container .logo {
+    width: 140px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .top-container {
+    
+    grid-template-columns: 1fr 1fr;
+    row-gap: 40px;
+  }
+  .left-container .logo-footer {
+    margin-left: 0;
+  }
+  .download-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .top-container {
+    grid-template-columns: 1fr;
+    padding: 30px 20px;
+    row-gap: 30px;
+  }
+  
+  .download-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bottom-footer-container {
+    padding: 20px;
+    text-align: justify;
+  }
 }
